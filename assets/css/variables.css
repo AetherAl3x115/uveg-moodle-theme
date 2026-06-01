@@ -9,8 +9,8 @@
 :root {
 
   /* ── Brand Colors ─────────────────────────────────────────── */
-  --uveg-blue:          #0d55de;
-  --uveg-navy:          #1a2744;
+  --uveg-blue:          #2662eb;
+  --uveg-navy:          #4c45e5;
   --uveg-gradient:      linear-gradient(to right, var(--uveg-blue), var(--uveg-navy));
   --uveg-gradient-diag: linear-gradient(135deg, var(--uveg-blue), var(--uveg-navy));
 
