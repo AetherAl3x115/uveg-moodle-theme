@@ -1,0 +1,99 @@
+/**
+ * uveg-tabs.css
+ * ─────────────────────────────────────────────────────────────
+ * Estilos del Web Component <uveg-tabs>.
+ * ─────────────────────────────────────────────────────────────
+ */
+
+/* ── Tab bar ────────────────────────────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 3px;
+  margin-bottom: var(--space-4);
+  background: var(--color-surface);
+  border: .5px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 4px;
+  width: fit-content;
+}
+
+/* ── Tab item ───────────────────────────────────────────────── */
+.tab {
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all var(--transition-base);
+  white-space: nowrap;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+  border: none;
+  background: none;
+}
+
+.tab.active {
+  background: var(--uveg-gradient);
+  color: var(--color-white);
+}
+
+.tab:hover:not(.active) {
+  background: var(--color-bg);
+}
+
+/* ── Ripple ─────────────────────────────────────────────────── */
+.tab-ripple {
+  position: absolute;
+  border-radius: var(--radius-full);
+  background: rgba(13, 85, 222, .25);
+  transform: scale(0);
+  animation: tabRippleOut .5s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes tabRippleOut {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ── Tab panels ─────────────────────────────────────────────── */
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+  animation: fadeSlideIn .3s cubic-bezier(.4, 0, .2, 1);
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Dark mode ──────────────────────────────────────────────── */
+[data-bs-theme="dark"] .tabs {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+[data-bs-theme="dark"] .tab {
+  color: var(--color-text-faint);
+}
+
+[data-bs-theme="dark"] .tab:hover:not(.active) {
+  background: var(--color-border-light);
+}

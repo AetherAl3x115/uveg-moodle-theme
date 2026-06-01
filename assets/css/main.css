@@ -1,0 +1,41 @@
+/**
+ * main.css
+ * ─────────────────────────────────────────────────────────────
+ * Punto de entrada único de estilos.
+ * Solo contiene @imports — cero reglas CSS aquí.
+ *
+ * Orden de carga (importa respetar la cascada):
+ *   1. variables     → tokens de diseño UVEG (debe ir primero)
+ *   2. layout        → estructura shell/sidebar/topbar
+ *   3. components    → cada Web Component su propio CSS
+ *   4. dark-mode     → overrides oscuros (debe ir al final)
+ *   5. responsive    → media queries (siempre al último)
+ *
+ * Bootstrap se carga en index.html vía CDN ANTES de este archivo.
+ * ─────────────────────────────────────────────────────────────
+ */
+
+/* ── 1. Tokens ──────────────────────────────────────────────── */
+@import './variables.css';
+
+/* ── 2. Layout ──────────────────────────────────────────────── */
+@import './layout.css';
+
+/* ── 2b. Content ────────────────────────────────────────────── */
+@import './content.css';
+
+/* ── 3. Components ──────────────────────────────────────────── */
+
+/* ── 3. Components ──────────────────────────────────────────── */
+@import '../../../components/uveg-sidebar/uveg-sidebar.css';
+@import '../../../components/uveg-topbar/uveg-topbar.css';
+@import '../../../components/uveg-tabs/uveg-tabs.css';
+@import '../../../components/uveg-card/uveg-card.css';
+@import '../../../components/uveg-progress/uveg-progress.css';
+@import '../../../components/uveg-scorm-drawer/uveg-scorm-drawer.css';
+
+/* ── 4. Dark mode ───────────────────────────────────────────── */
+@import './dark-mode.css';
+
+/* ── 5. Responsive ──────────────────────────────────────────── */
+@import './responsive.css';

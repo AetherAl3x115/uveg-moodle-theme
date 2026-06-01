@@ -1,0 +1,93 @@
+/**
+ * uveg-sidebar.css
+ * ─────────────────────────────────────────────────────────────
+ * Estilos del Web Component <uveg-sidebar>.
+ * Los estilos de estructura (width, flex, transition) viven
+ * en layout.css — aquí solo estilos internos del componente.
+ * ─────────────────────────────────────────────────────────────
+ */
+
+/* Ya definidos en layout.css:
+   .sidebar, .sb-top, .sb-logo-row, .sb-logo, .sb-brand,
+   .sb-brand-main, .sb-brand-sub, .sb-user, .sb-av,
+   .sb-uname, .sb-urole, .sb-nav, .sb-item, .sb-label,
+   .sb-sep, .sb-collapse
+*/
+
+/* ── Separador de sección ───────────────────────────────────── */
+.sb-section-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: rgba(255, 255, 255, .3);
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  padding: 10px 10px 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity var(--transition-spring);
+}
+
+.sidebar.collapsed .sb-section-label {
+  opacity: 0;
+}
+
+/* ── Badge de notificación en nav item ──────────────────────── */
+.sb-badge {
+  margin-left: auto;
+  background: #ef4444;
+  color: var(--color-white);
+  font-size: 9px;
+  font-weight: var(--font-weight-bold);
+  min-width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  flex-shrink: 0;
+  transition: opacity var(--transition-spring);
+}
+
+.sidebar.collapsed .sb-badge {
+  opacity: 0;
+}
+
+/* ── Tooltip cuando está colapsado ──────────────────────────── */
+.sb-item {
+  position: relative;
+}
+
+.sb-tooltip {
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--uveg-navy);
+  color: var(--color-white);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  padding: 5px 10px;
+  border-radius: var(--radius-md);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  z-index: var(--z-dropdown);
+  box-shadow: var(--shadow-md);
+}
+
+.sb-tooltip::before {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 5px solid transparent;
+  border-right-color: var(--uveg-navy);
+}
+
+/* Mostrar tooltip solo cuando el sidebar está colapsado */
+.sidebar.collapsed .sb-item:hover .sb-tooltip {
+  opacity: 1;
+}

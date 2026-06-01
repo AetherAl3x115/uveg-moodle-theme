@@ -1,0 +1,188 @@
+/**
+ * uveg-scorm-drawer.css
+ * ─────────────────────────────────────────────────────────────
+ * Estilos del Web Component <uveg-scorm-drawer>.
+ *
+ * El drawer es un panel que sube desde la parte inferior
+ * de la pantalla (bottom sheet pattern) y contiene un
+ * iframe con el contenido SCORM embebido via srcdoc.
+ *
+ * Estructura visual:
+ *   overlay (fondo oscuro)
+ *   └── drawer (panel blanco)
+ *         ├── handle (tirante visual)
+ *         ├── topbar (gradiente UVEG + título + botón cerrar)
+ *         └── iframe (contenido SCORM)
+ *
+ * Por qué srcdoc en lugar de src:
+ *   - El contenido SCORM es generado dinámicamente por el servidor
+ *   - srcdoc evita problemas de CORS en el demo/Netlify
+ *   - En producción (Moodle), el src apuntará al paquete SCORM real
+ * ─────────────────────────────────────────────────────────────
+ */
+
+/* ── Overlay ────────────────────────────────────────────────── */
+.scorm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .5);
+  z-index: var(--z-overlay);
+  opacity: 0;
+  transition: opacity .3s ease;
+  pointer-events: none;
+
+  /* Backdrop blur sutil para sensación de profundidad */
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.scorm-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ── Drawer ─────────────────────────────────────────────────── */
+.scorm-drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--scorm-drawer-height);
+  background: var(--color-surface);
+  border-radius: 20px 20px 0 0;
+  z-index: var(--z-drawer);
+
+  /* Estado inicial: fuera de pantalla */
+  transform: translateY(100%);
+  transition: transform .4s cubic-bezier(.4, 0, .2, 1);
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  /* Sombra pronunciada para separar del contenido de fondo */
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, .2);
+}
+
+.scorm-drawer.open {
+  transform: translateY(0);
+}
+
+/* ── Handle (tirante táctil) ────────────────────────────────── */
+.scorm-handle {
+  width: 40px;
+  height: 4px;
+  background: rgba(0, 0, 0, .12);
+  border-radius: var(--radius-full);
+  margin: 10px auto 0;
+  flex-shrink: 0;
+  cursor: grab;
+}
+
+/* ── Topbar del drawer ──────────────────────────────────────── */
+.scorm-topbar {
+  background: var(--uveg-gradient);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.scorm-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.scorm-topbar-icon {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, .15);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--color-white);
+  flex-shrink: 0;
+}
+
+.scorm-topbar-tag {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: rgba(255, 255, 255, .6);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.scorm-topbar-title {
+  font-size: 14px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+}
+
+/* ── Botón cerrar ───────────────────────────────────────────── */
+.scorm-close {
+  background: rgba(255, 255, 255, .15);
+  border: none;
+  border-radius: var(--radius-md);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-white);
+  cursor: pointer;
+  font-size: var(--font-size-xl);
+  transition: background var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.scorm-close:hover {
+  background: rgba(255, 255, 255, .25);
+}
+
+/* ── iframe ─────────────────────────────────────────────────── */
+.scorm-frame {
+  flex: 1;
+  border: none;
+  width: 100%;
+
+  /*
+   * IMPORTANTE: El iframe tiene su propio contexto de scroll.
+   * En iOS Safari es necesario -webkit-overflow-scrolling: touch
+   * para que el scroll dentro del iframe sea fluido.
+   */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Dark mode ──────────────────────────────────────────────── */
+/*
+ * El drawer mantiene fondo blanco en dark mode por diseño:
+ * el iframe tiene su propio fondo y el gradiente UVEG del topbar
+ * es branding institucional que no cambia.
+ * Solo el handle y la sombra se adaptan.
+ */
+[data-bs-theme="dark"] .scorm-drawer {
+  background: var(--color-surface);
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, .5);
+}
+
+[data-bs-theme="dark"] .scorm-handle {
+  background: rgba(255, 255, 255, .1);
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+/*
+ * En móvil el drawer ocupa casi toda la pantalla y
+ * tiene bordes redondeados más pronunciados para
+ * reforzar el patrón bottom sheet nativo de iOS/Android.
+ */
+@media (max-width: 576px) {
+  .scorm-drawer {
+    height: 96vh;
+    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  }
+}

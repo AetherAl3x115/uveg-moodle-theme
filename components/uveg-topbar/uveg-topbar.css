@@ -1,0 +1,93 @@
+/**
+ * uveg-topbar.css
+ * ─────────────────────────────────────────────────────────────
+ * Estilos del Web Component <uveg-topbar>.
+ * Estructura base en layout.css — aquí solo estilos internos.
+ * ─────────────────────────────────────────────────────────────
+ */
+
+/* ── Separador vertical ─────────────────────────────────────── */
+.tb-sep {
+  width: 1px;
+  height: 16px;
+  background: var(--color-border);
+}
+
+/* ── Texto auxiliar topbar ──────────────────────────────────── */
+.tb-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* ── Nombre de usuario ──────────────────────────────────────── */
+.tb-username {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+/* ── Rol label ──────────────────────────────────────────────── */
+.tb-role {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  background: var(--color-bg);
+  border: .5px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: 2px 8px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: .3px;
+}
+
+/* ── Dark mode toggle button ────────────────────────────────── */
+.tb-theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  border-radius: var(--radius-md);
+  transition: transform var(--transition-base);
+}
+
+.tb-theme-toggle:hover {
+  transform: scale(1.18);
+}
+
+.tb-theme-toggle .tb-icon {
+  /* Hereda estilos de .tb-icon en layout.css */
+  pointer-events: none;
+}
+
+/* ── Notification dot en campana ────────────────────────────── */
+.tb-bell-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tb-notif-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-surface);
+}
+
+/* ── Dark mode overrides ────────────────────────────────────── */
+[data-bs-theme="dark"] .tb-sep {
+  background: var(--color-border);
+}
+
+[data-bs-theme="dark"] .tb-role {
+  background: var(--color-border-light);
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+}
+
+[data-bs-theme="dark"] .tb-notif-dot {
+  border-color: var(--color-surface);
+}

@@ -1,0 +1,377 @@
+/**
+ * content.css
+ * ─────────────────────────────────────────────────────────────
+ * Estilos del área de contenido principal (center).
+ * Cubre: header del módulo, pbox, tabs, banner, presentación,
+ * avisos, section row.
+ * Todos los valores vienen de variables.css — cero hardcode aquí.
+ * ─────────────────────────────────────────────────────────────
+ */
+
+/* ── Module header ──────────────────────────────────────────── */
+.mod-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(to right, var(--color-mod-tag-from), var(--color-mod-tag-to));
+  color: var(--color-white);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  letter-spacing: .5px;
+  margin-bottom: 7px;
+  box-shadow: var(--shadow-mod-tag);
+}
+
+.mod-title {
+  font-size: clamp(22px, 2.2vw, 32px);
+  font-weight: var(--font-weight-black);
+  background: linear-gradient(to right, var(--color-title-from), var(--color-title-to));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text;
+  color: transparent;
+  line-height: 1.2;
+  margin-bottom: 14px;
+  letter-spacing: -0.3px;
+}
+
+.hrow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.hrow-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 9px;
+}
+
+.cnum-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+/* ── Progress box ───────────────────────────────────────────── */
+.pbox {
+  background: var(--color-pbox-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-pbox-border);
+  border-radius: var(--radius-pbox);
+  padding: 16px 20px;
+  display: flex;
+  gap: 0;
+  align-items: center;
+  box-shadow: var(--shadow-pbox);
+}
+
+.pbox .pl:first-child {
+  padding-right: 20px;
+  border-right: 1px solid var(--color-border);
+}
+
+.pbox .pl:last-child {
+  padding-left: 20px;
+}
+
+.pl {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.plabel {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-faint);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+}
+
+.pbar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pbar {
+  width: 90px;
+  height: 5px;
+  background: var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.pfill {
+  height: 100%;
+  background: linear-gradient(to right, var(--color-progress-fill-from), var(--color-progress-fill-to));
+  border-radius: var(--radius-sm);
+  width: 0;
+  transition: var(--pfill-transition);
+}
+
+.ppct {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-black);
+  color: var(--color-progress-pct);
+}
+
+.cnum {
+  font-size: 32px;
+  font-weight: var(--font-weight-black);
+  color: var(--uveg-blue);
+  line-height: 1;
+}
+
+.cden {
+  font-size: var(--font-size-base);
+  color: var(--color-text-faint);
+}
+
+/* ── Banner objetivo ────────────────────────────────────────── */
+.banner {
+  background: var(--uveg-gradient);
+  border-radius: var(--radius-2xl);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  transition: transform var(--transition-base);
+}
+
+.banner:hover {
+  transform: scale(1.005);
+}
+
+.bicon {
+  width: 42px;
+  height: 42px;
+  background: rgba(255, 255, 255, .1);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-white);
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.btext {
+  flex: 1;
+  color: var(--color-white);
+  font-size: var(--font-size-base);
+  line-height: 1.65;
+}
+
+.btext .obj-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: rgba(255, 255, 255, .45);
+  letter-spacing: .5px;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.btext strong {
+  color: var(--color-banner-strong);
+}
+
+.bbtn {
+  background: var(--color-white);
+  color: var(--uveg-blue);
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: 9px 16px;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: transform var(--transition-fast);
+}
+
+.bbtn:hover {
+  transform: scale(1.05);
+}
+
+/* ── Avisos ─────────────────────────────────────────────────── */
+.aviso-item {
+  background: var(--color-surface);
+  border: .5px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  transition: transform var(--transition-fast), border-color var(--transition-base);
+}
+
+.aviso-item:hover {
+  transform: translateX(3px);
+  border-color: var(--color-aviso-hover-border);
+}
+
+.aviso-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.aviso-dot.unread { background: var(--uveg-blue); }
+.aviso-dot.read   { background: var(--color-border); }
+
+.aviso-title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: 2px;
+}
+
+.aviso-desc {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+
+.aviso-date {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-faint);
+}
+
+/* ── Presentación ───────────────────────────────────────────── */
+.pres-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.pres-card {
+  background: var(--color-surface);
+  border: .5px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 16px;
+  cursor: pointer;
+  transition: border-color var(--transition-base), transform var(--transition-fast);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.pres-card:hover {
+  border-color: var(--color-pres-hover-border);
+  transform: translateY(-2px);
+}
+
+.pres-card.active {
+  border-color: var(--uveg-blue);
+  border-width: 1.5px;
+}
+
+.pres-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin: 0 auto 10px;
+  transition: transform var(--transition-spring);
+}
+
+.pres-card:hover .pres-icon {
+  transform: scale(1.1);
+}
+
+.pres-label {
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+.pres-content {
+  background: var(--color-surface);
+  border: .5px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 20px;
+  animation: fadeSlideIn .3s cubic-bezier(.4, 0, .2, 1);
+}
+
+.pres-content h3 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: 10px;
+}
+
+.pres-content p {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+
+.pres-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pres-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+}
+
+.pres-list li i {
+  color: var(--uveg-blue);
+  font-size: 14px;
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
+/* ── Note ───────────────────────────────────────────────────── */
+.note {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-faint);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 12px;
+}
+
+/* ── Dark mode ──────────────────────────────────────────────── */
+[data-bs-theme="dark"] .mod-title {
+  background: linear-gradient(to right, var(--color-text-primary), var(--color-text-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+[data-bs-theme="dark"] .aviso-item     { background: var(--color-surface); border-color: var(--color-border); }
+[data-bs-theme="dark"] .aviso-title    { color: var(--color-text-primary); }
+[data-bs-theme="dark"] .aviso-desc     { color: var(--color-text-muted); }
+[data-bs-theme="dark"] .aviso-date     { color: var(--color-text-faint); }
+[data-bs-theme="dark"] .pres-card      { background: var(--color-surface); border-color: var(--color-border); }
+[data-bs-theme="dark"] .pres-label     { color: var(--color-text-secondary); }
+[data-bs-theme="dark"] .pres-content   { background: var(--color-surface); border-color: var(--color-border); }
+[data-bs-theme="dark"] .pres-content h3 { color: var(--color-text-primary); }
+[data-bs-theme="dark"] .pres-content p  { color: var(--color-text-muted); }
+[data-bs-theme="dark"] .pres-list li   { color: var(--color-text-secondary); }

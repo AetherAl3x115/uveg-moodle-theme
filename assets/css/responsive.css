@@ -1,0 +1,190 @@
+/**
+ * responsive.css
+ * ─────────────────────────────────────────────────────────────
+ * Media queries para diseño adaptable.
+ *
+ * Breakpoints alineados con Bootstrap 5:
+ *   xs:  < 576px   (móvil pequeño)
+ *   sm:  ≥ 576px   (móvil grande)
+ *   md:  ≥ 768px   (tablet)
+ *   lg:  ≥ 992px   (desktop)
+ *   xl:  ≥ 1200px  (desktop grande)
+ *
+ * Estrategia: mobile-first cuando aplica, desktop overrides cuando
+ * el componente fue diseñado para desktop primero.
+ * ─────────────────────────────────────────────────────────────
+ */
+
+/* ── lg y menor: ocultar panel derecho ──────────────────────── */
+@media (max-width: 992px) {
+  .rpanel {
+    display: none;
+  }
+
+  .mod-title {
+    font-size: 18px;
+  }
+}
+
+/* ── md y menor: tablet ─────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* Grid de cards pasa a 1 columna */
+  .cards-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .cards-grid .card-reto {
+    grid-column: 1 !important;
+  }
+
+  /* Ocultar toggle tarjetas/lista — en tablet siempre lista */
+  .tv-wrap {
+    display: none;
+  }
+
+  /* Presentación: 2 columnas en tablet */
+  .pres-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── sm y menor: móvil ──────────────────────────────────────── */
+@media (max-width: 576px) {
+
+  /* Shell pasa a flujo vertical como feed */
+  .shell {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  /* Sidebar oculta en móvil — navegación vía topbar/hamburguer */
+  .sidebar {
+    display: none;
+  }
+
+  .main {
+    flex: 1;
+  }
+
+  /* Content row vertical */
+  .content-row {
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  /* Center sin overflow oculto — scroll nativo del body */
+  .center {
+    padding: 12px;
+    overflow-y: visible;
+  }
+
+  /* Header row apilado */
+  .hrow {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .hrow > div:last-child {
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .pbox {
+    width: 100%;
+  }
+
+  /* Botón IA full width */
+  .btn-ia {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Tabs: scroll horizontal táctil sin scrollbar visible */
+  .tabs {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+  }
+
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab {
+    white-space: nowrap;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+
+  /* Cards: 1 columna siempre, sub-acts también */
+  .cards-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .cards-grid .card-reto {
+    grid-column: 1 !important;
+  }
+
+  .sub-acts-grid,
+  .cards-grid.view-list .sub-acts-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Banner apilado */
+  .banner {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .banner .bbtn {
+    width: 100%;
+  }
+
+  .bicon {
+    margin: 0 auto;
+  }
+
+  /* Cards: mejor touch target */
+  .card {
+    touch-action: manipulation;
+  }
+
+  /* SCORM drawer ocupa casi toda la pantalla en móvil */
+  .scorm-drawer {
+    height: 96vh;
+    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  }
+
+  /* Presentación: 2 columnas en móvil */
+  .pres-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Tipografía ajustada */
+  .mod-title {
+    font-size: 18px;
+  }
+
+  /* Right panel oculto en móvil */
+  .rpanel {
+    display: none;
+  }
+}
+
+/* ── Preferencia del sistema: reducir movimiento ────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
