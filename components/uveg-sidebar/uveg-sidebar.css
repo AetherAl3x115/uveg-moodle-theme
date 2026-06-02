@@ -1,24 +1,24 @@
 /**
  * uveg-sidebar.css
  * ─────────────────────────────────────────────────────────────
- * Estilos del Web Component <uveg-sidebar>.
- * Los estilos de estructura (width, flex, transition) viven
- * en layout.css — aquí solo estilos internos del componente.
+ * Estilos internos del Web Component <uveg-sidebar>.
+ * Estructura (width, flex) vive en layout.css.
+ * Todos los colores via tokens de variables.css.
  * ─────────────────────────────────────────────────────────────
  */
 
-/* Ya definidos en layout.css:
+/* Ya en layout.css:
    .sidebar, .sb-top, .sb-logo-row, .sb-logo, .sb-brand,
    .sb-brand-main, .sb-brand-sub, .sb-user, .sb-av,
    .sb-uname, .sb-urole, .sb-nav, .sb-item, .sb-label,
    .sb-sep, .sb-collapse
 */
 
-/* ── Separador de sección ───────────────────────────────────── */
+/* ── Etiqueta de sección ────────────────────────────────────── */
 .sb-section-label {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
-  color: rgba(255, 255, 255, .3);
+  color: var(--color-text-faint);
   letter-spacing: .6px;
   text-transform: uppercase;
   padding: 10px 10px 4px;
@@ -29,9 +29,10 @@
 
 .sidebar.collapsed .sb-section-label {
   opacity: 0;
+  pointer-events: none;
 }
 
-/* ── Badge de notificación en nav item ──────────────────────── */
+/* ── Badge notificación ─────────────────────────────────────── */
 .sb-badge {
   margin-left: auto;
   background: #ef4444;
@@ -49,21 +50,17 @@
   transition: opacity var(--transition-spring);
 }
 
-.sidebar.collapsed .sb-badge {
-  opacity: 0;
-}
+.sidebar.collapsed .sb-badge { opacity: 0; }
 
-/* ── Tooltip cuando está colapsado ──────────────────────────── */
-.sb-item {
-  position: relative;
-}
+/* ── Tooltip colapsado ──────────────────────────────────────── */
+.sb-item { position: relative; }
 
 .sb-tooltip {
   position: absolute;
   left: calc(100% + 10px);
   top: 50%;
   transform: translateY(-50%);
-  background: var(--uveg-navy);
+  background: var(--color-accent-navy);
   color: var(--color-white);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
@@ -84,10 +81,244 @@
   top: 50%;
   transform: translateY(-50%);
   border: 5px solid transparent;
-  border-right-color: var(--uveg-navy);
+  border-right-color: var(--color-accent-navy);
 }
 
-/* Mostrar tooltip solo cuando el sidebar está colapsado */
-.sidebar.collapsed .sb-item:hover .sb-tooltip {
-  opacity: 1;
+.sidebar.collapsed .sb-item:hover .sb-tooltip { opacity: 1; }
+
+/* ── Bloque acordeón ────────────────────────────────────────── */
+.sb-block { width: 100%; }
+
+.sb-block-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  white-space: nowrap;
+  user-select: none;
 }
+
+.sb-block-header:hover { background: var(--color-tint-hover); }
+
+.sb-block-header i:first-child {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.sb-block-label {
+  flex: 1;
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+}
+
+.sb-block-chevron {
+  font-size: 14px;
+  color: var(--color-text-faint);
+  flex-shrink: 0;
+  transition: transform var(--transition-spring);
+}
+
+.sb-block-chevron.open { transform: rotate(180deg); }
+
+.sidebar.collapsed .sb-block-label,
+.sidebar.collapsed .sb-block-chevron { 
+  opacity: 0; 
+  pointer-events: none; 
+}
+
+.sidebar.collapsed .sb-block-wrap { 
+  display: none; 
+}
+
+.sidebar.collapsed .sb-section-label {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar.collapsed .sb-block-header {
+  justify-content: center;
+  padding: 9px 0;
+}
+
+/* ── Bloque: Mi Progreso ────────────────────────────────────── */
+.sb-prog-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--color-surface);
+  border: .5px solid var(--color-tint-border);
+  border-radius: var(--radius-lg);
+  margin: 0 4px var(--space-2);
+}
+
+.sb-prog-circle {
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+
+.sb-prog-pct {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.sb-prog-msg {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  text-align: center;
+}
+
+.sb-prog-sub {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.sb-prog-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color var(--transition-fast);
+}
+
+.sb-prog-link:hover { color: var(--color-accent-dark); }
+
+/* ── Bloque: Mi Menú ────────────────────────────────────────── */
+.sb-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.sb-menu-item:hover {
+  background: var(--color-tint-hover);
+  transform: translateX(2px);
+}
+
+.sb-menu-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-md);
+  background: var(--color-block-menu-icon-bg);
+  border: .5px solid var(--color-block-menu-icon-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sb-menu-icon i {
+  color: var(--color-block-menu-icon);
+  font-size: 13px;
+}
+
+.sb-menu-label {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Bloque: Próximas actividades ───────────────────────────── */
+.sb-act-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: 7px 10px;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.sb-act-item:hover { background: var(--color-tint-hover); }
+
+.sb-act-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.sb-act-dot--foro      { background: var(--color-act-dot-foro);      }
+.sb-act-dot--lectura   { background: var(--color-act-dot-lectura);   }
+.sb-act-dot--actividad { background: var(--color-act-dot-actividad); }
+
+.sb-act-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.sb-act-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sb-act-date {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-faint);
+}
+
+.sb-act-tag {
+  font-size: 8px;
+  font-weight: var(--font-weight-bold);
+  padding: 2px 5px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+.sb-act-tag--foro      { background: var(--color-act-tag-foro-bg);      color: var(--color-act-tag-foro-text);      }
+.sb-act-tag--lectura   { background: var(--color-act-tag-lectura-bg);   color: var(--color-act-tag-lectura-text);   }
+.sb-act-tag--actividad { background: var(--color-act-tag-actividad-bg); color: var(--color-act-tag-actividad-text); }
+
+.sb-act-cal {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 6px 10px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent);
+  cursor: pointer;
+  border-radius: var(--radius-lg);
+  transition: background var(--transition-fast);
+}
+
+.sb-act-cal i { font-size: 12px; }
+.sb-act-cal:hover { background: var(--color-tint-hover); }

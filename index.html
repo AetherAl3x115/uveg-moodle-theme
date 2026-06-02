@@ -48,6 +48,10 @@
   <!-- Estilos UVEG — punto de entrada único -->
   <link rel="stylesheet" href="./assets/css/main.css">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
   <!--
     Prevenir FOUC (Flash of Unstyled Content) en dark mode.
     Este script inline es intencional: debe ejecutarse ANTES de que
@@ -108,20 +112,25 @@
       <!-- ── Center (área principal scrollable) ─────────────── -->
       <main class="center" role="main">
 
-        <!-- Header del módulo -->
-        <div class="hrow">
-          <div>
-            <div class="mod-tag">
-              <i class="ti ti-circle-dot" style="font-size:9px" aria-hidden="true"></i>
-              MÓDULO EN CURSO
-            </div>
-            <h1 class="mod-title">
-              Planeación estratégica<br>
-              de proyectos educativos
-            </h1>
-          </div>
+        <!-- Breadcrumb -->
+          <nav class="breadcrumb-nav" aria-label="Navegación">
+            <a class="bc-item" href="#">Inicio</a>
+            <span class="bc-sep">›</span>
+            <a class="bc-item" href="#">Cursos</a>
+            <span class="bc-sep">›</span>
+            <span class="bc-item active">Módulo 01</span>
+          </nav>
 
-          <!-- Progreso compacto + botón IA -->
+      <!-- Header del módulo -->
+        <div class="hrow">
+          <div class="hrow-left">
+            <div class="mod-meta">Administración de proyectos educativos · Módulo 01</div>
+            <div class="mod-name">Planeación estratégica de proyectos educativos</div>
+            <div class="mod-status">
+              <i class="ti ti-circle-dot" style="font-size:9px" aria-hidden="true"></i>
+              Semana 1/4
+            </div>
+          </div>
           <div class="hrow-right">
             <div class="pbox" role="status" aria-label="Progreso del módulo">
               <div class="pl">
@@ -141,9 +150,9 @@
                 </div>
               </div>
             </div>
-            <button class="btn-ia" aria-label="Generar plan de estudio con IA">
-              <i class="ti ti-sparkles" aria-hidden="true"></i>
-              Plan de Estudio IA
+            <button class="btn-ia" aria-label="Glosario">
+              <i class="ti ti-books" aria-hidden="true"></i>
+              Glosario 
             </button>
           </div>
         </div>
@@ -396,21 +405,6 @@
         </section>
 
       </main><!-- /center -->
-
-      <!-- ── Right Panel ─────────────────────────────────────
-           Atributos configurables:
-             percent  → porcentaje de avance (0-100)
-             done     → actividades completadas
-             total    → total de actividades
-             message  → mensaje motivacional
-           ────────────────────────────────────────────────── -->
-      <uveg-progress
-        percent="70"
-        done="7"
-        total="10"
-        message="Avanzando muy bien">
-      </uveg-progress>
-
     </div><!-- /content-row -->
   </div><!-- /main -->
 </div><!-- /shell -->

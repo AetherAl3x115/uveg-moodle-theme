@@ -598,24 +598,6 @@
   padding: 11px !important;
 }
 
-.btn-ia {
-  background: var(--color-accent);
-  color: var(--color-white);
-  border: none;
-  border-radius: var(--radius-lg);
-  padding: 8px 14px;
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: transform var(--transition-fast), opacity var(--transition-fast);
-  white-space: nowrap;
-}
-
-.btn-ia:hover  { transform: scale(1.05); opacity: .92; }
-.btn-ia:active { transform: scale(.97); }
 
 .note {
   font-size: var(--font-size-sm);
