@@ -14,7 +14,6 @@
   gap: 10px;
 }
 
-/* Modo lista: 1 columna */
 .cards-grid.view-list {
   grid-template-columns: 1fr;
 }
@@ -23,7 +22,6 @@
   grid-column: 1;
 }
 
-/* Sub-acts: 1 col por defecto (modo tarjeta) */
 .sub-acts-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -31,12 +29,10 @@
   margin-bottom: 12px;
 }
 
-/* Modo lista: sub-acts en 2 columnas */
 .cards-grid.view-list .sub-acts-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-/* Reto: sub-acts siempre 1 columna */
 .card-reto .sub-acts-grid {
   grid-template-columns: 1fr !important;
 }
@@ -85,8 +81,8 @@
 
 /* ── Card base ──────────────────────────────────────────────── */
 .card {
-  background: var(--color-surface);
-  border: .5px solid var(--color-border);
+  background: var(--color-tint-bg);
+  border: .5px solid var(--color-tint-border);
   border-radius: var(--radius-2xl);
   cursor: pointer;
   overflow: hidden;
@@ -95,18 +91,18 @@
 }
 
 .card:hover {
-  border-color: #818cf8;
+  border-color: var(--color-accent-navy);
 }
 
 .card.open {
-  border-color: var(--uveg-blue);
+  border-color: var(--color-tint-border);
   border-width: 1px;
+  box-shadow: var(--shadow-accent);
 }
 
-/* Card reto: full width + fondo degradado sutil */
 .card-reto {
   grid-column: 1 / -1;
-  background: linear-gradient(135deg, var(--color-surface) 60%, var(--color-reto-bg));
+  background: var(--color-surface);
 }
 
 .c-top {
@@ -138,13 +134,10 @@
   transform: scale(1.1);
 }
 
-.av-pending  { background: var(--color-pending-bg);  color: var(--color-text-faint); }
-.av-progress { background: var(--color-progress-bg); color: var(--color-progress-text); }
-.av-done     { background: var(--color-done-bg);     color: var(--color-done-text); }
-.av-reto-base {
-  background: linear-gradient(135deg, var(--color-reto-bg), var(--color-progress-bg));
-  color: var(--color-reto-text);
-}
+.av-pending  { background: var(--color-tint-bg);  color: var(--color-accent); }
+.av-progress { background: var(--color-tint-bg);  color: var(--color-accent); }
+.av-done     { background: var(--color-done-bg);  color: var(--color-done-text); }
+.av-reto-base { background: var(--color-tint-bg); color: var(--color-accent); }
 
 /* Dot de estado */
 .av-dot {
@@ -158,9 +151,7 @@
   transition: background .4s, transform var(--transition-spring);
 }
 
-.card.open .av-dot {
-  transform: scale(1.15);
-}
+.card.open .av-dot { transform: scale(1.15); }
 
 .dot-pending  { background: var(--color-pending-dot); }
 .dot-progress { background: var(--color-progress-dot); }
@@ -205,7 +196,7 @@
   animation: spinIn .4s cubic-bezier(.4, 0, .2, 1) forwards;
 }
 
-/* Bar mode — toggle al hacer click en el circle */
+/* Bar mode */
 .state-bar-wrap {
   position: absolute;
   inset: 0;
@@ -221,8 +212,8 @@
   border-radius: var(--radius-full);
 }
 
-.state-circle.bar-mode svg           { opacity: 0 !important; }
-.state-circle.bar-mode .sc-icon      { opacity: 0 !important; }
+.state-circle.bar-mode svg            { opacity: 0 !important; }
+.state-circle.bar-mode .sc-icon       { opacity: 0 !important; }
 .state-circle.bar-mode .state-bar-wrap {
   opacity: 1 !important;
   pointer-events: auto;
@@ -249,10 +240,7 @@
 }
 
 /* ── Card info ──────────────────────────────────────────────── */
-.c-info {
-  flex: 1;
-  min-width: 0;
-}
+.c-info { flex: 1; min-width: 0; }
 
 .c-title {
   font-size: var(--font-size-base);
@@ -283,7 +271,7 @@
 .b-pending  { background: var(--color-pending-bg);  color: var(--color-pending-text); }
 .b-progress { background: var(--color-progress-bg); color: var(--color-progress-text); }
 .b-done     { background: var(--color-done-bg);     color: var(--color-done-text); }
-.b-reto     { background: var(--color-reto-bg);     color: var(--color-reto-text); }
+.b-reto     { background: var(--color-tint-bg);     color: var(--color-reto-text); }
 
 /* ── Card footer ────────────────────────────────────────────── */
 .c-footer {
@@ -307,17 +295,15 @@
 .cf-chip {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
-  background: var(--color-bg);
-  color: var(--color-text-muted);
+  background: var(--color-tint-bg);
+  color: var(--color-accent);
   padding: 2px 7px;
   border-radius: var(--radius-full);
+  border: .5px solid var(--color-tint-border);
 }
 
 /* ── Blob expand ────────────────────────────────────────────── */
-.blob-wrap {
-  height: 0;
-  overflow: hidden;
-}
+.blob-wrap  { height: 0; overflow: hidden; }
 
 .blob-inner {
   padding: 0 14px 14px;
@@ -347,8 +333,8 @@
 }
 
 .sim-btn:hover {
-  color: var(--uveg-blue);
-  border-color: var(--uveg-blue);
+  color: var(--color-accent);
+  border-color: var(--color-accent);
 }
 
 /* ── Sub-actividades ────────────────────────────────────────── */
@@ -362,8 +348,8 @@
 }
 
 .sub-act-card {
-  background: var(--color-bg);
-  border: .5px solid var(--color-border);
+  background: var(--color-tint-bg);
+  border: .5px solid var(--color-tint-border);
   border-radius: var(--radius-lg);
   padding: 12px;
   border-left: 3px solid;
@@ -382,17 +368,14 @@
   z-index: 0;
 }
 
-.sub-act-card.tarea::before   { background: rgba(13, 85, 222, 0.07); }
-.sub-act-card.examen::before  { background: rgba(124, 58, 237, 0.07); }
-.sub-act-card.entrega::before { background: rgba(234, 88, 12, 0.07); }
+.sub-act-card.tarea::before   { background: var(--color-tint-hover); }
+.sub-act-card.examen::before  { background: var(--color-tint-hover); }
+.sub-act-card.entrega::before { background: var(--color-tint-hover); }
 
 .sub-act-card:hover::before { width: 100%; }
+.sub-act-card:hover         { transform: translateY(-1px); }
 
-.sub-act-card:hover {
-  transform: translateY(-1px);
-}
-
-.sub-act-card.tarea   { border-left-color: var(--uveg-blue); }
+.sub-act-card.tarea   { border-left-color: var(--color-accent); }
 .sub-act-card.examen  { border-left-color: var(--color-examen-accent); }
 .sub-act-card.entrega { border-left-color: var(--color-entrega-accent); }
 
@@ -423,7 +406,7 @@
   letter-spacing: .3px;
 }
 
-.sub-act-badge.tarea   { background: var(--color-reto-bg);    color: var(--color-reto-text); }
+.sub-act-badge.tarea   { background: var(--color-tint-bg);  color: var(--color-reto-text); }
 .sub-act-badge.examen  { background: #fdf4ff; color: #7e22ce; }
 .sub-act-badge.entrega { background: #fff7ed; color: #9a3412; }
 
@@ -457,7 +440,7 @@
 .sub-act-link {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
-  color: var(--uveg-blue);
+  color: var(--color-accent);
   display: flex;
   align-items: center;
   gap: 3px;
@@ -507,9 +490,9 @@
   font-weight: var(--font-weight-black);
 }
 
-/* ── Reto header especial ───────────────────────────────────── */
+/* ── Reto header ────────────────────────────────────────────── */
 .reto-header {
-  background: var(--uveg-gradient);
+  background: var(--color-accent-dark);
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   padding: 16px;
   margin: -14px -14px 14px;
@@ -589,7 +572,7 @@
 /* ── Buttons ────────────────────────────────────────────────── */
 .btn-go {
   width: 100%;
-  background: var(--uveg-gradient);
+  background: var(--color-accent);
   color: var(--color-white);
   border: none;
   border-radius: var(--radius-lg);
@@ -607,17 +590,16 @@
   background: var(--color-pending-bg) !important;
   color: var(--color-pending-dot) !important;
   cursor: not-allowed !important;
-  background-image: none !important;
 }
 
 .btn-reto {
-  background: var(--uveg-gradient) !important;
+  background: var(--color-accent) !important;
   font-size: 13px !important;
   padding: 11px !important;
 }
 
 .btn-ia {
-  background: var(--uveg-gradient);
+  background: var(--color-accent);
   color: var(--color-white);
   border: none;
   border-radius: var(--radius-lg);
@@ -645,27 +627,27 @@
 }
 
 /* ── Dark mode ──────────────────────────────────────────────── */
-[data-bs-theme="dark"] .card          { background: var(--color-surface); border-color: var(--color-border); }
-[data-bs-theme="dark"] .card-reto     { background: linear-gradient(135deg, var(--color-surface) 60%, var(--color-reto-bg)); }
-[data-bs-theme="dark"] .card:hover    { border-color: #4f6bd4; }
-[data-bs-theme="dark"] .card.open     { border-color: var(--uveg-blue); }
-[data-bs-theme="dark"] .c-title       { color: var(--color-text-primary); }
-[data-bs-theme="dark"] .c-type        { color: var(--color-text-faint); }
-[data-bs-theme="dark"] .c-footer      { border-color: var(--color-border-light); }
-[data-bs-theme="dark"] .cf-date       { color: var(--color-text-faint); }
-[data-bs-theme="dark"] .cf-chip       { background: var(--color-border-light); color: var(--color-text-muted); }
-[data-bs-theme="dark"] .av-pending    { background: var(--color-border-light); }
-[data-bs-theme="dark"] .b-pending     { background: var(--color-border-light); color: var(--color-text-muted); }
-[data-bs-theme="dark"] .b-div         { background: var(--color-border-light); }
-[data-bs-theme="dark"] .b-desc        { color: var(--color-text-muted); }
-[data-bs-theme="dark"] .bd-lbl        { color: var(--color-text-faint); }
-[data-bs-theme="dark"] .bd-val        { color: var(--color-text-secondary); }
-[data-bs-theme="dark"] .sub-act-card  { background: var(--color-border-light); border-color: var(--color-border); }
-[data-bs-theme="dark"] .sub-act-name  { color: var(--color-text-primary); }
-[data-bs-theme="dark"] .sub-act-desc  { color: var(--color-text-muted); }
-[data-bs-theme="dark"] .tv-wrap       { background: var(--color-border-light); }
-[data-bs-theme="dark"] .tv-btn.active { background: var(--color-border); color: var(--color-text-secondary); }
+[data-bs-theme="dark"] .card           { background: var(--color-tint-bg); border-color: var(--color-tint-border); }
+[data-bs-theme="dark"] .card-reto      { background: var(--color-surface); }
+[data-bs-theme="dark"] .card:hover     { border-color: var(--color-accent-navy); }
+[data-bs-theme="dark"] .card.open      { border-color: var(--color-tint-border); box-shadow: var(--shadow-accent); }
+[data-bs-theme="dark"] .c-title        { color: var(--color-text-primary); }
+[data-bs-theme="dark"] .c-type         { color: var(--color-text-faint); }
+[data-bs-theme="dark"] .c-footer       { border-color: var(--color-border-light); }
+[data-bs-theme="dark"] .cf-date        { color: var(--color-text-faint); }
+[data-bs-theme="dark"] .cf-chip        { background: var(--color-tint-bg); color: var(--color-accent); border-color: var(--color-tint-border); }
+[data-bs-theme="dark"] .av-pending     { background: var(--color-tint-bg); color: var(--color-accent); }
+[data-bs-theme="dark"] .b-pending      { background: var(--color-tint-bg); color: var(--color-accent); }
+[data-bs-theme="dark"] .b-div          { background: var(--color-border-light); }
+[data-bs-theme="dark"] .b-desc         { color: var(--color-text-muted); }
+[data-bs-theme="dark"] .bd-lbl         { color: var(--color-text-faint); }
+[data-bs-theme="dark"] .bd-val         { color: var(--color-text-secondary); }
+[data-bs-theme="dark"] .sub-act-card   { background: var(--color-tint-bg); border-color: var(--color-tint-border); }
+[data-bs-theme="dark"] .sub-act-name   { color: var(--color-text-primary); }
+[data-bs-theme="dark"] .sub-act-desc   { color: var(--color-text-muted); }
+[data-bs-theme="dark"] .tv-wrap        { background: var(--color-border-light); }
+[data-bs-theme="dark"] .tv-btn.active  { background: var(--color-border); color: var(--color-text-secondary); }
 [data-bs-theme="dark"] .state-bar-wrap { background: var(--color-surface); }
-[data-bs-theme="dark"] .btn-locked    { background: var(--color-border-light) !important; color: #334155 !important; }
-[data-bs-theme="dark"] .sim-btn       { color: var(--color-text-faint); border-color: var(--color-border); }
-[data-bs-theme="dark"] .sim-btn:hover { color: #60a5fa; border-color: #60a5fa; }
+[data-bs-theme="dark"] .btn-locked     { background: var(--color-tint-bg) !important; color: var(--color-text-faint) !important; }
+[data-bs-theme="dark"] .sim-btn        { color: var(--color-text-faint); border-color: var(--color-border); }
+[data-bs-theme="dark"] .sim-btn:hover  { color: var(--color-accent-navy); border-color: var(--color-accent-navy); }

@@ -31,7 +31,7 @@
  *   card-id, title, subtitle, type, state, variant,
  *   date-start, date-end, progress-done, progress-total, scorm-title
  *
- * Estados válidos: pending | progress | done
+ * Estados válidos: pending | done
  * Variantes:       default | reto
  *
  * Eventos emitidos:
@@ -341,7 +341,6 @@ class UvegCard extends HTMLElement {
   }
 
   _renderSubActs(state) {
-    // Sub-actividades de ejemplo — en producción vendrían de atributos/slots
     const locked = state === "pending";
     const tareaLinkLabel =
       state === "done"
@@ -425,10 +424,8 @@ class UvegCard extends HTMLElement {
     const card = this.querySelector(".card");
     if (!card) return;
 
-    // Click en card → expand/collapse
     card.addEventListener("click", this._handleCardClick.bind(this));
 
-    // Hover spring
     card.addEventListener("mouseenter", () => {
       if (!this._isOpen) springScale(card, 1, 1.013);
     });
@@ -444,21 +441,18 @@ class UvegCard extends HTMLElement {
   }
 
   _handleCardClick(e) {
-    // Botón simular progreso
     if (e.target.closest("[data-sim]")) {
       e.stopPropagation();
       this._simulateProgress();
       return;
     }
 
-    // Botón state circle → toggle bar mode
     if (e.target.closest("[data-sc]")) {
       e.stopPropagation();
       this._toggleBarMode();
       return;
     }
 
-    // Botón abrir SCORM
     if (e.target.closest("[data-scorm-btn]")) {
       e.stopPropagation();
       const btn = e.target.closest("[data-scorm-btn]");
@@ -475,7 +469,6 @@ class UvegCard extends HTMLElement {
       return;
     }
 
-    // Click normal → expand/collapse
     this._toggleExpand();
   }
 
@@ -516,34 +509,35 @@ class UvegCard extends HTMLElement {
   _simulateProgress() {
     const card = this.querySelector(".card");
     const current = card.dataset.state;
-    const next =
-      current === "pending"
-        ? "progress"
-        : current === "progress"
-          ? "done"
-          : "pending";
 
-    // Actualizar atributo → dispara attributeChangedCallback → re-render
+    // FIX 1: solo pending ↔ done, sin pasar por progress
+    const next = current === "pending" ? "done" : "pending";
+
+    // FIX 2: capturar wasOpen ANTES del re-render
+    // setAttribute → attributeChangedCallback → _render() destruye el DOM
+    const wasOpen = this._isOpen;
+
     this.setAttribute("state", next);
 
-    // Si está abierta, recalcular altura del blob
-    if (this._isOpen) {
+    // Si estaba abierta, restaurar blob y clase open tras el re-render
+    if (wasOpen) {
       const bw = this.querySelector("[data-bw]");
       const bi = this.querySelector("[data-bi]");
+      const cardNew = this.querySelector(".card");
+
+      cardNew?.classList.add("open");
+
       if (bw && bi) {
-        bw.style.height = "auto";
+        // El contenido cambió (estado distinto) — recalcular altura real
         requestAnimationFrame(() => {
           bw.style.height = bi.scrollHeight + "px";
         });
       }
-      // Rebind events tras re-render
-      this._bindEvents();
     }
   }
 
   /* ── Public API ─────────────────────────────────────────── */
 
-  /** Cierra la card programáticamente (usado por otras cards al abrirse) */
   close() {
     if (!this._isOpen) return;
     const bw = this.querySelector("[data-bw]");

@@ -2,6 +2,7 @@
  * uveg-tabs.css
  * ─────────────────────────────────────────────────────────────
  * Estilos del Web Component <uveg-tabs>.
+ * Fill direccional via ::before + dot emergente via JS.
  * ─────────────────────────────────────────────────────────────
  */
 
@@ -10,11 +11,40 @@
   display: flex;
   gap: 3px;
   margin-bottom: var(--space-4);
-  background: var(--color-surface);
-  border: .5px solid var(--color-border);
+  background: var(--color-tint-bg);
+  border: 1px solid var(--color-tint-border);
   border-radius: var(--radius-xl);
   padding: 4px;
   width: fit-content;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Dot emergente — posicionado por JS ─────────────────────── */
+.tab-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--color-accent-dark);
+  pointer-events: none;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  transform: translateX(-50%) translateY(60%);
+  transition: left .35s cubic-bezier(.34, 1.1, .64, 1);
+}
+
+.tab-dot.up {
+  animation: tabDotBubble .55s cubic-bezier(.34, 1.6, .64, 1) forwards;
+}
+
+@keyframes tabDotBubble {
+  0%   { transform: translateX(-50%) translateY(60%)   scaleX(.7)   scaleY(1.3); }
+  40%  { transform: translateX(-50%) translateY(-140%) scaleX(1.2)  scaleY(.75); }
+  65%  { transform: translateX(-50%) translateY(-100%) scaleX(.88)  scaleY(1.15); }
+  82%  { transform: translateX(-50%) translateY(-120%) scaleX(1.08) scaleY(.92); }
+  100% { transform: translateX(-50%) translateY(-115%) scaleX(1)    scaleY(1); }
 }
 
 /* ── Tab item ───────────────────────────────────────────────── */
@@ -23,37 +53,99 @@
   border-radius: var(--radius-md);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-medium);
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 5px;
-  transition: all var(--transition-base);
   white-space: nowrap;
   user-select: none;
   position: relative;
+  z-index: 2;
   overflow: hidden;
   border: none;
-  background: none;
+  background: transparent;
+  transition: color var(--transition-base);
 }
 
 .tab.active {
-  background: var(--uveg-gradient);
   color: var(--color-white);
 }
 
-.tab:hover:not(.active) {
-  background: var(--color-bg);
+/* ── Fill de agua — direccional via clases JS ───────────────── */
+.tab::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-accent-dark);
+  box-shadow: var(--shadow-accent);
+  z-index: -1;
+  transform: scaleX(0);
+  transition: none;
+}
+
+.tab.active::before {
+  transform: scaleX(1);
+  box-shadow: var(--shadow-accent);
+}
+
+.tab.fill-from-left::before {
+  transform-origin: left center;
+  transition: transform .48s cubic-bezier(.16, 1, .3, 1);
+}
+
+.tab.fill-from-right::before {
+  transform-origin: right center;
+  transition: transform .48s cubic-bezier(.16, 1, .3, 1);
+}
+
+.tab.drain-to-left::before {
+  transform-origin: right center;
+  transition: transform .38s cubic-bezier(.4, 0, 1, 1);
+}
+
+.tab.drain-to-right::before {
+  transform-origin: left center;
+  transition: transform .38s cubic-bezier(.4, 0, 1, 1);
+}
+
+/* ── Color durante drain — blanco → secondary sincronizado ─── */
+.tab.drain-to-left,
+.tab.drain-to-right {
+  color: var(--color-white);
+  transition: color .38s cubic-bezier(.4, 0, 1, 1);
+}
+
+/* ── Hover bg — elemento interno animado ───────────────────── */
+.tab-hover-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-tint-hover);
+  opacity: 0;
+  transform: scale(.92);
+  transition:
+    opacity .18s ease,
+    transform .22s cubic-bezier(.34, 1.56, .64, 1);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.tab:not(.active):hover .tab-hover-bg {
+  opacity: 1;
+  transform: scale(1);
 }
 
 /* ── Ripple ─────────────────────────────────────────────────── */
 .tab-ripple {
   position: absolute;
   border-radius: var(--radius-full);
-  background: rgba(13, 85, 222, .25);
+  background: rgba(37, 99, 235, .2);
   transform: scale(0);
   animation: tabRippleOut .5s ease-out forwards;
   pointer-events: none;
+  z-index: 3;
 }
 
 @keyframes tabRippleOut {
@@ -74,26 +166,6 @@
 }
 
 @keyframes fadeSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ── Dark mode ──────────────────────────────────────────────── */
-[data-bs-theme="dark"] .tabs {
-  background: var(--color-surface);
-  border-color: var(--color-border);
-}
-
-[data-bs-theme="dark"] .tab {
-  color: var(--color-text-faint);
-}
-
-[data-bs-theme="dark"] .tab:hover:not(.active) {
-  background: var(--color-border-light);
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

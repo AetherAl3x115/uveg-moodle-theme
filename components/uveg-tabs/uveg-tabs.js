@@ -2,33 +2,11 @@
  * components/uveg-tabs/uveg-tabs.js
  * ─────────────────────────────────────────────────────────────
  * Web Component <uveg-tabs>
- *
- * Uso en HTML — declarativo, los panels son slots:
- *
- *   <uveg-tabs active="unidad1">
- *     <uveg-tab key="avisos"       icon="ti-mail"     label="Avisos"></uveg-tab>
- *     <uveg-tab key="presentacion" icon="ti-bookmark" label="Presentación"></uveg-tab>
- *     <uveg-tab key="unidad1"      icon="ti-book"     label="Unidad 1"></uveg-tab>
- *     <uveg-tab key="unidad2"      icon="ti-book"     label="Unidad 2"></uveg-tab>
- *   </uveg-tabs>
- *
- *   <!-- Panels: cualquier elemento con data-panel="key" -->
- *   <div data-panel="avisos">...</div>
- *   <div data-panel="unidad1">...</div>
- *
- * Atributos observados en <uveg-tabs>:
- *   active  → key del tab activo
- *
- * Eventos emitidos:
- *   uveg:tabchange → { detail: { tab: 'unidad1', prev: 'avisos' } }
+ * Fill direccional + dot emergente estilo gota.
  * ─────────────────────────────────────────────────────────────
  */
 
-import {
-  springWidth,
-  springScale,
-  createRipple,
-} from "../../js/utils/spring.js";
+import { springScale, createRipple } from "../../js/utils/spring.js";
 
 /* ── <uveg-tab> — elemento hijo declarativo ─────────────────── */
 class UvegTab extends HTMLElement {
@@ -47,6 +25,10 @@ class UvegTabs extends HTMLElement {
   constructor() {
     super();
     this._activeKey = null;
+    this._activeIdx = null;
+    this._dot = null;
+    this._dotReady = false;
+    this._resizeObs = null;
   }
 
   connectedCallback() {
@@ -54,16 +36,29 @@ class UvegTabs extends HTMLElement {
     this._render();
     this._bindEvents();
     this._syncPanels(this._activeKey);
+
+    requestAnimationFrame(() => {
+      const active = this.querySelector(".tab.active");
+      if (active) this._moveDot(active, false);
+
+      this._resizeObs = new ResizeObserver(() => {
+        const a = this.querySelector(".tab.active");
+        if (a) this._moveDot(a, false);
+      });
+      this._resizeObs.observe(this.querySelector(".tabs"));
+    });
+  }
+
+  disconnectedCallback() {
+    this._resizeObs?.disconnect();
   }
 
   attributeChangedCallback(name, oldVal, newVal) {
     if (oldVal === newVal || !this.isConnected) return;
-    if (name === "active") {
-      this._switchTab(newVal, false); // false = sin emitir evento
-    }
+    if (name === "active") this._switchTab(newVal, false);
   }
 
-  /* ── Leer definición de tabs desde children <uveg-tab> ───── */
+  /* ── Tab defs ───────────────────────────────────────────── */
 
   _getTabDefs() {
     return Array.from(this.querySelectorAll("uveg-tab")).map((el) => ({
@@ -76,37 +71,83 @@ class UvegTabs extends HTMLElement {
   /* ── Render ─────────────────────────────────────────────── */
 
   _render() {
-    const tabs = this._getTabDefs();
+    this.querySelector(".tabs-outer")?.remove();
 
-    // Insertar barra de tabs antes del primer <uveg-tab>
-    // sin tocar el contenido del slot
-    const existing = this.querySelector(".tabs");
-    if (existing) existing.remove();
+    const outer = document.createElement("div");
+    outer.className = "tabs-outer";
+    outer.style.cssText = "position:relative; width:fit-content;";
+
+    // Dot
+    this._dot = document.createElement("div");
+    this._dot.className = "tab-dot";
+    outer.appendChild(this._dot);
 
     const bar = document.createElement("div");
     bar.className = "tabs";
     bar.setAttribute("role", "tablist");
     bar.setAttribute("aria-label", "Secciones del módulo");
 
-    tabs.forEach((tab) => {
+    const defs = this._getTabDefs();
+    defs.forEach((tab, idx) => {
+      const isActive = tab.key === this._activeKey;
+      if (isActive) this._activeIdx = idx;
+
       const btn = document.createElement("button");
-      btn.className = `tab${tab.key === this._activeKey ? " active" : ""}`;
+      btn.className = `tab${isActive ? " active fill-from-left" : ""}`;
       btn.dataset.tab = tab.key;
+      btn.dataset.idx = idx;
       btn.setAttribute("role", "tab");
-      btn.setAttribute("aria-selected", String(tab.key === this._activeKey));
+      btn.setAttribute("aria-selected", String(isActive));
       btn.setAttribute("aria-controls", `panel-${tab.key}`);
       btn.id = `tab-${tab.key}`;
+
+      const hoverBg = document.createElement("span");
+      hoverBg.className = "tab-hover-bg";
+      hoverBg.setAttribute("aria-hidden", "true");
 
       btn.innerHTML = `
         <i class="ti ${tab.icon}" aria-hidden="true" style="font-size:12px"></i>
         ${tab.label}
       `;
-
+      btn.insertBefore(hoverBg, btn.firstChild);
       bar.appendChild(btn);
     });
 
-    // Insertar al inicio del componente
-    this.insertBefore(bar, this.firstChild);
+    outer.appendChild(bar);
+    this.insertBefore(outer, this.firstChild);
+  }
+
+  /* ── Dot ────────────────────────────────────────────────── */
+
+  _getDotCenter(btn) {
+    const outerRect = this.querySelector(".tabs-outer").getBoundingClientRect();
+    const btnRect = btn.getBoundingClientRect();
+    return btnRect.left - outerRect.left + btnRect.width / 2;
+  }
+
+  _triggerBubble() {
+    this._dot.classList.remove("up");
+    void this._dot.offsetWidth; // reflow
+    this._dot.classList.add("up");
+  }
+
+  _moveDot(btn, animate = true) {
+    const center = this._getDotCenter(btn);
+
+    if (!animate || !this._dotReady) {
+      this._dot.style.transition = "none";
+      this._dot.style.left = `${center}px`;
+      requestAnimationFrame(() => {
+        this._dot.style.transition = "";
+        this._dotReady = true;
+        this._triggerBubble();
+      });
+      return;
+    }
+
+    this._dot.classList.remove("up");
+    this._dot.style.left = `${center}px`;
+    setTimeout(() => this._triggerBubble(), 130);
   }
 
   /* ── Events ─────────────────────────────────────────────── */
@@ -114,7 +155,6 @@ class UvegTabs extends HTMLElement {
   _bindEvents() {
     const bar = this.querySelector(".tabs");
     if (!bar) return;
-
     bar.addEventListener("click", this._handleClick.bind(this));
     bar.addEventListener("keydown", this._handleKeydown.bind(this));
   }
@@ -124,7 +164,7 @@ class UvegTabs extends HTMLElement {
     if (!btn || btn.classList.contains("active")) return;
 
     createRipple(btn, e, "tab-ripple", 500);
-    springScale(btn, 0.94, 1);
+    springScale(btn, 0.97, 1);
     this._switchTab(btn.dataset.tab, true);
   }
 
@@ -150,21 +190,53 @@ class UvegTabs extends HTMLElement {
 
   _switchTab(key, emit = true) {
     const prev = this._activeKey;
+    const prevIdx = this._activeIdx;
     if (prev === key) return;
 
-    this._activeKey = key;
+    const newBtn = this.querySelector(`.tab[data-tab="${key}"]`);
+    const newIdx = parseInt(newBtn?.dataset.idx ?? 0);
+    const dir = newIdx > prevIdx ? "right" : "left";
 
-    // Actualizar botones
+    this._activeKey = key;
+    this._activeIdx = newIdx;
+
+    // Drenar anterior
     this.querySelectorAll(".tab[data-tab]").forEach((btn) => {
-      const isActive = btn.dataset.tab === key;
-      btn.classList.toggle("active", isActive);
-      btn.setAttribute("aria-selected", String(isActive));
+      if (btn.classList.contains("active")) {
+        btn.classList.remove(
+          "active",
+          "fill-from-left",
+          "fill-from-right",
+          "drain-to-left",
+          "drain-to-right",
+        );
+        btn.classList.add(dir === "right" ? "drain-to-left" : "drain-to-right");
+        btn.setAttribute("aria-selected", "false");
+        setTimeout(
+          () => btn.classList.remove("drain-to-left", "drain-to-right"),
+          420,
+        );
+      }
     });
 
-    // Sincronizar panels en el DOM
+    // Llenar nuevo
+    if (newBtn) {
+      newBtn.classList.remove(
+        "drain-to-left",
+        "drain-to-right",
+        "fill-from-left",
+        "fill-from-right",
+      );
+      newBtn.classList.add(
+        "active",
+        dir === "right" ? "fill-from-left" : "fill-from-right",
+      );
+      newBtn.setAttribute("aria-selected", "true");
+      this._moveDot(newBtn, true);
+    }
+
     this._syncPanels(key);
 
-    // Emitir evento
     if (emit) {
       this.dispatchEvent(
         new CustomEvent("uveg:tabchange", {
@@ -176,18 +248,13 @@ class UvegTabs extends HTMLElement {
     }
   }
 
-  /**
-   * Muestra el panel correspondiente al key activo.
-   * Busca elementos con [data-panel="key"] en el documento,
-   * no limitado al shadow DOM — compatible con layout externo.
-   */
+  /* ── Panels ─────────────────────────────────────────────── */
+
   _syncPanels(key) {
     document.querySelectorAll("[data-panel]").forEach((panel) => {
       const isActive = panel.dataset.panel === key;
       panel.classList.toggle("tab-panel", true);
       panel.classList.toggle("active", isActive);
-
-      // Accesibilidad
       panel.setAttribute("role", "tabpanel");
       panel.setAttribute("aria-labelledby", `tab-${panel.dataset.panel}`);
       panel.id = `panel-${panel.dataset.panel}`;
