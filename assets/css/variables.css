@@ -10,7 +10,7 @@
 
   /* ── Brand Accent ─────────────────────────────────────────── */
   --color-accent:        #2662eb;
-  --color-accent-dark:   #1d4ed8;
+  --color-accent-dark:   #1445c4;
   --color-accent-navy:   #4c45e5;
 
   /* ── Tinted Surface (accent-tinted backgrounds) ───────────── */
@@ -27,6 +27,16 @@
   --color-surface:       #ffffff;
   --color-border:        #e5e7eb;
   --color-border-light:  #f3f4f6;
+
+  /* ── Card tokens ──────────────────────────────────────────── */
+  --color-card-bg:          #edf1f7;
+  --color-card-border:      #d6dce8;
+  --color-card-border-hover:#a8bcda;
+  --color-card-chip-bg:     #8fa3b8;
+  --color-card-chip-border: #7a92a8;
+  --color-av-bg:            #dde5f3;
+  --color-sub-border:       #dee6ff;
+  --bs-card-bg:             #edf1f7;
 
   --color-text-primary:   #111827;
   --color-text-secondary: #374151;

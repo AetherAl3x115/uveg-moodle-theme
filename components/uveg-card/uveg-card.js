@@ -48,13 +48,13 @@ const STATE_CONFIG = {
     avClass: "av-pending",
     dotClass: "dot-pending",
     badgeClass: "b-pending",
-    badgeIcon: "ti-lock",
+    badgeIcon: "ti-clock",
     badgeLabel: "Pendiente",
-    ringStroke: "#d1d5db",
-    ringDash: "0 106.8",
+    ringStroke: "#cbd5e1",
+    ringDash: "26.7 80.1",
     iconClass: "pending",
-    iconName: "ti-dots",
-    barColor: "#d1d5db",
+    iconName: "ti-clock",
+    barColor: "#cbd5e1",
     barWidth: "0%",
     barVal: "0%",
     barValColor: "#9ca3af",
@@ -100,6 +100,7 @@ class UvegCard extends HTMLElement {
       "card-id",
       "title",
       "subtitle",
+      "desc",
       "type",
       "state",
       "variant",
@@ -162,54 +163,45 @@ class UvegCard extends HTMLElement {
     return `
       <div class="card" data-card-id="${id}" data-state="${state}">
         <div class="c-top">
-          <div class="c-row">
+          <div class="c-accent-bar ${state}" data-accentbar></div>
+          <div class="c-row" style="flex:1">
 
-            <!-- Avatar con dot de estado -->
+             <!-- Avatar con dot de estado -->
             <div class="av ${cfg.avClass}" data-av>
-              <i class="ti ti-book-2" aria-hidden="true"></i>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="M8 9h8"/><path d="M8 13h6"/><path d="m14.5 17.5 2.5-2.5 1.5 1.5-2.5 2.5H14.5v-1.5z"/></svg>
               <span class="av-dot ${cfg.dotClass}" data-dot></span>
             </div>
 
             <!-- Info -->
             <div class="c-info">
               <div class="c-title">${title}</div>
-              <div class="c-type">${type}</div>
+              <div class="c-desc">${this._attr("desc", "Explora los contenidos y actividades de esta lección para avanzar en el módulo.")}</div>
               <span class="badge ${cfg.badgeClass}" data-badge>
                 <i class="ti ${cfg.badgeIcon}" style="font-size:9px" aria-hidden="true"></i>
                 ${cfg.badgeLabel}
               </span>
             </div>
 
-            <!-- State circle (click = toggle bar/ring) -->
-            <div
-              class="state-circle"
-              data-sc
-              role="button"
-              tabindex="0"
-              aria-label="Ver progreso detallado"
-              title="Click para cambiar vista">
-              ${this._renderRing(id, cfg)}
-              <div class="sc-icon ${cfg.iconClass}" data-scicon>
-                <i class="ti ${cfg.iconName}" aria-hidden="true"></i>
-              </div>
-              <div class="state-bar-wrap" aria-hidden="true">
-                <div class="state-bar">
-                  <div class="state-bar-fill" data-barfill style="background:${cfg.barColor};width:${cfg.barWidth}"></div>
+         <!-- Columna derecha: ring + chevron arriba, chip abajo -->
+            <div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:4px;flex-shrink:0">
+              <div style="display:flex;align-items:center;gap:5px">
+                <div class="state-circle" data-sc role="button" tabindex="0" aria-label="Ver progreso">
+                  ${this._renderRing(id, cfg)}
+                  <div class="sc-icon ${cfg.iconClass}" data-scicon>
+                    <i class="ti ${cfg.iconName}" aria-hidden="true"></i>
+                  </div>
                 </div>
-                <span class="state-bar-val" data-barval style="color:${cfg.barValColor}">${cfg.barVal}</span>
+                <i class="ti ti-chevron-down" data-chevron aria-hidden="true"
+                  style="font-size:14px;color:#94a3b8;transition:transform .3s cubic-bezier(.4,0,.2,1)"></i>
               </div>
+              <span class="cf-chip" data-chip>${cfg.chipText(done, total)}</span>
             </div>
 
           </div>
         </div>
 
-        <!-- Footer -->
-        <div class="c-footer">
-          <div class="cf-date"><i class="ti ti-calendar" style="font-size:11px" aria-hidden="true"></i> ${dateStart}</div>
-          <div class="cf-date"><i class="ti ti-clock"    style="font-size:11px" aria-hidden="true"></i> ${dateEnd}</div>
-          <div class="cf-sep"></div>
-          <span class="cf-chip" data-chip>${cfg.chipText(done, total)}</span>
-        </div>
+        <!-- Footer vacío — estructura conservada -->
+        <div class="c-footer" style="padding:0;border:none;min-height:0"></div>
 
         <!-- Blob expandible -->
         <div class="blob-wrap" data-bw>
@@ -247,10 +239,11 @@ class UvegCard extends HTMLElement {
 
     return `
       <div class="card card-reto" data-card-id="${id}" data-state="${state}">
-        <div class="c-top">
+                <div class="c-top" style="padding:14px 14px 0;display:block">
 
           <!-- Header gradient UVEG -->
           <div class="reto-header">
+
             <div class="reto-header-icon">
               <i class="ti ti-trophy" aria-hidden="true"></i>
             </div>
@@ -340,82 +333,85 @@ class UvegCard extends HTMLElement {
     `;
   }
 
+  _svgByType(type) {
+    // SVG duotone inline por tipo de actividad
+    const svgs = {
+      video: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><rect x="24" y="50" width="156" height="156" rx="14" fill="#e50061" opacity=".18"/><rect x="24" y="50" width="156" height="156" rx="14" stroke="#e50061" stroke-width="14" fill="none"/><path d="M180 128L236 92v72z" fill="#e50061" opacity=".5"/><path d="M180 128L236 92v72z" stroke="#e50061" stroke-width="12" stroke-linejoin="round" fill="none"/></svg>`,
+      podcast: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><rect x="88" y="16" width="80" height="120" rx="40" fill="#7c3aed" opacity=".2"/><rect x="88" y="16" width="80" height="120" rx="40" stroke="#7c3aed" stroke-width="14" fill="none"/><path d="M48 128c0 44.2 35.8 80 80 80s80-35.8 80-80" stroke="#7c3aed" stroke-width="14" stroke-linecap="round" fill="none"/><line x1="128" y1="208" x2="128" y2="240" stroke="#7c3aed" stroke-width="14" stroke-linecap="round"/><line x1="96" y1="240" x2="160" y2="240" stroke="#7c3aed" stroke-width="14" stroke-linecap="round"/></svg>`,
+      infografia: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><rect x="32" y="140" width="48" height="76" rx="6" fill="#0891b2" opacity=".2"/><rect x="104" y="96" width="48" height="120" rx="6" fill="#0891b2" opacity=".35"/><rect x="176" y="48" width="48" height="168" rx="6" fill="#0891b2" opacity=".55"/><rect x="32" y="140" width="48" height="76" rx="6" stroke="#0891b2" stroke-width="12" fill="none"/><rect x="104" y="96" width="48" height="120" rx="6" stroke="#0891b2" stroke-width="12" fill="none"/><rect x="176" y="48" width="48" height="168" rx="6" stroke="#0891b2" stroke-width="12" fill="none"/></svg>`,
+      presentacion: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><rect x="16" y="40" width="224" height="152" rx="12" fill="#d97706" opacity=".15"/><rect x="16" y="40" width="224" height="152" rx="12" stroke="#d97706" stroke-width="14" fill="none"/><line x1="128" y1="192" x2="128" y2="224" stroke="#d97706" stroke-width="14" stroke-linecap="round"/><line x1="80" y1="224" x2="176" y2="224" stroke="#d97706" stroke-width="14" stroke-linecap="round"/><path d="M72 116 L108 80 L144 108 L184 68" stroke="#d97706" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
+      lectura: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><path d="M128 208C128 208 24 160 24 80V48L128 16L232 48V80C232 160 128 208 128 208Z" fill="#16a34a" opacity=".15"/><path d="M128 208C128 208 24 160 24 80V48L128 16L232 48V80C232 160 128 208 128 208Z" stroke="#16a34a" stroke-width="14" stroke-linejoin="round" fill="none"/><path d="M88 128 L112 152 L168 96" stroke="#16a34a" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
+    };
+    return svgs[type] || svgs.lectura;
+  }
+
   _renderSubActs(state) {
-    const locked = state === "pending";
-    const tareaLinkLabel =
-      state === "done"
-        ? "Ver resultado"
-        : locked
-          ? "Pendiente"
-          : "Iniciar actividad";
-    const examenLinkLabel = state === "done" ? "Ver resultado" : "Pendiente";
-    const lockIcon = `<i class="ti ti-lock" style="font-size:10px" aria-hidden="true"></i>`;
-    const arrowIcon = `<i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i>`;
+    // Mapa de tipos: ícono SVG + etiqueta del badge + color clase
+    const TIPOS = {
+      video: { label: "VIDEO", badgeClass: "video" },
+      podcast: { label: "PODCAST", badgeClass: "podcast" },
+      infografia: { label: "INFOGRAFÍA", badgeClass: "infografia" },
+      presentacion: { label: "PRESENTACIÓN", badgeClass: "presentacion" },
+      lectura: { label: "LECTURA", badgeClass: "lectura" },
+    };
 
-    return `
-      <div class="sub-act-card tarea">
-        <div class="sub-act-top">
-          <div class="sub-act-icon" style="background:#EEF2FF">
-            <i class="ti ti-file-text" style="color:#4338ca;font-size:15px" aria-hidden="true"></i>
-          </div>
-          <span class="sub-act-badge tarea">TAREA</span>
-        </div>
-        <div class="sub-act-name">Análisis de contexto educativo</div>
-        <div class="sub-act-desc">Aplica el marco FODA para analizar tu institución.</div>
-        <div class="sub-act-footer">
-          <button class="sub-act-link" style="${locked ? "color:#9ca3af" : ""}">
-            ${tareaLinkLabel} ${locked ? lockIcon : arrowIcon}
-          </button>
-          <div class="sub-act-pts">
-            <div class="pts-donut">
-              ${
-                state === "done"
-                  ? `
-                <svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true">
-                  <circle cx="19" cy="19" r="13" fill="none" stroke="#e5e7eb" stroke-width="3"/>
-                  <circle cx="19" cy="19" r="13" fill="none" stroke="#22c55e" stroke-width="3"
-                    stroke-dasharray="72 9.7" stroke-dashoffset="20.4" stroke-linecap="round"/>
-                </svg>
-                <div class="pts-val" style="color:#166634">90</div>
-              `
-                  : `
-                <svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true">
-                  <circle cx="19" cy="19" r="13" fill="none" stroke="#e5e7eb" stroke-width="3"/>
-                </svg>
-                <div class="pts-val" style="color:#9ca3af">—</div>
-              `
-              }
-            </div>
-            <span class="sub-act-pts-label">pts</span>
-          </div>
-        </div>
-      </div>
+    // Distribución por card-id: cada lección tiene su propio par de tipos
+    const id = parseInt(this._attr("card-id"), 10);
+    const DISTRIBUCIONES = {
+      0: ["video", "lectura"],
+      1: ["podcast", "presentacion"],
+      2: ["infografia", "lectura"],
+      3: ["presentacion", "video"],
+      5: ["podcast", "infografia"],
+      6: ["lectura", "presentacion"],
+    };
 
-      <div class="sub-act-card examen">
-        <div class="sub-act-top">
-          <div class="sub-act-icon" style="background:#fdf4ff">
-            <i class="ti ti-clipboard-check" style="color:#7e22ce;font-size:15px" aria-hidden="true"></i>
+    // Nombres de sub-actividades por card-id
+    const NOMBRES = {
+      0: [
+        "L1. Video — ¿Qué es la planeación estratégica?",
+        "L1. Lectura — Fundamentos del módulo",
+      ],
+      1: [
+        "L2. Podcast — Diagnóstico educativo en contexto",
+        "L2. Presentación — Herramientas de análisis situacional",
+      ],
+      2: [
+        "L3. Infografía — Componentes del mapa estratégico",
+        "L3. Lectura — Diseño institucional por objetivos",
+      ],
+      3: [
+        "L4. Presentación — Fases de implementación",
+        "L4. Video — Casos de éxito en gestión educativa",
+      ],
+      5: [
+        "L5. Podcast — Impacto de la tecnología en el aula",
+        "L5. Infografía — Indicadores de evaluación tecnológica",
+      ],
+      6: [
+        "L6. Lectura — Innovación pedagógica aplicada",
+        "L6. Presentación — KPIs para proyectos educativos",
+      ],
+    };
+
+    // Fallback si el card-id no está mapeado
+    const tipos = DISTRIBUCIONES[id] ?? ["lectura", "presentacion"];
+    const nombres = NOMBRES[id] ?? ["Actividad 1", "Actividad 2"];
+
+    return tipos
+      .map((tipo, i) => {
+        const cfg = TIPOS[tipo];
+        return `
+        <div class="sub-act-card ${tipo}">
+        <div class="sub-act-row">
+            <div class="sub-act-icon ${tipo}">${this._svgByType(tipo)}</div>
+            <div class="sub-act-name">${nombres[i]}</div>
+            <span class="sub-act-badge ${tipo}">${cfg.label}</span>
           </div>
-          <span class="sub-act-badge examen">EXAMEN</span>
         </div>
-        <div class="sub-act-name">Evaluación de la lección</div>
-        <div class="sub-act-desc">${locked ? "Disponible al completar la tarea." : "Demuestra tu comprensión de los conceptos."}</div>
-        <div class="sub-act-footer">
-          <button class="sub-act-link" style="color:#9ca3af">
-            ${examenLinkLabel} ${lockIcon}
-          </button>
-          <div class="sub-act-pts">
-            <div class="pts-donut">
-              <svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true">
-                <circle cx="19" cy="19" r="13" fill="none" stroke="#e5e7eb" stroke-width="3"/>
-              </svg>
-              <div class="pts-val" style="color:#9ca3af">—</div>
-            </div>
-            <span class="sub-act-pts-label">pts</span>
-          </div>
-        </div>
-      </div>
-    `;
+      `;
+      })
+      .join("");
   }
 
   /* ── Events ─────────────────────────────────────────────── */
@@ -427,16 +423,17 @@ class UvegCard extends HTMLElement {
     card.addEventListener("click", this._handleCardClick.bind(this));
 
     card.addEventListener("mouseenter", () => {
-      if (!this._isOpen) springScale(card, 1, 1.013);
+      card.classList.remove("hover-out");
     });
     card.addEventListener("mouseleave", () => {
-      if (!this._isOpen) springScale(card, 1.013, 1);
+      card.classList.add("hover-out");
+      setTimeout(() => card.classList.remove("hover-out"), 300);
     });
     card.addEventListener("mousedown", () => {
-      springScale(card, this._isOpen ? 1 : 1.013, 0.984);
+      springScale(card, 1.015, 0.984);
     });
     card.addEventListener("mouseup", () => {
-      springScale(card, 0.984, this._isOpen ? 1 : 1.013);
+      springScale(card, 0.984, 1.015);
     });
   }
 
@@ -485,6 +482,8 @@ class UvegCard extends HTMLElement {
       liquidOpen(bw, bi);
       springScale(card, 0.984, 1.013);
       setTimeout(() => springScale(card, 1.013, 1), 100);
+      const chevron = this.querySelector("[data-chevron]");
+      if (chevron) chevron.style.transform = "rotate(180deg)";
 
       this.dispatchEvent(
         new CustomEvent("uveg:cardopen", {
@@ -496,6 +495,8 @@ class UvegCard extends HTMLElement {
     } else {
       liquidClose(bw, bi);
       springScale(card, 1, 1);
+      const chevron = this.querySelector("[data-chevron]");
+      if (chevron) chevron.style.transform = "rotate(0deg)";
     }
   }
 
