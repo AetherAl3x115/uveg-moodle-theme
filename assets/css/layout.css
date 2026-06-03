@@ -105,6 +105,15 @@ body {
   overflow: hidden;
 }
 
+.sidebar.collapsed .sb-user {
+  justify-content: center;
+  padding: 4px 0;
+}
+
+.sidebar.collapsed .sb-user > div:not(.sb-av) {
+  display: none;
+}
+
 .sb-user:hover {
   background: var(--color-tint-border);
 }
@@ -230,6 +239,7 @@ body {
   opacity: 0;
   pointer-events: none;
 }
+
 
 .sb-sep {
   height: .5px;
@@ -406,14 +416,14 @@ uveg-card:has(.card-reto) {
 .hrow-left { flex: 1; }
 
 .mod-meta {
-  font-size: 11px;
+font-size: var(--font-size-base);
   color: var(--color-text-faint);
   margin-bottom: 4px;
 }
 
 .mod-name {
-  font-size: 18px;
-  font-weight: var(--font-weight-semibold);
+  font-size: 22px;
+   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
   margin-bottom: 6px;
   line-height: 1.3;
@@ -439,7 +449,7 @@ uveg-card:has(.card-reto) {
   flex-shrink: 0;
 }
 
-.cnum { color: var(--color-accent); }
+
 
 .btn-ia {
   background: var(--color-btn-glosario-bg);
@@ -488,3 +498,5 @@ uveg-card:has(.card-reto) {
   font-size: 11px;
   color: var(--color-border);
 }
+ 
+

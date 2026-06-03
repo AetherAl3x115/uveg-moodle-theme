@@ -126,6 +126,9 @@
 
 .sidebar.collapsed .sb-block-label,
 .sidebar.collapsed .sb-block-chevron { 
+  flex: 0;
+  width: 0;
+  overflow: hidden;
   opacity: 0; 
   pointer-events: none; 
 }
@@ -142,6 +145,7 @@
 .sidebar.collapsed .sb-block-header {
   justify-content: center;
   padding: 9px 0;
+  gap: 0;
 }
 
 /* ── Bloque: Mi Progreso ────────────────────────────────────── */
@@ -205,35 +209,42 @@
 .sb-prog-link:hover { color: var(--color-accent-dark); }
 
 /* ── Bloque: Mi Menú ────────────────────────────────────────── */
+.sb-menu-dock {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 2px 4px;
+}
+
 .sb-menu-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 7px 10px;
+  padding: 5px 7px;
   border-radius: var(--radius-lg);
   cursor: pointer;
-  transition: background var(--transition-fast), transform var(--transition-fast);
+  transition: background var(--transition-fast);
 }
 
-.sb-menu-item:hover {
-  background: var(--color-tint-hover);
-  transform: translateX(2px);
-}
+.sb-menu-item:hover { background: var(--color-tint-hover); }
 
+/* Círculo con color único vía --item-color inyectado por JS */
 .sb-menu-icon {
-  width: 26px;
-  height: 26px;
-  border-radius: var(--radius-md);
-  background: var(--color-block-menu-icon-bg);
-  border: .5px solid var(--color-block-menu-icon-border);
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background: var(--item-color, var(--color-accent));
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transition: transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+.sb-menu-item:hover .sb-menu-icon { transform: scale(1.18); }
+
 .sb-menu-icon i {
-  color: var(--color-block-menu-icon);
+  color: #ffffff;
   font-size: 13px;
 }
 
@@ -243,8 +254,30 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: transform 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              color var(--transition-fast);
 }
 
+.sb-menu-item:hover .sb-menu-label {
+  transform: translateX(3px);
+  color: var(--color-text-primary);
+}
+
+.sb-menu-arrow {
+  margin-left: auto;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 160ms ease,
+              transform 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  color: var(--color-text-faint);
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.sb-menu-item:hover .sb-menu-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
 /* ── Bloque: Próximas actividades ───────────────────────────── */
 .sb-act-item {
   display: flex;
@@ -319,6 +352,15 @@
   border-radius: var(--radius-lg);
   transition: background var(--transition-fast);
 }
+
+/* ── Bloquear translateX durante apertura del sidebar ───────── */
+/* Se agrega .sb-opening al .sidebar por ~420ms al expandir     */
+.sidebar.sb-opening .sb-item:not(.active):hover,
+.sidebar.sb-opening .sb-menu-item:hover {
+  transform: none;
+}
+ 
+ 
 
 .sb-act-cal i { font-size: 12px; }
 .sb-act-cal:hover { background: var(--color-tint-hover); }
