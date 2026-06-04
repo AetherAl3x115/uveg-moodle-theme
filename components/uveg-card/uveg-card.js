@@ -175,7 +175,6 @@ class UvegCard extends HTMLElement {
               ${hi("play", 10)}
               Simular progreso
             </button>
-            <div class="sub-section-title">Recursos de aprendizaje</div>
             <div class="sub-acts-grid">
               ${this._renderSubActs(state)}
             </div>
