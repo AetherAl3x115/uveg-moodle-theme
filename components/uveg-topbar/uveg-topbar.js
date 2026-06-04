@@ -25,6 +25,7 @@
 
 import { toggleTheme } from "../../js/utils/theme.js";
 import { springWidth } from "../../js/utils/spring.js";
+import { hi } from "../../js/utils/icons.js";
 
 class UvegTopbar extends HTMLElement {
   static get observedAttributes() {
@@ -80,8 +81,8 @@ class UvegTopbar extends HTMLElement {
             id="tb-theme-btn"
             aria-label="Cambiar tema"
             title="Cambiar tema claro/oscuro">
-            <i class="ti ti-moon tb-icon icon-moon" aria-hidden="true"></i>
-            <i class="ti ti-sun  tb-icon icon-sun"  aria-hidden="true"></i>
+            ${hi("moon", 18, "tb-icon icon-moon")}
+            ${hi("sun", 18, "tb-icon icon-sun")}
           </button>
 
           <!-- Búsqueda -->
@@ -91,7 +92,7 @@ class UvegTopbar extends HTMLElement {
             aria-label="Buscar"
             title="Buscar"
             style="background:none;border:none;cursor:pointer;padding:0;line-height:1">
-            <i class="ti ti-search" aria-hidden="true"></i>
+            ${hi("magnifying-glass", 18)}
           </button>
 
           <!-- Notificaciones -->
@@ -102,7 +103,7 @@ class UvegTopbar extends HTMLElement {
               aria-label="Notificaciones${notifications > 0 ? ` (${notifications} nuevas)` : ""}"
               title="Notificaciones"
               style="background:none;border:none;cursor:pointer;padding:0;line-height:1">
-              <i class="ti ti-bell" aria-hidden="true"></i>
+             ${hi("bell", 18)}
             </button>
             ${notifDot}
           </div>
@@ -114,7 +115,7 @@ class UvegTopbar extends HTMLElement {
             aria-label="Mensajes"
             title="Mensajes"
             style="background:none;border:none;cursor:pointer;padding:0;line-height:1">
-            <i class="ti ti-message" aria-hidden="true"></i>
+        ${hi("message", 18)}
           </button>
 
           <span class="tb-sep" aria-hidden="true"></span>
