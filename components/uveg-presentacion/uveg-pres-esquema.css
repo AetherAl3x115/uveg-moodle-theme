@@ -1,0 +1,62 @@
+/**
+ * components/uveg-presentacion/uveg-pres-esquema.css
+ * ─────────────────────────────────────────────────────────────
+ * Hereda del host (inyectado por page.js):
+ *   --pres-color  → #a500af  (morado Esquema)
+ *   --pres-bg     → #fccfff
+ *
+ * CERO hardcode — todos los valores desde variables.css
+ * ─────────────────────────────────────────────────────────────
+ */
+
+/* ── Imagen del esquema ─────────────────────────────────────── */
+.pe-img-wrap {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1.5px solid var(--pres-bg, var(--color-tint-border));
+}
+
+.pe-img {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ── Placeholder (cuando no hay src) ───────────────────────── */
+.pe-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 36px var(--space-5);
+  border-radius: var(--radius-xl);
+  border: 2px dashed var(--pres-color, var(--color-tint-border));
+  background: color-mix(in srgb, var(--pres-bg, var(--color-tint-bg)) 30%, transparent);
+  text-align: center;
+}
+
+.pe-placeholder-icon {
+  color: var(--pres-color, var(--color-accent));
+  opacity: 0.45;
+}
+
+.pe-placeholder-text {
+  font-size: var(--font-size-md);
+  color: var(--pres-color, var(--color-accent));
+  opacity: 0.7;
+  line-height: 1.65;
+}
+
+.pe-placeholder-text span {
+  font-size: var(--font-size-sm);
+  opacity: 0.8;
+}
+
+.pe-placeholder-text code {
+  background: color-mix(in srgb, var(--pres-bg, var(--color-tint-bg)) 80%, transparent);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+}

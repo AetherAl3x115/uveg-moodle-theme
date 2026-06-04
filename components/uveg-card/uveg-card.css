@@ -402,11 +402,11 @@
 }
 
 /* Hover fill por color de tipo */
-.sub-act-card.video::before        { background: #fff0f6; }
-.sub-act-card.podcast::before      { background: #f5f3ff; }
-.sub-act-card.infografia::before   { background: #ecfeff; }
-.sub-act-card.presentacion::before { background: #fffbeb; }
-.sub-act-card.lectura::before      { background: #f0fdf4; }
+.sub-act-card.video::before        { background: var(--color-act-video-bg); }
+.sub-act-card.podcast::before      { background: var(--color-act-podcast-bg); }
+.sub-act-card.infografia::before   { background: var(--color-act-infografia-bg); }
+.sub-act-card.presentacion::before { background: var(--color-act-presentacion-bg); }
+.sub-act-card.lectura::before      { background: var(--color-act-lectura-bg); }
 .sub-act-card.tarea::before        { background: #eef2ff; }
 .sub-act-card.examen::before       { background: #fdf4ff; }
 .sub-act-card.entrega::before      { background: #fff7ed; }
@@ -460,18 +460,18 @@
   flex-shrink: 0;
 }
 
-.sub-act-icon.video        { background: #fff0f6; transition: background var(--transition-base); }
-.sub-act-icon.podcast      { background: #f5f3ff; transition: background var(--transition-base); }
-.sub-act-icon.infografia   { background: #ecfeff; transition: background var(--transition-base); }
-.sub-act-icon.presentacion { background: #fffbeb; transition: background var(--transition-base); }
-.sub-act-icon.lectura      { background: #f0fdf4; transition: background var(--transition-base); }
+.sub-act-icon.video        { background: var(--color-act-video-bg);        transition: background var(--transition-base); }
+.sub-act-icon.podcast      { background: var(--color-act-podcast-bg);      transition: background var(--transition-base); }
+.sub-act-icon.infografia   { background: var(--color-act-infografia-bg);   transition: background var(--transition-base); }
+.sub-act-icon.presentacion { background: var(--color-act-presentacion-bg); transition: background var(--transition-base); }
+.sub-act-icon.lectura      { background: var(--color-act-lectura-bg);      transition: background var(--transition-base); }
 
 /* En hover el ícono se oscurece para no perderse con el fill */
-.sub-act-card.video:hover        .sub-act-icon.video        { background: #fecdd3; }
-.sub-act-card.podcast:hover      .sub-act-icon.podcast      { background: #ddd6fe; }
-.sub-act-card.infografia:hover   .sub-act-icon.infografia   { background: #a5f3fc; }
-.sub-act-card.presentacion:hover .sub-act-icon.presentacion { background: #fde68a; }
-.sub-act-card.lectura:hover      .sub-act-icon.lectura      { background: #bbf7d0; }
+.sub-act-card.video:hover        .sub-act-icon.video        { background: var(--color-act-video-border); }
+.sub-act-card.podcast:hover      .sub-act-icon.podcast      { background: var(--color-act-podcast-border); }
+.sub-act-card.infografia:hover   .sub-act-icon.infografia   { background: var(--color-act-infografia-border); }
+.sub-act-card.presentacion:hover .sub-act-icon.presentacion { background: var(--color-act-presentacion-border); }
+.sub-act-card.lectura:hover      .sub-act-icon.lectura      { background: var(--color-act-lectura-border); }
 .sub-act-badge {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
@@ -480,11 +480,11 @@
   letter-spacing: .3px;
 }
 
-.sub-act-badge.video        { background: #fff0f6; color: #be185d; border: .5px solid #fba4c0; }
-.sub-act-badge.podcast      { background: #f5f3ff; color: #6d28d9; border: .5px solid #c4b5fd; }
-.sub-act-badge.infografia   { background: #ecfeff; color: #0e7490; border: .5px solid #a5f3fc; }
-.sub-act-badge.presentacion { background: #fffbeb; color: #b45309; border: .5px solid #fcd34d; }
-.sub-act-badge.lectura      { background: #f0fdf4; color: #15803d; border: .5px solid #86efac; }
+.sub-act-badge.video        { background: var(--color-act-video-bg);        color: var(--color-act-video-text);        border: .5px solid var(--color-act-video-border); }
+.sub-act-badge.podcast      { background: var(--color-act-podcast-bg);      color: var(--color-act-podcast-text);      border: .5px solid var(--color-act-podcast-border); }
+.sub-act-badge.infografia   { background: var(--color-act-infografia-bg);   color: var(--color-act-infografia-text);   border: .5px solid var(--color-act-infografia-border); }
+.sub-act-badge.presentacion { background: var(--color-act-presentacion-bg); color: var(--color-act-presentacion-text); border: .5px solid var(--color-act-presentacion-border); }
+.sub-act-badge.lectura      { background: var(--color-act-lectura-bg);      color: var(--color-act-lectura-text);      border: .5px solid var(--color-act-lectura-border); }
 
 .sub-act-open { display: none; }
 

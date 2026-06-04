@@ -44,6 +44,13 @@ import "../../components/uveg-card/uveg-card.js";
 import "../../components/uveg-progress/uveg-progress.js";
 import "../../components/uveg-scorm-drawer/uveg-scorm-drawer.js";
 
+/* ── Componentes de Presentación ────────────────────────────── */
+import "../../components/uveg-presentacion/uveg-pres-alcances.js";
+import "../../components/uveg-presentacion/uveg-pres-esquema.js";
+import "../../components/uveg-presentacion/uveg-pres-metodologia.js";
+import "../../components/uveg-presentacion/uveg-pres-evaluacion.js";
+import "../../components/uveg-presentacion/uveg-pres-cronograma.js";
+
 /* ── 3. App init ────────────────────────────────────────────── */
 
 /**

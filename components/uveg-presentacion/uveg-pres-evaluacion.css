@@ -1,0 +1,88 @@
+/**
+ * components/uveg-presentacion/uveg-pres-evaluacion.css
+ * ─────────────────────────────────────────────────────────────
+ * Light DOM. Todos los colores via variables.css.
+ * Tokens de sección inyectados por page.js en #pres-content:
+ *   --pres-color  → #e50061 (rosa Evaluación)
+ *   --pres-bg     → #ffd2e5
+ * ─────────────────────────────────────────────────────────────
+ */
+
+/* ── Contenedor ─────────────────────────────────────────────── */
+.pres-eval {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Subsección (Reto) ──────────────────────────────────────── */
+.pres-eval-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.pres-eval-section:first-child { padding-top: 0; }
+.pres-eval-section:last-child  { border-bottom: none; padding-bottom: 0; }
+
+/* ── Título con ícono ───────────────────────────────────────── */
+.pres-eval-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--pres-color, var(--color-accent));
+  line-height: 1.3;
+  margin: 0;
+}
+
+.pres-eval-title .hi {
+  flex-shrink: 0;
+  color: var(--pres-color, var(--color-accent));
+}
+
+/* ── Bloque con border-left ─────────────────────────────────── */
+.pres-eval-body {
+  border-left: 2px solid var(--pres-bg, var(--color-tint-hover));
+  padding: 6px 14px 6px 20px;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+/* ── Lista de lecciones ─────────────────────────────────────── */
+.pres-eval-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pres-eval-list li {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  padding-left: 12px;
+  position: relative;
+}
+
+.pres-eval-list li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: var(--pres-color, var(--color-accent));
+  font-size: 10px;
+  top: 5px;
+}
+
+/* ── Dark mode ──────────────────────────────────────────────── */
+[data-bs-theme="dark"] .pres-eval-section {
+  border-bottom-color: var(--color-border);
+}
+
+[data-bs-theme="dark"] .pres-eval-list li {
+  color: var(--color-text-muted);
+}

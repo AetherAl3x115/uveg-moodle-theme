@@ -1,0 +1,88 @@
+/**
+ * components/uveg-presentacion/uveg-pres-metodologia.css
+ * ─────────────────────────────────────────────────────────────
+ * Light DOM. Todos los colores via variables.css.
+ * Tokens de sección inyectados por page.js en #pres-content:
+ *   --pres-color  → #ea8f00 (naranja Metodología)
+ *   --pres-bg     → #ffeed3
+ * ─────────────────────────────────────────────────────────────
+ */
+
+/* ── Contenedor ─────────────────────────────────────────────── */
+.pres-met {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Subsección ─────────────────────────────────────────────── */
+.pres-met-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.pres-met-section:first-child {
+  padding-top: 0;
+}
+
+.pres-met-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* ── Título con ícono ───────────────────────────────────────── */
+.pres-met-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--pres-color, var(--color-accent));
+  line-height: 1.3;
+  margin: 0;
+}
+
+.pres-met-title .hi {
+  flex-shrink: 0;
+  color: var(--pres-color, var(--color-accent));
+}
+
+/* ── Bloque de texto con border-left atenuado ───────────────── */
+.pres-met-body {
+ border-left: 2px solid var(--pres-bg, var(--color-tint-hover));
+  padding: 6px 14px 6px 20px;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── Párrafos ───────────────────────────────────────────────── */
+.pres-met-p {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.pres-met-p strong {
+  color: var(--pres-color, var(--color-accent));
+  font-weight: var(--font-weight-bold);
+}
+
+/* ── Dark mode ──────────────────────────────────────────────── */
+[data-bs-theme="dark"] .pres-met-section {
+  border-bottom-color: var(--color-border);
+}
+
+[data-bs-theme="dark"] .pres-met-p {
+  color: var(--color-text-muted);
+}
+
+.pres-met-title.is-warning,
+.pres-met-title.is-warning .hi {
+  color: var(--color-warning);
+}

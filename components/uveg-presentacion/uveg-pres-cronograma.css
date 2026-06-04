@@ -1,0 +1,595 @@
+/**
+ * components/uveg-presentacion/uveg-pres-cronograma.css
+ * ─────────────────────────────────────────────────────────────
+ * Light DOM. Todos los colores via variables.css.
+ * --pres-color: #00a0ce / --pres-bg: #d5f6ff
+ * ─────────────────────────────────────────────────────────────
+ */
+
+/* ── Contenedor ─────────────────────────────────────────────── */
+.pres-crono { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── Topbar ─────────────────────────────────────────────────── */
+.pres-crono-topbar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+}
+
+/* Fila cara + % + badge */
+.pres-crono-prog-face-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pres-crono-prog-face {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+  transition: background var(--transition-spring);
+}
+
+.pres-crono-prog-face .hi { transition: color var(--transition-spring); }
+
+.pres-crono-prog-face.state-atrasado  { background: #fee2e2; }
+.pres-crono-prog-face.state-atrasado  .hi { color: var(--color-warning); }
+.pres-crono-prog-face.state-regular   { background: #fef9c3; }
+.pres-crono-prog-face.state-regular   .hi { color: #b45309; }
+.pres-crono-prog-face.state-corriente { background: var(--color-progress-bg); }
+.pres-crono-prog-face.state-corriente .hi { color: var(--color-progress-dot); }
+.pres-crono-prog-face.state-completo  { background: var(--color-done-bg); }
+.pres-crono-prog-face.state-completo  .hi { color: var(--color-done-dot); }
+
+.pres-crono-prog-nums {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.pres-crono-prog-pct {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  transition: color var(--transition-spring);
+}
+
+.pres-crono-prog-pct small {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-normal);
+}
+
+.pres-crono-prog-pct.state-atrasado  { color: var(--color-warning); }
+.pres-crono-prog-pct.state-regular   { color: #b45309; }
+.pres-crono-prog-pct.state-corriente { color: var(--color-progress-dot); }
+.pres-crono-prog-pct.state-completo  { color: var(--color-done-dot); }
+
+.pres-crono-prog-sublabel {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.pres-crono-prog-status-msg {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  margin-left: auto;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  transition: background var(--transition-spring), color var(--transition-spring);
+}
+
+.pres-crono-prog-status-msg.state-atrasado  { background: #fee2e2; color: var(--color-warning); }
+.pres-crono-prog-status-msg.state-regular   { background: #fef9c3; color: #b45309; }
+.pres-crono-prog-status-msg.state-corriente { background: var(--color-progress-bg); color: var(--color-progress-dot); }
+.pres-crono-prog-status-msg.state-completo  { background: var(--color-done-bg); color: var(--color-done-dot); }
+
+/* Track */
+.pres-crono-prog-track {
+  position: relative;
+  height: 8px;
+  background: var(--color-border-light);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pres-crono-prog-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: 4px;
+  transition: width var(--transition-spring), background var(--transition-spring);
+  z-index: 1;
+}
+
+.pres-crono-prog-fill.state-atrasado  { background: var(--color-warning); }
+.pres-crono-prog-fill.state-regular   { background: #eab308; }
+.pres-crono-prog-fill.state-corriente { background: var(--color-progress-dot); }
+.pres-crono-prog-fill.state-completo  { background: var(--color-done-dot); }
+
+.pres-crono-prog-segments {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.pres-crono-seg {
+  height: 100%;
+  border-right: 2px solid var(--color-surface);
+}
+.pres-crono-seg:last-child { border-right: none; }
+
+.pres-crono-prog-dates {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.pres-crono-hint {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  opacity: .8;
+}
+.pres-crono-hint .hi { flex-shrink: 0; color: var(--color-text-muted); }
+
+/* ── Toolbar ────────────────────────────────────────────────── */
+.pres-crono-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pres-crono-nav { display: flex; align-items: center; gap: 6px; }
+
+.pres-crono-nav-label {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  text-transform: capitalize;
+  min-width: 130px;
+  text-align: center;
+}
+
+.pres-crono-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.pres-crono-nav-btn:hover {
+  background: var(--pres-bg, var(--color-tint-hover));
+  border-color: var(--pres-color, var(--color-accent));
+  color: var(--pres-color, var(--color-accent));
+}
+
+.pres-crono-nav-btn .hi { pointer-events: none; }
+
+/* ── Vistas — mismo patrón que uveg-tabs ────────────────────── */
+.pres-crono-views {
+  display: flex;
+  gap: 3px;
+  margin-left: auto;
+  background: var(--color-tint-bg);
+  border: 1px solid var(--color-tint-border);
+  border-radius: var(--radius-xl);
+  padding: 4px;
+  position: relative;
+}
+
+.pres-crono-views-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  padding: 5px 8px;
+  display: flex;
+  align-items: center;
+}
+
+.pres-crono-view-btn {
+  padding: 5px 12px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: transparent;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  white-space: nowrap;
+  user-select: none;
+  transition: color var(--transition-base);
+}
+
+.pres-crono-view-btn.active { color: var(--color-white); }
+
+.pres-crono-view-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  background: var(--pres-color, var(--color-accent));
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--pres-color, var(--color-accent)) 35%, transparent);
+  z-index: -1;
+  transform: scaleX(0);
+  transition: none;
+}
+
+.pres-crono-view-btn.active::before { transform: scaleX(1); }
+
+.pres-crono-view-btn.fill-from-left::before  { transform-origin: left center;  transition: transform .48s cubic-bezier(.16,1,.3,1); }
+.pres-crono-view-btn.fill-from-right::before { transform-origin: right center; transition: transform .48s cubic-bezier(.16,1,.3,1); }
+.pres-crono-view-btn.drain-to-left::before   { transform-origin: right center; transition: transform .38s cubic-bezier(.4,0,1,1); }
+.pres-crono-view-btn.drain-to-right::before  { transform-origin: left center;  transition: transform .38s cubic-bezier(.4,0,1,1); }
+
+.pres-crono-view-btn.drain-to-left,
+.pres-crono-view-btn.drain-to-right { color: var(--color-white); transition: color .38s cubic-bezier(.4,0,1,1); }
+
+.crono-view-hover-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-tint-hover);
+  opacity: 0;
+  transform: scale(.92);
+  transition: opacity .18s ease, transform .22s cubic-bezier(.34,1.56,.64,1);
+  z-index: -1;
+  pointer-events: none;
+}
+.pres-crono-view-btn:not(.active):hover .crono-view-hover-bg { opacity: 1; transform: scale(1); }
+
+.crono-view-ripple {
+  position: absolute;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--pres-color, var(--color-accent)) 25%, transparent);
+  transform: scale(0);
+  animation: cronoRipple .5s ease-out forwards;
+  pointer-events: none;
+  z-index: 3;
+}
+@keyframes cronoRipple { to { transform: scale(4); opacity: 0; } }
+
+/* Filtros */
+.pres-crono-filters { display: flex; align-items: center; gap: 5px; color: var(--color-text-muted); }
+
+.pres-crono-filter-sel {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 3px 6px;
+  cursor: pointer;
+  outline: none;
+}
+.pres-crono-filter-sel:focus { border-color: var(--pres-color, var(--color-accent)); }
+
+/* ── Vista Mes ──────────────────────────────────────────────── */
+.pres-crono-cal { display: flex; flex-direction: column; gap: 2px; }
+
+.pres-crono-dow-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.pres-crono-dow {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-align: center;
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  padding: 3px 0;
+}
+
+.pres-crono-weeks { display: flex; flex-direction: column; gap: 2px; }
+
+.pres-crono-week-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+/* ── Celda ──────────────────────────────────────────────────── */
+.pres-crono-cell {
+  min-height: 64px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.pres-crono-cell--empty { background: transparent; border-color: transparent; pointer-events: none; }
+.pres-crono-cell.in-module { background: var(--color-surface); }
+.pres-crono-cell.is-today  { border-color: var(--pres-color, var(--color-accent)); border-width: 1.5px; }
+.pres-crono-cell.is-dragover {
+  background: var(--pres-bg, var(--color-tint-hover));
+  border-color: var(--pres-color, var(--color-accent));
+  border-style: dashed;
+}
+
+.cell-num { font-size: 10px; color: var(--color-text-muted); line-height: 1; margin-bottom: 3px; }
+.pres-crono-cell.is-today .cell-num { color: var(--pres-color, var(--color-accent)); font-weight: var(--font-weight-bold); }
+.cell-chips { display: flex; flex-direction: column; gap: 2px; }
+
+/* ── Vista Semana ───────────────────────────────────────────── */
+.pres-crono-semana { display: flex; flex-direction: column; gap: 0; }
+
+.pres-crono-semana-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.pres-crono-semana-col-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 0;
+  border-radius: var(--radius-sm);
+}
+
+.pres-crono-semana-col-header.is-today { background: var(--pres-bg, var(--color-tint-hover)); }
+
+.semana-dow {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.semana-day-num {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.pres-crono-semana-col-header.is-today .semana-day-num { color: var(--pres-color, var(--color-accent)); }
+
+.pres-crono-semana-body {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  align-items: start;
+}
+
+.pres-crono-semana-col {
+  min-height: 80px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-sm);
+  padding: 6px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.pres-crono-semana-col.is-dragover {
+  background: var(--pres-bg, var(--color-tint-hover));
+  border-color: var(--pres-color, var(--color-accent));
+  border-style: dashed;
+}
+
+/* ── Vista Lista ────────────────────────────────────────────── */
+.pres-crono-lista { display: flex; flex-direction: column; }
+
+.pres-crono-lista-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+.pres-crono-lista-row:last-child { border-bottom: none; }
+
+.pres-crono-lista-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 32px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.lista-day {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--pres-color, var(--color-accent));
+  line-height: 1;
+}
+
+.lista-month {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.pres-crono-lista-items { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+
+.pres-crono-lista-empty {
+  padding: 20px 0;
+  text-align: center;
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+}
+
+/* ── Chips ──────────────────────────────────────────────────── */
+.pres-crono-chip {
+  display: grid;
+  grid-template-columns: 10px 1fr auto auto;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  padding: 3px 5px;
+  border-radius: 4px;
+  cursor: grab;
+  border: 1px solid transparent;
+  user-select: none;
+  transition: opacity var(--transition-fast);
+  overflow: hidden;
+}
+
+.pres-crono-chip.is-wide {
+  font-size: var(--font-size-sm);
+  padding: 5px 8px;
+  border-radius: var(--radius-sm);
+  grid-template-columns: 14px 1fr auto auto;
+  gap: 6px;
+}
+
+.pres-crono-chip.is-dragging { opacity: 0.3; cursor: grabbing; }
+
+.chip-icon  { display: flex; align-items: center; flex-shrink: 0; }
+.chip-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; font-weight: var(--font-weight-medium); }
+.chip-hour  { font-size: 8px; opacity: .7; white-space: nowrap; }
+.chip-check { display: flex; align-items: center; }
+
+.is-wide .chip-hour { font-size: var(--font-size-xs); }
+.pres-crono-chip.is-done .chip-label { text-decoration: line-through; opacity: .6; }
+
+/* Colores por tipo */
+.pres-crono-chip.act-video        { background: var(--color-act-video-bg);        color: var(--color-act-video-text);        border-color: var(--color-act-video-border); }
+.pres-crono-chip.act-lectura      { background: var(--color-act-lectura-bg);      color: var(--color-act-lectura-text);      border-color: var(--color-act-lectura-border); }
+.pres-crono-chip.act-podcast      { background: var(--color-act-podcast-bg);      color: var(--color-act-podcast-text);      border-color: var(--color-act-podcast-border); }
+.pres-crono-chip.act-presentacion { background: var(--color-act-presentacion-bg); color: var(--color-act-presentacion-text); border-color: var(--color-act-presentacion-border); }
+.pres-crono-chip.act-infografia   { background: var(--color-act-infografia-bg);   color: var(--color-act-infografia-text);   border-color: var(--color-act-infografia-border); }
+.pres-crono-chip.act-reto         { background: var(--color-reto-bg); color: var(--color-reto-text); border-color: var(--color-accent-navy); cursor: default; font-weight: var(--font-weight-bold); }
+
+/* Completada → verde */
+.pres-crono-chip.is-done { background: var(--color-done-bg); color: var(--color-done-text); border-color: var(--color-done-dot); }
+
+/* ── Leyenda ────────────────────────────────────────────────── */
+.pres-crono-legend { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+.pres-crono-legend-item { display: flex; align-items: center; gap: 5px; font-size: var(--font-size-xs); color: var(--color-text-muted); }
+
+.pres-crono-legend-dot { width: 9px; height: 9px; border-radius: 2px; border: 1px solid transparent; flex-shrink: 0; }
+
+.ld-video        { background: var(--color-act-video-bg);        border-color: var(--color-act-video-border); }
+.ld-lectura      { background: var(--color-act-lectura-bg);      border-color: var(--color-act-lectura-border); }
+.ld-podcast      { background: var(--color-act-podcast-bg);      border-color: var(--color-act-podcast-border); }
+.ld-presentacion { background: var(--color-act-presentacion-bg); border-color: var(--color-act-presentacion-border); }
+.ld-infografia   { background: var(--color-act-infografia-bg);   border-color: var(--color-act-infografia-border); }
+.ld-reto         { background: var(--color-reto-bg);             border-color: var(--color-accent-navy); }
+
+.pres-crono-legend-right { margin-left: auto; display: flex; align-items: center; gap: 4px; font-size: var(--font-size-xs); color: var(--color-text-faint); }
+.pres-crono-legend-right .hi { color: var(--color-text-faint); }
+
+/* ── Hint rediseñado ────────────────────────────────────────── */
+.pres-crono-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-accent-dark);
+  background: var(--color-tint-bg);
+  border: 1px solid var(--color-tint-border);
+  border-radius: var(--radius-full);
+  padding: 5px 12px;
+  width: fit-content;
+}
+
+.pres-crono-hint .hi {
+  flex-shrink: 0;
+  color: var(--color-accent);
+}
+
+/* ── Simulador de progreso ──────────────────────────────────── */
+.pres-crono-sim-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  background: none;
+  border: .5px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  margin-left: auto;
+}
+
+.pres-crono-sim-btn:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+/* ── Vistas — color exacto de uveg-tabs ─────────────────────── */
+.pres-crono-views {
+  display: flex;
+  gap: 3px;
+  margin-left: auto;
+  background: var(--color-tint-bg);
+  border: 1px solid var(--color-tint-border);
+  border-radius: var(--radius-xl);
+  padding: 4px;
+  position: relative;
+}
+
+.pres-crono-view-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-accent-dark);
+  box-shadow: var(--shadow-accent);
+  z-index: -1;
+  transform: scaleX(0);
+  transition: none;
+}
+
+.pres-crono-view-btn.active::before { transform: scaleX(1); }
+
+.pres-crono-view-btn.fill-from-left::before  { transform-origin: left center;  transition: transform .48s cubic-bezier(.16,1,.3,1); }
+.pres-crono-view-btn.fill-from-right::before { transform-origin: right center; transition: transform .48s cubic-bezier(.16,1,.3,1); }
+.pres-crono-view-btn.drain-to-left::before   { transform-origin: right center; transition: transform .38s cubic-bezier(.4,0,1,1); }
+.pres-crono-view-btn.drain-to-right::before  { transform-origin: left center;  transition: transform .38s cubic-bezier(.4,0,1,1); }
+
+.crono-view-ripple {
+  position: absolute;
+  border-radius: var(--radius-full);
+  background: rgba(37, 99, 235, .2);
+  transform: scale(0);
+  animation: cronoRipple .5s ease-out forwards;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ── Dark mode ──────────────────────────────────────────────── */
+[data-bs-theme="dark"] .pres-crono-topbar { background: var(--color-surface); border-color: var(--color-border); }
+[data-bs-theme="dark"] .pres-crono-cell,
+[data-bs-theme="dark"] .pres-crono-semana-col { background: var(--color-surface); border-color: var(--color-border-light); }
+[data-bs-theme="dark"] .pres-crono-filter-sel { background: var(--color-surface); color: var(--color-text-secondary); border-color: var(--color-border); }
+[data-bs-theme="dark"] .pres-crono-view-btn.active { color: var(--color-white); }

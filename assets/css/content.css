@@ -380,10 +380,11 @@
 }
 
 .pres-content {
-  background: var(--color-surface);
+
   border: .5px solid var(--color-border);
+background: linear-gradient(to bottom, color-mix(in srgb, var(--pres-bg, var(--color-tint-bg)) 40%, transparent) 0%, var(--color-surface) 20%);
   border-radius: var(--radius-xl);
-  padding: 20px;
+  padding: 28px 32px;
   animation: fadeSlideIn .3s cubic-bezier(.4, 0, .2, 1);
 }
 
@@ -445,7 +446,7 @@
 [data-bs-theme="dark"] .aviso-date     { color: var(--color-text-faint); }
 [data-bs-theme="dark"] .pres-card      { background: var(--color-surface); border-color: var(--color-border); }
 [data-bs-theme="dark"] .pres-label     { color: var(--color-text-secondary); }
-[data-bs-theme="dark"] .pres-content   { background: var(--color-surface); border-color: var(--color-border); }
+[data-bs-theme="dark"] .pres-content   { background: linear-gradient(to bottom, var(--color-tint-bg) 0%, var(--color-surface) 40%); border-color: var(--color-border); }
 [data-bs-theme="dark"] .pres-content h3 { color: var(--color-text-primary); }
 [data-bs-theme="dark"] .pres-content p  { color: var(--color-text-muted); }
 [data-bs-theme="dark"] .pres-list li   { color: var(--color-text-secondary); }

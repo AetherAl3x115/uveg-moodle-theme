@@ -77,6 +77,28 @@
 --color-act-tag-lectura-text:   var(--color-accent-dark);
 --color-act-tag-actividad-bg:   #ffedd5;
 --color-act-tag-actividad-text: #c2410c;
+
+  /* ── Activity type tokens (uveg-card + cronograma) ────────── */
+  --color-act-video-bg:           #fff0f6;
+  --color-act-video-text:         #be185d;
+  --color-act-video-border:       #fba4c0;
+
+  --color-act-lectura-bg:         #f0fdf4;
+  --color-act-lectura-text:       #15803d;
+  --color-act-lectura-border:     #86efac;
+
+  --color-act-podcast-bg:         #f5f3ff;
+  --color-act-podcast-text:       #6d28d9;
+  --color-act-podcast-border:     #c4b5fd;
+
+  --color-act-presentacion-bg:    #fffbeb;
+  --color-act-presentacion-text:  #b45309;
+  --color-act-presentacion-border:#fcd34d;
+
+  --color-act-infografia-bg:      #ecfeff;
+  --color-act-infografia-text:    #0e7490;
+  --color-act-infografia-border:  #a5f3fc;
+  
 --color-advisor-asesor-bg:  #dce6fd;
 --color-advisor-asesor-dot: var(--color-accent);
 --color-advisor-tutor-bg:   #d6f0e6;
@@ -84,7 +106,8 @@
 --color-advisor-tutor-dot:  var(--color-done-dot);
 
   /* ── Action Buttons ───────────────────────────────────────── */
---color-btn-glosario-bg:    #dc2626;
+  --color-warning:          #dc2626;
+--color-btn-glosario-bg:    var(--color-warning);
   --color-btn-glosario-hover: #b91c1c;
   --color-tab-glossary:       #c2185b;
 

@@ -4,13 +4,15 @@
  * Lógica específica de index.html.
  * Maneja: animación de progreso, cards de presentación,
  * toggle vista tarjetas/lista.
+ *
+ * Caché de componentes uveg-pres-* — se montan una sola vez
+ * y se muestran/ocultan con display para evitar re-render.
  * ─────────────────────────────────────────────────────────────
  */
 
 import { hi } from "./utils/icons.js";
 
 /* ── SVGs custom de presentación ────────────────────────────── */
-// Inline directo — currentColor hereda el color del contenedor
 const PRES_SVG = {
   alcances: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"><path d="m21.053 10.22c-1.554-3.627-5.107-5.97-9.053-5.97s-7.499 2.343-9.053 5.97c-.484 1.131-.484 2.43 0 3.561 1.554 3.627 5.107 5.97 9.053 5.97s7.499-2.343 9.053-5.97c.484-1.131.484-2.43 0-3.561zm-1.379 2.97c-1.317 3.073-4.329 5.06-7.674 5.06s-6.356-1.986-7.674-5.06c-.324-.757-.324-1.624 0-2.381 1.317-3.073 4.329-5.06 7.674-5.06s6.356 1.986 7.674 5.06c.324.757.324 1.624 0 2.381zm-7.674-5.94c-2.619 0-4.75 2.131-4.75 4.75s2.131 4.75 4.75 4.75 4.75-2.131 4.75-4.75-2.131-4.75-4.75-4.75zm0 8c-1.792 0-3.25-1.458-3.25-3.25s1.458-3.25 3.25-3.25 3.25 1.458 3.25 3.25-1.458 3.25-3.25 3.25z"/></svg>`,
 
@@ -23,60 +25,17 @@ const PRES_SVG = {
   cronograma: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="22" height="22" fill="currentColor"><path d="m39.5 30.6c-2.3 2.3-4.5 4.5-6.8 6.8-1.4-1.4-2.9-2.9-4.3-4.3-1.8-1.8-4.7 1-2.8 2.8 1.9 1.9 3.8 3.8 5.7 5.7.8.8 2.1.8 2.8 0l8.2-8.2c1.9-1.8-.9-4.6-2.8-2.8z"/><path d="m51.6 8.8c0-.2 0-.4 0-.6 0-1-.9-2-2-2s-2 .9-2 2v.6h-24.7v-.1c0-.2 0-.4 0-.6 0-1-.9-2-2-2s-2 .9-2 2v.8c-4.6 0-8.4 3.8-8.4 8.4v7.7c-.1.3-.2.5-.2.8-.6 4.3-1.6 8.6-3 12.7-.7 1.9-1.5 3.9-2.4 5.7-.8 1.7-.7 3.6.3 5.1s2.6 2.4 4.4 2.4h1.1c.9 3.7 4.2 6.4 8.2 6.4h32.4c4.6 0 8.4-3.8 8.4-8.4v-32.5c0-4.6-3.6-8.2-8.1-8.4zm-32.8 4v.4c0 1 .9 2 2 2s2-.9 2-2c0-.1 0-.3 0-.4h24.8v.6c0 1 .9 2 2 2s2-.9 2-2c0-.2 0-.4 0-.6 2.3.2 4.1 2.1 4.1 4.4v4.8c-.1 0-.3 0-.4 0h-40.9v-4.8c0-2.5 2-4.4 4.4-4.4zm-10.3 34.3c-.2-.4-.3-.8-.1-1.2.9-2 1.8-4 2.5-6.1 1.5-4.4 2.6-8.9 3.2-13.5 0-.1.1-.2.2-.2h40.9s.1 0 .2.1c0 0 .1.1.1.2-.5 4.5-1.5 8.9-2.9 13.1-.7 2.1-1.6 4.2-2.6 6.3-.6 1.2-1.9 2-3.3 2h-37.1c-.5-.2-.9-.4-1.1-.7zm42.8 6.9h-32.5c-1.7 0-3.1-1-3.9-2.4h31.7c2.9 0 5.6-1.7 6.9-4.3.8-1.6 1.5-3.3 2.1-5v7.3c.1 2.4-1.9 4.4-4.3 4.4z"/></svg>`,
 };
 
-/* ── Contenido de presentación ──────────────────────────────── */
-const ARROW = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/></svg>`;
-
-const PRES_CONTENT = {
-  alcances: `
-    <h3>Alcances del módulo</h3>
-    <p>Al concluir este módulo serás capaz de analizar el entorno educativo desde una perspectiva estratégica, identificando áreas de oportunidad para la implementación tecnológica.</p>
-    <ul class="pres-list">
-      <li>${ARROW}Propósito general y competencias a desarrollar</li>
-      <li>${ARROW}Análisis del contexto educativo actual</li>
-      <li>${ARROW}Diseño de mapas estratégicos institucionales</li>
-      <li>${ARROW}Evaluación y mejora continua de procesos</li>
-    </ul>`,
-  esquema: `
-    <h3>Esquema del contenido</h3>
-    <p>El módulo se estructura en dos unidades con 4 lecciones y 2 retos integradores que te permiten aplicar progresivamente los conocimientos adquiridos.</p>
-    <ul class="pres-list">
-      <li>${ARROW}Unidad 1: Fundamentos y diagnóstico estratégico (4 lecciones)</li>
-      <li>${ARROW}Unidad 2: Implementación y evaluación de impacto (2 lecciones)</li>
-      <li>${ARROW}2 Retos integradores con entrega en PDF</li>
-      <li>${ARROW}Foros de discusión y actividades colaborativas</li>
-    </ul>`,
-  metodologia: `
-    <h3>Metodología</h3>
-    <p>Este módulo utiliza un enfoque de aprendizaje basado en proyectos (ABP), donde cada lección construye sobre la anterior para culminar en un plan estratégico real.</p>
-    <ul class="pres-list">
-      <li>${ARROW}Lecturas teóricas con casos de aplicación real</li>
-      <li>${ARROW}Actividades prácticas individuales y colaborativas</li>
-      <li>${ARROW}Retroalimentación continua del docente</li>
-      <li>${ARROW}Retos integradores como evidencia de aprendizaje</li>
-    </ul>`,
-  evaluacion: `
-    <h3>Evaluación</h3>
-    <p>Tu calificación final se construye de forma progresiva a partir de tareas, exámenes y retos. Cada actividad tiene un peso específico en la calificación total del módulo.</p>
-    <ul class="pres-list">
-      <li>${ARROW}Tareas por lección: 40% de la calificación</li>
-      <li>${ARROW}Exámenes por unidad: 30% de la calificación</li>
-      <li>${ARROW}Retos integradores: 30% de la calificación</li>
-      <li>${ARROW}Calificación mínima aprobatoria: 70/100</li>
-    </ul>`,
-  cronograma: `
-    <h3>Cronograma</h3>
-    <p>El módulo tiene una duración de 4 semanas. Cada semana tiene actividades específicas con fechas de entrega definidas para mantener un ritmo de aprendizaje constante.</p>
-    <ul class="pres-list">
-      <li>${ARROW}Semana 1: Lecciones 1 y 2 + Foro de diagnóstico</li>
-      <li>${ARROW}Semana 2: Lecciones 3 y 4 + Reto 1</li>
-      <li>${ARROW}Semana 3: Lecciones 5 y 6</li>
-      <li>${ARROW}Semana 4: Reto 2 integrador final</li>
-    </ul>`,
+/* ── Mapa key → tag del Web Component ──────────────────────── */
+const PRES_COMPONENT = {
+  alcances: "uveg-pres-alcances",
+  esquema: "uveg-pres-esquema",
+  metodologia: "uveg-pres-metodologia",
+  evaluacion: "uveg-pres-evaluacion",
+  cronograma: "uveg-pres-cronograma",
 };
 
 /* ── Inyectar SVGs en las cards de presentación ─────────────── */
 function initPresentacionIcons() {
-  // Inyecta el SVG correspondiente en cada .pres-icon-wrap
   document.querySelectorAll("[data-pres]").forEach((card) => {
     const key = card.dataset.pres;
     const wrap = card.querySelector(".pres-icon-wrap");
@@ -99,7 +58,6 @@ function initProgressBar() {
 
 /* ── Cards de presentación ──────────────────────────────────── */
 function initPresentacionCards() {
-  // Activar primera card al cargar
   const first = document.querySelector("[data-pres]");
   if (first) _activatePres(first);
 
@@ -110,10 +68,13 @@ function initPresentacionCards() {
   });
 }
 
+/* Caché: cada key se monta una sola vez, luego display none/block */
+const _presCache = {};
+
 function _activatePres(card) {
   const key = card.dataset.pres;
-  const content = PRES_CONTENT[key];
-  if (!content) return;
+  const componentTag = PRES_COMPONENT[key];
+  if (!componentTag) return;
 
   // Actualizar estado activo en cards
   document.querySelectorAll("[data-pres]").forEach((c) => {
@@ -121,28 +82,53 @@ function _activatePres(card) {
     c.setAttribute("aria-selected", String(c === card));
   });
 
-  // Actualizar header de contenido con pill del color de la sección
   const color = getComputedStyle(card).getPropertyValue("--pres-color").trim();
   const bg = getComputedStyle(card).getPropertyValue("--pres-bg").trim();
   const label = card.querySelector(".pres-label")?.textContent || "";
-
   const pc = document.getElementById("pres-content");
   if (!pc) return;
 
   // Animación de entrada
   pc.style.animation = "none";
-  pc.offsetHeight; // reflow
+  pc.offsetHeight; // reflow forzado
   pc.style.animation = "fadeSlideIn .3s cubic-bezier(.4,0,.2,1)";
 
-  pc.innerHTML = `
-    <div class="pres-content-header" style="--pres-color:${color};--pres-bg:${bg}">
+  // Propagar tokens de color al contenedor
+  pc.style.setProperty("--pres-color", color);
+  pc.style.setProperty("--pres-bg", bg);
+
+  // Oculta todos los wrappers cacheados
+  Object.values(_presCache).forEach((el) => (el.style.display = "none"));
+
+  if (!_presCache[key]) {
+    // Primera vez — crea header + componente y los cachea
+    const header = document.createElement("div");
+    header.className = "pres-content-header";
+    header.style.cssText = `--pres-color:${color};--pres-bg:${bg}`;
+    header.innerHTML = `
       <span class="pres-content-pill">
         <span class="pres-content-pill-icon">${PRES_SVG[key] || ""}</span>
         ${label}
       </span>
-    </div>
-    ${content}
-  `;
+    `;
+
+    const comp = document.createElement(componentTag);
+    if (key === "esquema") {
+      comp.setAttribute("src", "./assets/img/esquema.png");
+      comp.setAttribute("alt", "Ciclo de Planeación Estratégica Educativa");
+    }
+
+    const wrapper = document.createElement("div");
+    wrapper.dataset.presWrapper = key;
+    wrapper.appendChild(header);
+    wrapper.appendChild(comp);
+
+    pc.appendChild(wrapper);
+    _presCache[key] = wrapper;
+  } else {
+    // Ya existe — solo mostrarlo
+    _presCache[key].style.display = "";
+  }
 }
 
 /* ── Toggle vista tarjetas / lista ──────────────────────────── */

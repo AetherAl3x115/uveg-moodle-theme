@@ -33,6 +33,11 @@
 @import '../../../components/uveg-card/uveg-card.css';
 @import '../../../components/uveg-progress/uveg-progress.css';
 @import '../../../components/uveg-scorm-drawer/uveg-scorm-drawer.css';
+@import '../../../components/uveg-presentacion/uveg-pres-alcances.css';
+@import '../../../components/uveg-presentacion/uveg-pres-esquema.css';
+@import '../../../components/uveg-presentacion/uveg-pres-metodologia.css';
+@import '../../../components/uveg-presentacion/uveg-pres-evaluacion.css';
+@import '../../../components/uveg-presentacion/uveg-pres-cronograma.css';
 
 /* ── 4. Dark mode ───────────────────────────────────────────── */
 @import './dark-mode.css';
