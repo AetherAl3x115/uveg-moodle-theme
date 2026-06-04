@@ -156,6 +156,8 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;
+  /* Hijos nunca se comprimen — el nav scrollea en su lugar */
+  align-items: stretch;
 }
 
 .sb-item {
@@ -252,7 +254,6 @@ body {
   margin: var(--space-2);
   padding: 9px 10px;
   border-radius: var(--radius-lg);
-  background: var(--color-tint-hover);
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -261,7 +262,12 @@ body {
   border: none;
   width: calc(100% - var(--space-4));
   flex-shrink: 0;
+  flex-grow: 0;
   color: inherit;
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  background: var(--color-tint-bg);
 }
 
 .sb-collapse:hover {
