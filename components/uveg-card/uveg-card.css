@@ -691,6 +691,91 @@
   margin-top: 12px;
 }
 
+/* ── PATCH: i → svg.hi para Heroicons en uveg-card.css ─────────
+   Agregar al final de uveg-card.css
+   ─────────────────────────────────────────────────────────────── */
+
+/* sc-icon: el font-size no aplica a SVG, forzar tamaño explícito */
+.sc-icon svg.hi {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* Animación spinIn en done — era .sc-icon.done i, ahora svg.hi */
+.sc-icon.done svg.hi {
+  animation: spinIn .4s cubic-bezier(.4, 0, .2, 1) forwards;
+}
+
+/* av: el z-index del <i> ahora va al svg */
+.av svg.hi {
+  position: relative;
+  z-index: 2;
+}
+
+/* badge: ícono pequeño alineado */
+.badge svg.hi {
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+/* sim-btn: ícono play alineado */
+.sim-btn svg.hi {
+  flex-shrink: 0;
+}
+
+/* note: ícono info alineado */
+.note svg.hi {
+  flex-shrink: 0;
+}
+
+/* btn-reto: ícono bolt alineado */
+.btn-reto svg.hi {
+  flex-shrink: 0;
+}
+
+/* cf-date: íconos calendario y reloj */
+.cf-date {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+.cf-date svg.hi {
+  flex-shrink: 0;
+}
+
+/* tv-btn: íconos de vista tarjetas/lista */
+.tv-btn svg.hi {
+  flex-shrink: 0;
+}
+
+/* chevron de expand — era <i>, ahora <span data-chevron> con svg adentro */
+[data-chevron] {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+[data-chevron] svg.hi {
+  flex-shrink: 0;
+}
+
+/* ── FIX: state-circle svg agarraba el svg.hi del sc-icon ── */
+.state-circle > svg:not(.hi) {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.state-circle .sc-icon svg.hi {
+  position: static !important;
+  width: 14px !important;
+  height: 14px !important;
+  top: auto !important;
+  left: auto !important;
+}
+
 /* ── Dark mode ──────────────────────────────────────────────── */
 [data-bs-theme="dark"] .card           { background: var(--color-tint-bg); border-color: var(--color-tint-border); }
 [data-bs-theme="dark"] .card-reto      { background: var(--color-surface); }

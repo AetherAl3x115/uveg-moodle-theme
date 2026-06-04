@@ -3,10 +3,24 @@
  * ─────────────────────────────────────────────────────────────
  * Web Component <uveg-tabs>
  * Fill direccional + dot emergente estilo gota.
- * ─────────────────────────────────────────────────────────────
+ * Iconografía: Heroicons 2 Outline via js/utils/icons.js
  */
 
 import { springScale, createRipple } from "../../js/utils/spring.js";
+import { hi } from "../../js/utils/icons.js";
+
+/* ── Mapa icon attr → clave hi() ────────────────────────────── */
+const TAB_ICON_MAP = {
+  "ti-mail": "mail",
+  "ti-bookmark": "bookmark",
+  "ti-book": "book",
+  "ti-circle": "info-circle",
+};
+
+function tabIcon(iconAttr) {
+  const key = TAB_ICON_MAP[iconAttr] || "info-circle";
+  return hi(key, 12);
+}
 
 /* ── <uveg-tab> — elemento hijo declarativo ─────────────────── */
 class UvegTab extends HTMLElement {
@@ -105,10 +119,8 @@ class UvegTabs extends HTMLElement {
       hoverBg.className = "tab-hover-bg";
       hoverBg.setAttribute("aria-hidden", "true");
 
-      btn.innerHTML = `
-        <i class="ti ${tab.icon}" aria-hidden="true" style="font-size:12px"></i>
-        ${tab.label}
-      `;
+      // Heroicon en lugar de <i class="ti ...">
+      btn.innerHTML = `${tabIcon(tab.icon)} ${tab.label}`;
       btn.insertBefore(hoverBg, btn.firstChild);
       bar.appendChild(btn);
     });
@@ -127,7 +139,7 @@ class UvegTabs extends HTMLElement {
 
   _triggerBubble() {
     this._dot.classList.remove("up");
-    void this._dot.offsetWidth; // reflow
+    void this._dot.offsetWidth;
     this._dot.classList.add("up");
   }
 
@@ -200,7 +212,6 @@ class UvegTabs extends HTMLElement {
     this._activeKey = key;
     this._activeIdx = newIdx;
 
-    // Drenar anterior
     this.querySelectorAll(".tab[data-tab]").forEach((btn) => {
       if (btn.classList.contains("active")) {
         btn.classList.remove(
@@ -219,7 +230,6 @@ class UvegTabs extends HTMLElement {
       }
     });
 
-    // Llenar nuevo
     if (newBtn) {
       newBtn.classList.remove(
         "drain-to-left",

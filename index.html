@@ -7,9 +7,13 @@
 
   Orden de carga de recursos (importante para rendimiento):
     1. Bootstrap CSS   — base de estilos y grid
-    2. Tabler Icons    — iconografía
-    3. main.css        — estilos UVEG (variables → layout → components → dark → responsive)
-    4. main.js         — lógica de app (type="module", defer implícito)
+    2. main.css        — estilos UVEG (variables → layout → components → dark → responsive)
+    3. main.js         — lógica de app (type="module", defer implícito)
+
+  Iconografía: Heroicons 2 Outline via js/utils/icons.js
+    Migrado desde Tabler Icons (webfont) a SVG inline.
+    El <link> de Tabler Icons fue removido intencionalmente.
+    Para agregar un ícono nuevo: editar js/utils/icons.js y usar hi('clave', size).
 
   Filosofía de este HTML:
     - Declarativo: los componentes se configuran via atributos, no JS
@@ -40,17 +44,18 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
     crossorigin="anonymous">
 
-  <!-- Tabler Icons — iconografía consistente en toda la UI -->
-  <link
-    rel="stylesheet"
-   href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+  <!--
+    Tabler Icons REMOVIDO — iconografía migrada a Heroicons 2 Outline.
+    Los íconos ahora se sirven como SVG inline via js/utils/icons.js.
+    No requiere carga de webfont externa.
+  -->
 
   <!-- Estilos UVEG — punto de entrada único -->
   <link rel="stylesheet" href="./assets/css/main.css">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 
   <!--
     Prevenir FOUC (Flash of Unstyled Content) en dark mode.
@@ -113,21 +118,22 @@
       <main class="center" role="main">
 
         <!-- Breadcrumb -->
-          <nav class="breadcrumb-nav" aria-label="Navegación">
-            <a class="bc-item" href="#">Inicio</a>
-            <span class="bc-sep">›</span>
-            <a class="bc-item" href="#">Cursos</a>
-            <span class="bc-sep">›</span>
-            <span class="bc-item active">Módulo 01</span>
-          </nav>
+        <nav class="breadcrumb-nav" aria-label="Navegación">
+          <a class="bc-item" href="#">Inicio</a>
+          <span class="bc-sep">›</span>
+          <a class="bc-item" href="#">Cursos</a>
+          <span class="bc-sep">›</span>
+          <span class="bc-item active">Módulo 01</span>
+        </nav>
 
-      <!-- Header del módulo -->
+        <!-- Header del módulo -->
         <div class="hrow">
           <div class="hrow-left">
             <div class="mod-meta">Administración de proyectos educativos · Módulo 01</div>
             <div class="mod-name">Planeación estratégica de proyectos educativos</div>
             <div class="mod-status">
-              <i class="ti ti-circle-dot" style="font-size:9px" aria-hidden="true"></i>
+              <!-- ti-circle-dot → signal (Heroicons) -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="M9.348 14.651a3.75 3.75 0 0 1 0-5.303m5.304 0a3.75 3.75 0 0 1 0 5.303m-7.425 2.122a6.75 6.75 0 0 1 0-9.546m9.546 0a6.75 6.75 0 0 1 0 9.546M5.106 18.894c-3.808-3.808-3.808-9.98 0-13.789m13.788 0c3.808 3.808 3.808 9.981 0 13.789M12 12h.008v.008H12V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/></svg>
               Semana 1/4
             </div>
           </div>
@@ -137,8 +143,8 @@
                 <span class="plabel">Avance</span>
                 <div class="pbar-wrap">
                   <div class="pbar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
-                <div class="pfill"></div>
-                    </div>
+                    <div class="pfill"></div>
+                  </div>
                   <span class="ppct">70%</span>
                 </div>
               </div>
@@ -151,8 +157,9 @@
               </div>
             </div>
             <button class="btn-ia" aria-label="Glosario">
-              <i class="ti ti-books" aria-hidden="true"></i>
-              Glosario 
+              <!-- ti-books → book-open (Heroicons) -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"/></svg>
+              Glosario
             </button>
           </div>
         </div>
@@ -161,6 +168,8 @@
              uveg-tabs registra los <uveg-tab> hijos y construye
              la barra automáticamente. Para agregar un tab nuevo,
              solo agregar un <uveg-tab> aquí.
+             Los atributos icon="ti-*" son traducidos internamente
+             por TAB_ICON_MAP en uveg-tabs.js → Heroicons.
              ────────────────────────────────────────────────── -->
         <uveg-tabs active="unidad1">
           <uveg-tab key="avisos"       icon="ti-mail"     label="Avisos"></uveg-tab>
@@ -179,7 +188,11 @@
             <div>
               <div class="aviso-title">Recordatorio: Reto 1 vence el 17 de junio</div>
               <div class="aviso-desc">No olvides entregar tu plan estratégico antes de la fecha límite. Revisa los criterios de evaluación en la sección de retos.</div>
-              <div class="aviso-date"><i class="ti ti-clock" style="font-size:10px" aria-hidden="true"></i> Hace 2 horas</div>
+              <div class="aviso-date">
+                <!-- ti-clock → clock (Heroicons) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+                Hace 2 horas
+              </div>
             </div>
           </div>
           <div class="aviso-item">
@@ -187,7 +200,10 @@
             <div>
               <div class="aviso-title">Nueva actividad disponible: Foro de diagnóstico</div>
               <div class="aviso-desc">El foro de diagnóstico ya está abierto. Comparte tu análisis antes del 28 de mayo.</div>
-              <div class="aviso-date"><i class="ti ti-clock" style="font-size:10px" aria-hidden="true"></i> Hace 5 horas</div>
+              <div class="aviso-date">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+                Hace 5 horas
+              </div>
             </div>
           </div>
           <div class="aviso-item">
@@ -195,7 +211,10 @@
             <div>
               <div class="aviso-title">Calificación publicada — Lección 1</div>
               <div class="aviso-desc">Tu calificación para la Lección 1 ha sido publicada. Obtuviste 95/100. ¡Excelente trabajo!</div>
-              <div class="aviso-date"><i class="ti ti-clock" style="font-size:10px" aria-hidden="true"></i> Ayer</div>
+              <div class="aviso-date">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+                Ayer
+              </div>
             </div>
           </div>
           <div class="aviso-item">
@@ -203,7 +222,10 @@
             <div>
               <div class="aviso-title">Material de apoyo disponible</div>
               <div class="aviso-desc">Se ha subido material de apoyo para la Unidad 2. Revisa los recursos adicionales.</div>
-              <div class="aviso-date"><i class="ti ti-clock" style="font-size:10px" aria-hidden="true"></i> 26 may 2026</div>
+              <div class="aviso-date">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+                26 may 2026
+              </div>
             </div>
           </div>
         </section>
@@ -211,30 +233,33 @@
         <!-- ── Panel: Presentación ──────────────────────────── -->
         <section data-panel="presentacion" aria-labelledby="tab-presentacion">
 
-
           <!-- Grid de tarjetas de presentación -->
           <div class="pres-grid" role="tablist" aria-label="Secciones de presentación">
             <div class="pres-card active" data-pres="alcances" role="tab" tabindex="0" aria-selected="true">
               <div class="pres-icon" style="background:#EEF2FF" aria-hidden="true">
-                <i class="ti ti-eye" style="color:#4338ca"></i>
+                <!-- ti-eye → eye (Heroicons) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4338ca" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
               </div>
               <div class="pres-label">Alcances del módulo</div>
             </div>
             <div class="pres-card" data-pres="esquema" role="tab" tabindex="0" aria-selected="false">
               <div class="pres-icon" style="background:#f0fdf4" aria-hidden="true">
-                <i class="ti ti-sitemap" style="color:#166534"></i>
+                <!-- ti-sitemap → rectangle-group (Heroicons) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 0 1-1.125-1.125v-3.75ZM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-8.25ZM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-2.25Z"/></svg>
               </div>
               <div class="pres-label">Esquema del contenido</div>
             </div>
             <div class="pres-card" data-pres="metodologia" role="tab" tabindex="0" aria-selected="false">
               <div class="pres-icon" style="background:#fff7ed" aria-hidden="true">
-                <i class="ti ti-file-description" style="color:#9a3412"></i>
+                <!-- ti-file-description → document-text (Heroicons) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9a3412" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/></svg>
               </div>
               <div class="pres-label">Metodología</div>
             </div>
             <div class="pres-card" data-pres="evaluacion" role="tab" tabindex="0" aria-selected="false">
               <div class="pres-icon" style="background:#fdf4ff" aria-hidden="true">
-                <i class="ti ti-circle-check" style="color:#7e22ce"></i>
+                <!-- ti-circle-check → check-circle (Heroicons) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7e22ce" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
               </div>
               <div class="pres-label">Evaluación</div>
             </div>
@@ -245,10 +270,23 @@
             <h3>Alcances del módulo</h3>
             <p>Al concluir este módulo serás capaz de analizar el entorno educativo desde una perspectiva estratégica, identificando áreas de oportunidad para la implementación tecnológica.</p>
             <ul class="pres-list">
-              <li><i class="ti ti-arrow-right" aria-hidden="true"></i>Propósito general y competencias a desarrollar</li>
-              <li><i class="ti ti-arrow-right" aria-hidden="true"></i>Análisis del contexto educativo actual</li>
-              <li><i class="ti ti-arrow-right" aria-hidden="true"></i>Diseño de mapas estratégicos institucionales</li>
-              <li><i class="ti ti-arrow-right" aria-hidden="true"></i>Evaluación y mejora continua de procesos</li>
+              <li>
+                <!-- ti-arrow-right → arrow-right (Heroicons) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/></svg>
+                Propósito general y competencias a desarrollar
+              </li>
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/></svg>
+                Análisis del contexto educativo actual
+              </li>
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/></svg>
+                Diseño de mapas estratégicos institucionales
+              </li>
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/></svg>
+                Evaluación y mejora continua de procesos
+              </li>
             </ul>
           </div>
         </section>
@@ -256,17 +294,18 @@
         <!-- ── Panel: Unidad 1 ──────────────────────────────── -->
         <section data-panel="unidad1" aria-labelledby="tab-unidad1">
 
-
           <!-- Toggle vista tarjetas / lista -->
           <div class="sec-row">
             <span class="sec-title">Actividades de la sección</span>
             <div class="tv-wrap" role="group" aria-label="Cambiar vista">
               <button class="tv-btn active" data-view="grid" aria-pressed="true">
-                <i class="ti ti-layout-grid" style="font-size:11px" aria-hidden="true"></i>
+                <!-- ti-layout-grid → squares-2x2 (Heroicons) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/></svg>
                 Tarjetas
               </button>
               <button class="tv-btn" data-view="list" aria-pressed="false">
-                <i class="ti ti-list" style="font-size:11px" aria-hidden="true"></i>
+                <!-- ti-list → list-bullet (Heroicons) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/></svg>
                 Lista
               </button>
             </div>
@@ -339,14 +378,14 @@
           </div>
 
           <p class="note">
-            <i class="ti ti-info-circle" style="font-size:12px" aria-hidden="true"></i>
+            <!-- ti-info-circle → information-circle (Heroicons) -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/></svg>
             Completa las actividades en orden para avanzar en el módulo.
           </p>
         </section>
 
         <!-- ── Panel: Unidad 2 ──────────────────────────────── -->
         <section data-panel="unidad2" aria-labelledby="tab-unidad2">
-
 
           <div class="sec-row">
             <span class="sec-title">Actividades de la sección</span>
@@ -389,7 +428,7 @@
           </div>
 
           <p class="note">
-            <i class="ti ti-info-circle" style="font-size:12px" aria-hidden="true"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/></svg>
             Completa la Unidad 1 para desbloquear estas actividades.
           </p>
         </section>
@@ -419,8 +458,6 @@
      Separado de main.js por ser lógica específica de esta página
      que no justifica un módulo propio. -->
 <script type="module" src="js/page.js"></script>
-
-
 
 </body>
 </html>

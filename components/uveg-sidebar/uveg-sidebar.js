@@ -2,42 +2,36 @@
  * components/uveg-sidebar/uveg-sidebar.js
  * ─────────────────────────────────────────────────────────────
  * Web Component <uveg-sidebar>
+ * Iconografía: Heroicons 2 Outline via js/utils/icons.js
  */
 
 import { springWidth, liquidOpen, liquidClose } from "../../js/utils/spring.js";
+import { hi } from "../../js/utils/icons.js";
 
 const NAV_ITEMS = [
-  { key: "dashboard", icon: "ti-layout-dashboard", label: "Dashboard" },
-  { key: "modulos", icon: "ti-book-2", label: "Módulos" },
-  { key: "cursos", icon: "ti-school", label: "Cursos" },
-  { key: "mensajes", icon: "ti-message-circle", label: "Mensajes", badge: 3 },
+  { key: "dashboard", icon: "dashboard", label: "Dashboard" },
+  { key: "modulos", icon: "modules", label: "Módulos" },
+  { key: "cursos", icon: "courses", label: "Cursos" },
+  { key: "mensajes", icon: "messages", label: "Mensajes", badge: 3 },
 ];
 
 const NAV_ITEMS_BOTTOM = [
-  { key: "perfil", icon: "ti-user-circle", label: "Mi perfil" },
-  { key: "config", icon: "ti-settings", label: "Configuración" },
+  { key: "perfil", icon: "profile", label: "Mi perfil" },
+  { key: "config", icon: "settings", label: "Configuración" },
 ];
 
 const MENU_ITEMS = [
-  { icon: "ti-home", label: "Inicio", color: "var(--color-act-dot-actividad)" },
-  { icon: "ti-book-2", label: "Módulos", color: "var(--color-accent)" },
+  { icon: "home", label: "Inicio", color: "var(--color-act-dot-actividad)" },
+  { icon: "book", label: "Módulos", color: "var(--color-accent)" },
+  { icon: "check-circle", label: "Evaluación", color: "var(--color-done-dot)" },
+  { icon: "chart-bar", label: "Informes", color: "var(--color-act-dot-foro)" },
   {
-    icon: "ti-circle-check",
-    label: "Evaluación",
-    color: "var(--color-done-dot)",
-  },
-  {
-    icon: "ti-chart-bar",
-    label: "Informes",
-    color: "var(--color-act-dot-foro)",
-  },
-  {
-    icon: "ti-info-circle",
+    icon: "info-circle",
     label: "Centro de información",
     color: "var(--color-accent-navy)",
   },
   {
-    icon: "ti-news",
+    icon: "newspaper",
     label: "Revistas de investigación",
     color: "var(--color-progress-fill-from)",
   },
@@ -58,21 +52,32 @@ const NEXT_ACTIVITIES = [
   },
 ];
 
-const COLLAPSED_WIDTH = 58;
-const EXPANDED_WIDTH = 220;
+const ADVISOR_DATA = [
+  {
+    role: "asesor",
+    roleLabel: "Asesor",
+    roleIcon: "profile",
+    initials: "DP",
+    name: "Daniel Pérez",
+    email: "danperezm@uveg.edu.mx",
+    phone: "4493069160",
+    sessionsUrl: "#sesiones-asesor",
+  },
+  {
+    role: "tutor",
+    roleLabel: "Tutor",
+    roleIcon: "courses",
+    initials: "LA",
+    name: "Lucía de los Ángeles",
+    email: "lumanuell@uveg.edu.mx",
+    phone: null,
+    sessionsUrl: "#sesiones-tutor",
+  },
+];
 
-/**
- * Datos mock del progreso.
- * Se reemplazan cuando el cronograma llame a window.uvegUpdateProgress(data).
- *
- * Estructura esperada:
- * {
- *   pct:          number,              // 0-100
- *   completadas:  number,              // actividades completadas del cronograma
- *   recomendadas: number,              // actividades que debías llevar a esta fecha
- *   estado:       'bien'|'regular'|'atrasado'
- * }
- */
+const COLLAPSED_WIDTH = 58;
+const EXPANDED_WIDTH = 248;
+
 const PROGRESO_DEFAULT = {
   pct: 70,
   completadas: 5,
@@ -80,15 +85,12 @@ const PROGRESO_DEFAULT = {
   estado: "bien",
 };
 
-/**
- * Config visual por estado — iconos Tabler, sin emojis.
- */
 const PROGRESO_CONFIG = {
   bien: {
     stroke: "#22c55e",
     badgeBg: "#f0fdf4",
     badgeColor: "#166534",
-    badgeIcon: "ti-mood-happy",
+    badgeIcon: "mood-happy",
     badgeText: "Al día",
     msg: "Avanzando muy bien",
   },
@@ -96,7 +98,7 @@ const PROGRESO_CONFIG = {
     stroke: "#f59e0b",
     badgeBg: "#fffbeb",
     badgeColor: "#92400e",
-    badgeIcon: "ti-mood-empty",
+    badgeIcon: "mood-neutral",
     badgeText: "Regular",
     msg: "Vas un poco atrasado",
   },
@@ -104,14 +106,12 @@ const PROGRESO_CONFIG = {
     stroke: "#ef4444",
     badgeBg: "#fef2f2",
     badgeColor: "#991b1b",
-    badgeIcon: "ti-mood-sad",
+    badgeIcon: "mood-sad",
     badgeText: "Atrasado",
     msg: "Necesitas ponerte al día",
   },
 };
 
-/* ── Helpers SVG ─────────────────────────────────────────────── */
-// Radio = 26, circunferencia = 2π·26 ≈ 163.36
 function _progresoDash(pct) {
   const c = 2 * Math.PI * 26;
   const fill = (pct / 100) * c;
@@ -130,6 +130,7 @@ class UvegSidebar extends HTMLElement {
       progreso: false,
       menu: false,
       actividades: true,
+      advisor: false,
     };
     this._progreso = { ...PROGRESO_DEFAULT };
   }
@@ -185,15 +186,17 @@ class UvegSidebar extends HTMLElement {
           ${NAV_ITEMS_BOTTOM.map((item) => this._renderNavItem(item, activeItem)).join("")}
           <div class="sb-sep" role="separator"></div>
           <div class="sb-section-label" aria-hidden="true">Bloques</div>
-          ${this._renderBlock("progreso", "ti-chart-donut", "Mi Progreso", this._renderBlockProgreso())}
-          ${this._renderBlock("menu", "ti-menu-2", "Mi Menú", this._renderBlockMenu())}
-          ${this._renderBlock("actividades", "ti-calendar-event", "Próximas actividades", this._renderBlockActividades())}
+          ${this._renderBlock("progreso", "chart-pie", "Mi Progreso", this._renderBlockProgreso())}
+          ${this._renderBlock("menu", "bars-3", "Mi Menú", this._renderBlockMenu())}
+          ${this._renderBlock("actividades", "calendar-days", "Próximas actividades", this._renderBlockActividades())}
         </nav>
+
+        ${this._renderBlockAdvisor()}
 
         <button class="sb-collapse" id="sb-toggle"
           aria-label="${this._collapsed ? "Expandir sidebar" : "Colapsar sidebar"}"
           aria-expanded="${!this._collapsed}">
-          <i class="ti ti-arrow-bar-left" aria-hidden="true"></i>
+          ${hi("collapse", 16)}
           <span>Colapsar</span>
         </button>
 
@@ -211,7 +214,7 @@ class UvegSidebar extends HTMLElement {
            data-key="${item.key}" role="button" tabindex="0"
            aria-current="${isActive ? "page" : "false"}"
            aria-label="${item.label}">
-        <i class="ti ${item.icon}" aria-hidden="true"></i>
+        ${hi(item.icon, 18)}
         <span class="sb-label">${item.label}</span>
         ${badge}
         <span class="sb-tooltip" aria-hidden="true">${item.label}</span>
@@ -225,9 +228,11 @@ class UvegSidebar extends HTMLElement {
       <div class="sb-block" data-block="${key}">
         <div class="sb-block-header" role="button" tabindex="0"
              aria-expanded="${isOpen}" aria-controls="sb-block-body-${key}">
-          <i class="ti ${icon}" aria-hidden="true"></i>
+          ${hi(icon, 18)}
           <span class="sb-label sb-block-label">${label}</span>
-          <i class="ti ti-chevron-down sb-block-chevron ${isOpen ? "open" : ""}" aria-hidden="true"></i>
+          <span class="sb-block-chevron ${isOpen ? "open" : ""}" aria-hidden="true">
+            ${hi("chevron-down", 14)}
+          </span>
         </div>
         <div class="sb-block-wrap" id="sb-block-wrap-${key}" style="height:0;overflow:hidden">
           <div class="sb-block-inner" id="sb-block-inner-${key}"
@@ -252,7 +257,6 @@ class UvegSidebar extends HTMLElement {
     return `
       <div class="sb-prog-card" id="sb-prog-card" data-estado="${estado}">
 
-        <!-- Círculo SVG -->
         <div class="sb-prog-circle" aria-label="${pct}% de avance">
           <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true">
             <circle cx="32" cy="32" r="26"
@@ -269,25 +273,21 @@ class UvegSidebar extends HTMLElement {
           <span class="sb-prog-pct" id="sb-prog-pct">${pct}%</span>
         </div>
 
-        <!-- Badge de estado -->
         <span class="sb-prog-badge" id="sb-prog-badge"
               style="background:${cfg.badgeBg};color:${cfg.badgeColor}">
-          <i class="ti ${cfg.badgeIcon}" aria-hidden="true"></i>
+          ${hi(cfg.badgeIcon, 13)}
           ${cfg.badgeText}
         </span>
 
-        <!-- Mensaje -->
         <div class="sb-prog-msg" id="sb-prog-msg">${cfg.msg}</div>
 
-        <!-- Subtexto cronograma -->
         <div class="sb-prog-sub" id="sb-prog-sub">
           ${completadas} de ${recomendadas} actividades recomendadas
         </div>
 
-        <!-- Link cronograma -->
         <button class="sb-prog-link" id="sb-prog-link">
           Ver cronograma
-          <i class="ti ti-arrow-right" style="font-size:10px" aria-hidden="true"></i>
+          ${hi("arrow-right", 10)}
         </button>
 
       </div>
@@ -304,26 +304,22 @@ class UvegSidebar extends HTMLElement {
 
     card.dataset.estado = estado;
 
-    // Arco SVG animado
     const arc = card.querySelector("#sb-prog-arc");
     if (arc) {
       arc.setAttribute("stroke", cfg.stroke);
       this._animateArc(arc, prev.pct, pct);
     }
 
-    // Porcentaje animado
     const pctEl = card.querySelector("#sb-prog-pct");
     if (pctEl) this._animatePct(pctEl, prev.pct, pct);
 
-    // Badge
     const badge = card.querySelector("#sb-prog-badge");
     if (badge) {
       badge.style.background = cfg.badgeBg;
       badge.style.color = cfg.badgeColor;
-      badge.innerHTML = `<i class="ti ${cfg.badgeIcon}" aria-hidden="true"></i> ${cfg.badgeText}`;
+      badge.innerHTML = `${hi(cfg.badgeIcon, 13)} ${cfg.badgeText}`;
     }
 
-    // Mensaje y subtexto
     const msg = card.querySelector("#sb-prog-msg");
     if (msg) msg.textContent = cfg.msg;
 
@@ -331,10 +327,8 @@ class UvegSidebar extends HTMLElement {
     if (sub)
       sub.textContent = `${completadas} de ${recomendadas} actividades recomendadas`;
 
-    // Rebote en la tarjeta
     this._bounceCard(card);
 
-    // Recalcular altura del wrap si el bloque está abierto
     if (this._blocks.progreso) {
       const wrap = this.querySelector("#sb-block-wrap-progreso");
       const inner = this.querySelector("#sb-block-inner-progreso");
@@ -431,13 +425,11 @@ class UvegSidebar extends HTMLElement {
       (item, idx) => `
       <div class="sb-menu-item" role="button" tabindex="0"
            aria-label="${item.label}" data-menu-idx="${idx}">
-        <!-- Círculo con color único por ítem -->
-        <div class="sb-menu-icon" aria-hidden="true"
-             style="--item-color:${item.color}">
-          <i class="ti ${item.icon}"></i>
-        </div>
-       <span class="sb-menu-label">${item.label}</span>
-        <i class="ti ti-chevron-right sb-menu-arrow" aria-hidden="true"></i>
+         <div class="sb-menu-icon" aria-hidden="true" style="--item-color:${item.color}">
+        ${hi(item.icon, 15)}
+      </div>
+        <span class="sb-menu-label">${item.label}</span>
+        ${hi("chevron-right", 14, "sb-menu-arrow")}
       </div>
     `,
     ).join("");
@@ -460,8 +452,104 @@ class UvegSidebar extends HTMLElement {
     return `
       ${items}
       <div class="sb-act-cal" role="button" tabindex="0">
-        <i class="ti ti-calendar" aria-hidden="true"></i>
+        ${hi("calendar", 14)}
         Ver calendario completo
+      </div>
+    `;
+  }
+
+  /* ── Bloque: Mi Asesor / Tutor ──────────────────────────── */
+
+  _renderBlockAdvisor() {
+    const isOpen = this._blocks.advisor;
+
+    const closedHtml = `
+      <div class="sb-advisor-closed" id="sb-advisor-closed"
+           role="button" tabindex="0" aria-label="Ver asesor y tutor"
+           style="${isOpen ? "display:none" : ""}">
+        <div class="sb-advisor-stack" aria-hidden="true">
+          <div class="sb-advisor-av sb-advisor-av--asesor">${ADVISOR_DATA[0].initials}</div>
+          <div class="sb-advisor-av sb-advisor-av--tutor">${ADVISOR_DATA[1].initials}</div>
+        </div>
+        <div class="sb-advisor-closed-info">
+          <div class="sb-advisor-closed-names">${ADVISOR_DATA[0].name.split(" ")[0]} · ${ADVISOR_DATA[1].name.split(" ")[0]}</div>
+          <div class="sb-advisor-closed-sub">Asesor y tutor</div>
+        </div>
+        ${hi("chevron-down", 14, "sb-advisor-closed-ch")}
+      </div>
+    `;
+
+    const personsHtml = ADVISOR_DATA.map(
+      (p) => `
+      <div class="sb-advisor-person">
+        <div class="sb-advisor-person-top">
+          <div class="sb-advisor-av-wrap">
+            <div class="sb-advisor-av sb-advisor-av--${p.role}">${p.initials}</div>
+            <div class="sb-advisor-av-dot sb-advisor-av-dot--${p.role}" aria-hidden="true"></div>
+          </div>
+          <div class="sb-advisor-meta">
+            <div class="sb-advisor-role">
+              ${hi(p.roleIcon, 12)}
+              ${p.roleLabel}
+            </div>
+            <div class="sb-advisor-name">${p.name}</div>
+            <div class="sb-advisor-email">
+              ${hi("mail", 11)}${p.email}
+            </div>
+            ${
+              p.phone
+                ? `
+            <div class="sb-advisor-phone">
+              ${hi("phone", 11)}${p.phone}
+            </div>`
+                : ""
+            }
+          </div>
+        </div>
+        <div class="sb-advisor-actions">
+          <button class="sb-advisor-btn sb-advisor-btn--msg"
+                  aria-label="Enviar mensaje a ${p.name}"
+                  onclick="window.location.href='mailto:${p.email}'">
+            ${hi("message", 14)}
+            Mensaje
+          </button>
+          <button class="sb-advisor-btn sb-advisor-btn--sessions"
+                  aria-label="Ver sesiones grabadas de ${p.name}"
+                  onclick="window.location.href='${p.sessionsUrl}'">
+            <span class="sb-sessions-icon-wrap">
+              ${hi("video", 14)}
+              <span class="sb-sessions-dot" aria-hidden="true"></span>
+            </span>
+            Sesiones
+          </button>
+        </div>
+      </div>
+    `,
+    ).join("");
+
+    const openHtml = `
+      <div class="sb-advisor-open" id="sb-advisor-open"
+           style="${isOpen ? "" : "display:none"}">
+        <div class="sb-advisor-open-hdr"
+             role="button" tabindex="0" aria-label="Cerrar panel asesor y tutor">
+          ${hi("users", 16)}
+          <span class="sb-advisor-open-title">Mi asesor / tutor</span>
+          ${hi("chevron-up", 14, "sb-advisor-open-ch")}
+        </div>
+        <div class="sb-advisor-body-wrap" id="sb-advisor-body-wrap"
+             style="height:0;overflow:hidden">
+          <div class="sb-advisor-body-inner" id="sb-advisor-body-inner"
+               style="transform:scaleY(0.92);opacity:0;transform-origin:top center">
+            ${personsHtml}
+          </div>
+        </div>
+      </div>
+    `;
+
+    return `
+      <div class="sb-advisor-wrap" id="sb-advisor-wrap" data-block="advisor">
+        ${closedHtml}
+        ${openHtml}
       </div>
     `;
   }
@@ -477,7 +565,6 @@ class UvegSidebar extends HTMLElement {
         `[data-block="${key}"] .sb-block-header`,
       );
       if (!wrap || !inner) return;
-      // Todos nacen cerrados visualmente — liquidOpen hace la entrada animada
       setTimeout(() => {
         liquidOpen(wrap, inner);
         this._bounceHeader(header);
@@ -507,6 +594,20 @@ class UvegSidebar extends HTMLElement {
           this._toggleBlock(block.dataset.block);
         }
       }
+      return;
+    }
+    const advisorClosed = e.target.closest("#sb-advisor-closed");
+    if (advisorClosed) {
+      if (this._collapsed) {
+        this._expandToBlock("advisor");
+      } else {
+        this._toggleAdvisor(true);
+      }
+      return;
+    }
+    const advisorOpenHdr = e.target.closest(".sb-advisor-open-hdr");
+    if (advisorOpenHdr) {
+      this._toggleAdvisor(false);
       return;
     }
     const navItem = e.target.closest(".sb-item[data-key]");
@@ -545,13 +646,11 @@ class UvegSidebar extends HTMLElement {
     chevron?.classList.toggle("open", !isOpen);
 
     if (!isOpen) {
-      // Abrir — liquidOpen + rebote en el header
       liquidOpen(wrap, inner);
       this._bounceHeader(header);
     } else {
-      // Cerrar — mismas constantes que el HTML original (0.3 * 0.66)
       if (wrap._liquidRaf) cancelAnimationFrame(wrap._liquidRaf);
-      inner.style.transition = ""; // limpiar por si _openInitial dejó "none"
+      inner.style.transition = "";
       let vel = 0,
         cur = parseFloat(wrap.style.height) || inner.scrollHeight;
       let sv = 0,
@@ -592,17 +691,81 @@ class UvegSidebar extends HTMLElement {
     });
   }
 
+  /* ── Toggle advisor ─────────────────────────────────────── */
+
+  _toggleAdvisor(open) {
+    const closed = this.querySelector("#sb-advisor-closed");
+    const openEl = this.querySelector("#sb-advisor-open");
+    const wrap = this.querySelector("#sb-advisor-body-wrap");
+    const inner = this.querySelector("#sb-advisor-body-inner");
+    if (!closed || !openEl || !wrap || !inner) return;
+
+    this._blocks.advisor = open;
+
+    if (open) {
+      closed.style.display = "none";
+      openEl.style.display = "block";
+      liquidOpen(wrap, inner);
+    } else {
+      if (wrap._liquidRaf) cancelAnimationFrame(wrap._liquidRaf);
+      let vel = 0,
+        cur = parseFloat(wrap.style.height) || inner.scrollHeight;
+      let sv = 0,
+        sc = 1;
+      let ov = 0,
+        oc = 1;
+      inner.style.transformOrigin = "top center";
+      const tick = () => {
+        vel = (vel + (0 - cur) * 0.3) * 0.66;
+        cur += vel;
+        sv = (sv + (0.7 - sc) * 0.3) * 0.66;
+        sc += sv;
+        ov = (ov + (0 - oc) * 0.3) * 0.66;
+        oc += ov;
+        wrap.style.height = `${Math.max(cur, 0)}px`;
+        inner.style.transform = `scaleY(${Math.max(sc, 0.7)})`;
+        inner.style.opacity = `${Math.max(oc, 0)}`;
+        if (cur > 0.4 || Math.abs(vel) > 0.4) {
+          wrap._liquidRaf = requestAnimationFrame(tick);
+        } else {
+          wrap.style.height = "0px";
+          inner.style.transform = "scaleY(0.7)";
+          inner.style.opacity = "0";
+          wrap._liquidRaf = null;
+          openEl.style.display = "none";
+          closed.style.display = "flex";
+        }
+      };
+      tick();
+    }
+  }
+
   /* ── Expandir sidebar hacia un bloque específico ────────── */
 
   _expandToBlock(key) {
-    if (!key || !(key in this._blocks)) return;
+    if (!key) return;
+    if (key === "advisor") {
+      this._blocks.advisor = true;
+      this._collapsed = false;
+      const sidebar = this.querySelector(".sidebar");
+      const toggleBtn = this.querySelector("#sb-toggle");
+      toggleBtn?.setAttribute("aria-expanded", "true");
+      toggleBtn?.setAttribute("aria-label", "Colapsar sidebar");
+      sidebar.classList.remove("collapsed");
+      springWidth(this, EXPANDED_WIDTH, 0.18, 0.68, () => {
+        requestAnimationFrame(() => {
+          this._toggleAdvisor(true);
+        });
+      });
+      return;
+    }
+    if (!(key in this._blocks)) return;
 
     this._blocks[key] = true;
     this._collapsed = false;
 
     const sidebar = this.querySelector(".sidebar");
     const toggleBtn = this.querySelector("#sb-toggle");
-
     toggleBtn?.setAttribute("aria-expanded", "true");
     toggleBtn?.setAttribute("aria-label", "Colapsar sidebar");
     sidebar.classList.remove("collapsed");
@@ -654,6 +817,20 @@ class UvegSidebar extends HTMLElement {
           inner.style.opacity = "0";
         }
       });
+      if (this._blocks.advisor) {
+        const advisorOpen = this.querySelector("#sb-advisor-open");
+        const advisorClosed = this.querySelector("#sb-advisor-closed");
+        const wrap = this.querySelector("#sb-advisor-body-wrap");
+        const inner = this.querySelector("#sb-advisor-body-inner");
+        if (advisorOpen && advisorClosed && wrap && inner) {
+          wrap.style.height = "0px";
+          inner.style.transform = "scaleY(0.92)";
+          inner.style.opacity = "0";
+          advisorOpen.style.display = "none";
+          advisorClosed.style.display = "flex";
+          this._blocks.advisor = false;
+        }
+      }
       sidebar.classList.add("collapsed");
       springWidth(this, COLLAPSED_WIDTH);
     } else {
@@ -662,14 +839,6 @@ class UvegSidebar extends HTMLElement {
         requestAnimationFrame(() => this._openInitial());
       });
     }
-  }
-
-  _getBlocksSection() {
-    return [
-      ...this.querySelectorAll(".sb-block"),
-      ...this.querySelectorAll(".sb-section-label"),
-      this.querySelectorAll(".sb-sep")[1],
-    ].filter(Boolean);
   }
 
   /* ── Activar nav item ───────────────────────────────────── */

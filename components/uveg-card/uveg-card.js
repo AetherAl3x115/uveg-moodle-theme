@@ -2,45 +2,11 @@
  * components/uveg-card/uveg-card.js
  * ─────────────────────────────────────────────────────────────
  * Web Component <uveg-card>
- *
- * Uso básico (lección):
- *   <uveg-card
- *     card-id="0"
- *     title="Lección 1. Introducción al módulo"
- *     type="Lectura + actividad"
- *     state="done"
- *     date-start="25 may"
- *     date-end="28 may"
- *     progress-done="2"
- *     progress-total="2"
- *     scorm-title="Lección 1">
- *   </uveg-card>
- *
- * Uso reto:
- *   <uveg-card
- *     card-id="4"
- *     variant="reto"
- *     title="Reto 1. Planeación estratégica"
- *     subtitle="Entrega individual · hasta 100 pts"
- *     state="pending"
- *     date-start="1 jun"
- *     date-end="17 jun">
- *   </uveg-card>
- *
- * Atributos observados:
- *   card-id, title, subtitle, type, state, variant,
- *   date-start, date-end, progress-done, progress-total, scorm-title
- *
- * Estados válidos: pending | done
- * Variantes:       default | reto
- *
- * Eventos emitidos:
- *   uveg:openscorm  → { detail: { title, cardId } }
- *   uveg:cardopen   → { detail: { cardId } }
- * ─────────────────────────────────────────────────────────────
+ * Iconografía: Heroicons 2 Outline via js/utils/icons.js
  */
 
 import { springScale, liquidOpen, liquidClose } from "../../js/utils/spring.js";
+import { hi } from "../../js/utils/icons.js";
 
 /* ── Configuración de estados ───────────────────────────────── */
 const STATE_CONFIG = {
@@ -48,12 +14,12 @@ const STATE_CONFIG = {
     avClass: "av-pending",
     dotClass: "dot-pending",
     badgeClass: "b-pending",
-    badgeIcon: "ti-clock",
+    badgeIcon: "clock",
     badgeLabel: "Pendiente",
     ringStroke: "#cbd5e1",
     ringDash: "26.7 80.1",
     iconClass: "pending",
-    iconName: "ti-clock",
+    iconKey: "clock",
     barColor: "#cbd5e1",
     barWidth: "0%",
     barVal: "0%",
@@ -64,12 +30,12 @@ const STATE_CONFIG = {
     avClass: "av-progress",
     dotClass: "dot-progress",
     badgeClass: "b-progress",
-    badgeIcon: "ti-player-play",
+    badgeIcon: "play",
     badgeLabel: "En progreso",
     ringStroke: "#3b82f6",
     ringDash: "53.4 53.4",
     iconClass: "progress",
-    iconName: "ti-clock",
+    iconKey: "clock",
     barColor: "#3b82f6",
     barWidth: "50%",
     barVal: "50%",
@@ -80,12 +46,12 @@ const STATE_CONFIG = {
     avClass: "av-done",
     dotClass: "dot-done",
     badgeClass: "b-done",
-    badgeIcon: "ti-check",
+    badgeIcon: "check",
     badgeLabel: "Completada",
     ringStroke: "#22c55e",
     ringDash: "106.8 0",
     iconClass: "done",
-    iconName: "ti-check",
+    iconKey: "check",
     barColor: "#22c55e",
     barWidth: "100%",
     barVal: "100%",
@@ -146,18 +112,14 @@ class UvegCard extends HTMLElement {
     const cfg = STATE_CONFIG[state] || STATE_CONFIG.pending;
     const done = parseInt(this._attr("progress-done", "0"), 10);
     const total = parseInt(this._attr("progress-total", "2"), 10);
-    const isReto = this._isReto();
 
-    this.innerHTML = isReto
+    this.innerHTML = this._isReto()
       ? this._renderReto(id, state, cfg)
       : this._renderLesson(id, state, cfg, done, total);
   }
 
   _renderLesson(id, state, cfg, done, total) {
     const title = this._attr("title");
-    const type = this._attr("type");
-    const dateStart = this._attr("date-start");
-    const dateEnd = this._attr("date-end");
     const scormTitle = this._attr("scorm-title", title);
 
     return `
@@ -166,9 +128,9 @@ class UvegCard extends HTMLElement {
           <div class="c-accent-bar ${state}" data-accentbar></div>
           <div class="c-row" style="flex:1">
 
-             <!-- Avatar con dot de estado -->
+            <!-- Avatar con dot de estado — ícono cambia según estado -->
             <div class="av ${cfg.avClass}" data-av>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="M8 9h8"/><path d="M8 13h6"/><path d="m14.5 17.5 2.5-2.5 1.5 1.5-2.5 2.5H14.5v-1.5z"/></svg>
+              ${hi(state === "done" ? "clipboard-list" : "pencil-square", 18)}
               <span class="av-dot ${cfg.dotClass}" data-dot></span>
             </div>
 
@@ -177,22 +139,24 @@ class UvegCard extends HTMLElement {
               <div class="c-title">${title}</div>
               <div class="c-desc">${this._attr("desc", "Explora los contenidos y actividades de esta lección para avanzar en el módulo.")}</div>
               <span class="badge ${cfg.badgeClass}" data-badge>
-                <i class="ti ${cfg.badgeIcon}" style="font-size:9px" aria-hidden="true"></i>
+                ${hi(cfg.badgeIcon, 9)}
                 ${cfg.badgeLabel}
               </span>
             </div>
 
-         <!-- Columna derecha: ring + chevron arriba, chip abajo -->
+            <!-- Columna derecha: ring + chevron arriba, chip abajo -->
             <div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:4px;flex-shrink:0">
               <div style="display:flex;align-items:center;gap:5px">
                 <div class="state-circle" data-sc role="button" tabindex="0" aria-label="Ver progreso">
                   ${this._renderRing(id, cfg)}
                   <div class="sc-icon ${cfg.iconClass}" data-scicon>
-                    <i class="ti ${cfg.iconName}" aria-hidden="true"></i>
+                    ${hi(cfg.iconKey, 14)}
                   </div>
                 </div>
-                <i class="ti ti-chevron-down" data-chevron aria-hidden="true"
-                  style="font-size:14px;color:#94a3b8;transition:transform .3s cubic-bezier(.4,0,.2,1)"></i>
+                <span data-chevron aria-hidden="true"
+                  style="display:flex;align-items:center;color:#94a3b8;transition:transform .3s cubic-bezier(.4,0,.2,1)">
+                  ${hi("chevron-down", 14)}
+                </span>
               </div>
               <span class="cf-chip" data-chip>${cfg.chipText(done, total)}</span>
             </div>
@@ -208,7 +172,7 @@ class UvegCard extends HTMLElement {
           <div class="blob-inner" data-bi>
             <div class="b-div"></div>
             <button class="sim-btn" data-sim aria-label="Simular progreso">
-              <i class="ti ti-player-play" style="font-size:10px" aria-hidden="true"></i>
+              ${hi("play", 10)}
               Simular progreso
             </button>
             <div class="sub-section-title">Recursos de aprendizaje</div>
@@ -239,13 +203,12 @@ class UvegCard extends HTMLElement {
 
     return `
       <div class="card card-reto" data-card-id="${id}" data-state="${state}">
-                <div class="c-top" style="padding:14px 14px 0;display:block">
+        <div class="c-top" style="padding:14px 14px 0;display:block">
 
           <!-- Header gradient UVEG -->
           <div class="reto-header">
-
             <div class="reto-header-icon">
-              <i class="ti ti-trophy" aria-hidden="true"></i>
+              ${hi("trophy", 20)}
             </div>
             <div class="reto-header-info">
               <div class="reto-header-tag">RETO INTEGRADOR</div>
@@ -255,12 +218,13 @@ class UvegCard extends HTMLElement {
             <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
               <span class="badge" data-badge
                 style="background:rgba(255,255,255,.15);color:#fff;border:.5px solid rgba(255,255,255,.2)">
-                <i class="ti ti-clock" style="font-size:9px" aria-hidden="true"></i> Vence pronto
+                ${hi("clock", 9)}
+                Vence pronto
               </span>
               <div class="state-circle" data-sc role="button" tabindex="0" aria-label="Ver progreso">
                 ${this._renderRing(id, cfg, true)}
                 <div class="sc-icon ${cfg.iconClass}" data-scicon style="color:rgba(255,255,255,.6)">
-                  <i class="ti ${cfg.iconName}" aria-hidden="true"></i>
+                  ${hi(cfg.iconKey, 14)}
                 </div>
                 <div class="state-bar-wrap" aria-hidden="true">
                   <div class="state-bar">
@@ -276,8 +240,8 @@ class UvegCard extends HTMLElement {
 
         <!-- Footer -->
         <div class="c-footer">
-          <div class="cf-date"><i class="ti ti-calendar" style="font-size:11px" aria-hidden="true"></i> ${dateStart}</div>
-          <div class="cf-date"><i class="ti ti-clock"    style="font-size:11px" aria-hidden="true"></i> Vence: ${dateEnd}</div>
+          <div class="cf-date">${hi("calendar", 11)} ${dateStart}</div>
+          <div class="cf-date">${hi("clock", 11)} Vence: ${dateEnd}</div>
           <div class="cf-sep"></div>
           <span class="cf-chip" data-chip>0/1</span>
         </div>
@@ -287,7 +251,7 @@ class UvegCard extends HTMLElement {
           <div class="blob-inner" data-bi>
             <div class="b-div"></div>
             <button class="sim-btn" data-sim aria-label="Simular progreso">
-              <i class="ti ti-player-play" style="font-size:10px" aria-hidden="true"></i>
+              ${hi("play", 10)}
               Simular progreso
             </button>
             <div class="b-desc">
@@ -304,12 +268,11 @@ class UvegCard extends HTMLElement {
                 <span class="bd-val">${dateEnd}</span>
               </div>
             </div>
-            <button class="btn-go btn-reto" data-scorm-btn
-              data-scorm-title="${title}">
-              <i class="ti ti-bolt" aria-hidden="true"></i> Ver instrucciones del Reto
+            <button class="btn-go btn-reto" data-scorm-btn data-scorm-title="${title}">
+              ${hi("bolt", 14)} Ver instrucciones del Reto
             </button>
             <p class="note">
-              <i class="ti ti-info-circle" aria-hidden="true"></i>
+              ${hi("info-circle", 12)}
               2 intentos permitidos · Calificación mínima: 70
             </p>
           </div>
@@ -334,7 +297,6 @@ class UvegCard extends HTMLElement {
   }
 
   _svgByType(type) {
-    // SVG duotone inline por tipo de actividad
     const svgs = {
       video: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><rect x="24" y="50" width="156" height="156" rx="14" fill="#e50061" opacity=".18"/><rect x="24" y="50" width="156" height="156" rx="14" stroke="#e50061" stroke-width="14" fill="none"/><path d="M180 128L236 92v72z" fill="#e50061" opacity=".5"/><path d="M180 128L236 92v72z" stroke="#e50061" stroke-width="12" stroke-linejoin="round" fill="none"/></svg>`,
       podcast: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><rect x="88" y="16" width="80" height="120" rx="40" fill="#7c3aed" opacity=".2"/><rect x="88" y="16" width="80" height="120" rx="40" stroke="#7c3aed" stroke-width="14" fill="none"/><path d="M48 128c0 44.2 35.8 80 80 80s80-35.8 80-80" stroke="#7c3aed" stroke-width="14" stroke-linecap="round" fill="none"/><line x1="128" y1="208" x2="128" y2="240" stroke="#7c3aed" stroke-width="14" stroke-linecap="round"/><line x1="96" y1="240" x2="160" y2="240" stroke="#7c3aed" stroke-width="14" stroke-linecap="round"/></svg>`,
@@ -346,7 +308,6 @@ class UvegCard extends HTMLElement {
   }
 
   _renderSubActs(state) {
-    // Mapa de tipos: ícono SVG + etiqueta del badge + color clase
     const TIPOS = {
       video: { label: "VIDEO", badgeClass: "video" },
       podcast: { label: "PODCAST", badgeClass: "podcast" },
@@ -355,7 +316,6 @@ class UvegCard extends HTMLElement {
       lectura: { label: "LECTURA", badgeClass: "lectura" },
     };
 
-    // Distribución por card-id: cada lección tiene su propio par de tipos
     const id = parseInt(this._attr("card-id"), 10);
     const DISTRIBUCIONES = {
       0: ["video", "lectura"],
@@ -365,8 +325,6 @@ class UvegCard extends HTMLElement {
       5: ["podcast", "infografia"],
       6: ["lectura", "presentacion"],
     };
-
-    // Nombres de sub-actividades por card-id
     const NOMBRES = {
       0: [
         "L1. Video — ¿Qué es la planeación estratégica?",
@@ -394,7 +352,6 @@ class UvegCard extends HTMLElement {
       ],
     };
 
-    // Fallback si el card-id no está mapeado
     const tipos = DISTRIBUCIONES[id] ?? ["lectura", "presentacion"];
     const nombres = NOMBRES[id] ?? ["Actividad 1", "Actividad 2"];
 
@@ -403,7 +360,7 @@ class UvegCard extends HTMLElement {
         const cfg = TIPOS[tipo];
         return `
         <div class="sub-act-card ${tipo}">
-        <div class="sub-act-row">
+          <div class="sub-act-row">
             <div class="sub-act-icon ${tipo}">${this._svgByType(tipo)}</div>
             <div class="sub-act-name">${nombres[i]}</div>
             <span class="sub-act-badge ${tipo}">${cfg.label}</span>
@@ -421,20 +378,15 @@ class UvegCard extends HTMLElement {
     if (!card) return;
 
     card.addEventListener("click", this._handleCardClick.bind(this));
-
-    card.addEventListener("mouseenter", () => {
-      card.classList.remove("hover-out");
-    });
+    card.addEventListener("mouseenter", () =>
+      card.classList.remove("hover-out"),
+    );
     card.addEventListener("mouseleave", () => {
       card.classList.add("hover-out");
       setTimeout(() => card.classList.remove("hover-out"), 300);
     });
-    card.addEventListener("mousedown", () => {
-      springScale(card, 1.015, 0.984);
-    });
-    card.addEventListener("mouseup", () => {
-      springScale(card, 0.984, 1.015);
-    });
+    card.addEventListener("mousedown", () => springScale(card, 1.015, 0.984));
+    card.addEventListener("mouseup", () => springScale(card, 0.984, 1.015));
   }
 
   _handleCardClick(e) {
@@ -443,13 +395,11 @@ class UvegCard extends HTMLElement {
       this._simulateProgress();
       return;
     }
-
     if (e.target.closest("[data-sc]")) {
       e.stopPropagation();
       this._toggleBarMode();
       return;
     }
-
     if (e.target.closest("[data-scorm-btn]")) {
       e.stopPropagation();
       const btn = e.target.closest("[data-scorm-btn]");
@@ -465,7 +415,6 @@ class UvegCard extends HTMLElement {
       );
       return;
     }
-
     this._toggleExpand();
   }
 
@@ -473,6 +422,7 @@ class UvegCard extends HTMLElement {
     const card = this.querySelector(".card");
     const bw = this.querySelector("[data-bw]");
     const bi = this.querySelector("[data-bi]");
+    const chevron = this.querySelector("[data-chevron]");
     if (!bw || !bi) return;
 
     this._isOpen = !this._isOpen;
@@ -482,9 +432,7 @@ class UvegCard extends HTMLElement {
       liquidOpen(bw, bi);
       springScale(card, 0.984, 1.013);
       setTimeout(() => springScale(card, 1.013, 1), 100);
-      const chevron = this.querySelector("[data-chevron]");
       if (chevron) chevron.style.transform = "rotate(180deg)";
-
       this.dispatchEvent(
         new CustomEvent("uveg:cardopen", {
           bubbles: true,
@@ -495,7 +443,6 @@ class UvegCard extends HTMLElement {
     } else {
       liquidClose(bw, bi);
       springScale(card, 1, 1);
-      const chevron = this.querySelector("[data-chevron]");
       if (chevron) chevron.style.transform = "rotate(0deg)";
     }
   }
@@ -509,31 +456,20 @@ class UvegCard extends HTMLElement {
 
   _simulateProgress() {
     const card = this.querySelector(".card");
-    const current = card.dataset.state;
-
-    // FIX 1: solo pending ↔ done, sin pasar por progress
-    const next = current === "pending" ? "done" : "pending";
-
-    // FIX 2: capturar wasOpen ANTES del re-render
-    // setAttribute → attributeChangedCallback → _render() destruye el DOM
+    const next = card.dataset.state === "pending" ? "done" : "pending";
     const wasOpen = this._isOpen;
 
     this.setAttribute("state", next);
 
-    // Si estaba abierta, restaurar blob y clase open tras el re-render
     if (wasOpen) {
       const bw = this.querySelector("[data-bw]");
       const bi = this.querySelector("[data-bi]");
       const cardNew = this.querySelector(".card");
-
       cardNew?.classList.add("open");
-
-      if (bw && bi) {
-        // El contenido cambió (estado distinto) — recalcular altura real
+      if (bw && bi)
         requestAnimationFrame(() => {
           bw.style.height = bi.scrollHeight + "px";
         });
-      }
     }
   }
 

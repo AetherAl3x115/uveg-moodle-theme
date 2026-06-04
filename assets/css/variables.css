@@ -77,6 +77,11 @@
 --color-act-tag-lectura-text:   var(--color-accent-dark);
 --color-act-tag-actividad-bg:   #ffedd5;
 --color-act-tag-actividad-text: #c2410c;
+--color-advisor-asesor-bg:  #dce6fd;
+--color-advisor-asesor-dot: var(--color-accent);
+--color-advisor-tutor-bg:   #d6f0e6;
+--color-advisor-tutor-text: #0f6e56;
+--color-advisor-tutor-dot:  var(--color-done-dot);
 
   /* ── Action Buttons ───────────────────────────────────────── */
 --color-btn-glosario-bg:    #dc2626;
@@ -210,4 +215,9 @@
 --color-act-tag-foro-text:      #c4b5fd;
 --color-act-tag-actividad-bg:   #431407;
 --color-act-tag-actividad-text: #fb923c;
+
+--color-advisor-asesor-bg:      #1e2a4a;
+--color-advisor-tutor-bg:       #0d2e1f;
+--color-advisor-tutor-text:     #4ade80;
+--color-advisor-tutor-dot:      #4ade80;
 }
