@@ -85,7 +85,8 @@
 
   /* ── Action Buttons ───────────────────────────────────────── */
 --color-btn-glosario-bg:    #dc2626;
---color-btn-glosario-hover: #b91c1c;
+  --color-btn-glosario-hover: #b91c1c;
+  --color-tab-glossary:       #c2185b;
 
   /* ── Header / Progress box ────────────────────────────────── */
   --color-progress-fill-from: #10b981;

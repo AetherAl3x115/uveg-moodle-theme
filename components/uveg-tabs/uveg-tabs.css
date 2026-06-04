@@ -169,3 +169,30 @@
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ── Tab Glosario — color diferenciado ─────────────────────── */
+.tab--glossary {
+  --tab-glossary-color: var(--color-tab-glossary);
+  border: 1.5px solid color-mix(in srgb, var(--tab-glossary-color) 35%, transparent);
+  color: var(--color-tab-glossary);
+}
+
+.tab--glossary::before {
+  background: var(--tab-glossary-color);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--tab-glossary-color) 35%, transparent);
+}
+
+.tab--glossary:not(.active):hover .tab-hover-bg {
+  background: color-mix(in srgb, var(--tab-glossary-color) 12%, transparent);
+  opacity: 1;
+  transform: scale(1);
+}
+
+.tab--glossary.drain-to-left,
+.tab--glossary.drain-to-right {
+  color: var(--color-white);
+}
+
+.tab--glossary.active {
+  border-color: transparent;
+}

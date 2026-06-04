@@ -15,6 +15,7 @@ const TAB_ICON_MAP = {
   "ti-bookmark": "bookmark",
   "ti-book": "book",
   "ti-circle": "info-circle",
+  "ti-language": "language",
 };
 
 function tabIcon(iconAttr) {
@@ -108,6 +109,7 @@ class UvegTabs extends HTMLElement {
 
       const btn = document.createElement("button");
       btn.className = `tab${isActive ? " active fill-from-left" : ""}`;
+      if (tab.key === "glosario") btn.classList.add("tab--glossary");
       btn.dataset.tab = tab.key;
       btn.dataset.idx = idx;
       btn.setAttribute("role", "tab");
@@ -144,6 +146,13 @@ class UvegTabs extends HTMLElement {
   }
 
   _moveDot(btn, animate = true) {
+    // Color del dot según el tab activo
+    const isGlosario = btn.classList.contains("tab--glossary");
+    this._dot.style.background = isGlosario
+      ? getComputedStyle(document.documentElement)
+          .getPropertyValue("--color-tab-glossary")
+          .trim()
+      : "";
     const center = this._getDotCenter(btn);
 
     if (!animate || !this._dotReady) {
