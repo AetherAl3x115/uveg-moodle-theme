@@ -414,6 +414,25 @@ class UvegCard extends HTMLElement {
       );
       return;
     }
+
+    if (e.target.closest(".sub-act-card")) {
+      e.stopPropagation();
+      const sub = e.target.closest(".sub-act-card");
+      const name =
+        sub.querySelector(".sub-act-name")?.textContent?.trim() || "";
+      this.dispatchEvent(
+        new CustomEvent("uveg:openscorm", {
+          bubbles: true,
+          composed: true,
+          detail: {
+            title: this._attr("title"),
+            scormTitle: name,
+            cardId: this._attr("card-id"),
+          },
+        }),
+      );
+      return;
+    }
     this._toggleExpand();
   }
 

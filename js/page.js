@@ -76,7 +76,6 @@ function _activatePres(card) {
   const componentTag = PRES_COMPONENT[key];
   if (!componentTag) return;
 
-  // Actualizar estado activo en cards
   document.querySelectorAll("[data-pres]").forEach((c) => {
     c.classList.toggle("active", c === card);
     c.setAttribute("aria-selected", String(c === card));
@@ -88,20 +87,18 @@ function _activatePres(card) {
   const pc = document.getElementById("pres-content");
   if (!pc) return;
 
-  // Animación de entrada
-  pc.style.animation = "none";
-  pc.offsetHeight; // reflow forzado
-  pc.style.animation = "fadeSlideIn .3s cubic-bezier(.4,0,.2,1)";
+  pc.style.opacity = "0";
+  pc.offsetHeight;
+  pc.style.transition = "opacity .25s ease";
+  pc.style.opacity = "1";
+  setTimeout(() => (pc.style.transition = ""), 260);
 
-  // Propagar tokens de color al contenedor
   pc.style.setProperty("--pres-color", color);
   pc.style.setProperty("--pres-bg", bg);
 
-  // Oculta todos los wrappers cacheados
   Object.values(_presCache).forEach((el) => (el.style.display = "none"));
 
   if (!_presCache[key]) {
-    // Primera vez — crea header + componente y los cachea
     const header = document.createElement("div");
     header.className = "pres-content-header";
     header.style.cssText = `--pres-color:${color};--pres-bg:${bg}`;
@@ -126,7 +123,6 @@ function _activatePres(card) {
     pc.appendChild(wrapper);
     _presCache[key] = wrapper;
   } else {
-    // Ya existe — solo mostrarlo
     _presCache[key].style.display = "";
   }
 }
@@ -157,8 +153,58 @@ function initViewToggle() {
   });
 }
 
+/* ── Lesson View SPA ────────────────────────────────────────── */
+function initLessonView() {
+  const center = document.querySelector(".center");
+  const lv = document.querySelector("uveg-lesson-view");
+  if (!center || !lv) return;
+
+  customElements.whenDefined("uveg-lesson-view").then(() => {
+    _bindLessonViewEvents(center, lv);
+  });
+}
+
+function _bindLessonViewEvents(center, lv) {
+  const getPanels = () =>
+    [
+      ...center.querySelectorAll("[data-panel]"),
+      center.querySelector("uveg-tabs"),
+      center.querySelector(".hrow"),
+      center.querySelector(".breadcrumb-nav"),
+    ].filter((el) => el && el !== lv);
+
+  document.addEventListener("uveg:openscorm", (e) => {
+    const { title = "", cardId = "", scormTitle = "" } = e.detail || {};
+    getPanels().forEach((el) => {
+      el.dataset.lvHidden = el.style.display || "";
+      el.style.display = "none";
+    });
+    lv.show({
+      title: scormTitle || title,
+      cardId,
+      type: "lesson",
+      state: "progress",
+      dateEnd: "—",
+      attempts: 3, // demo — cambiar a 1 en producción
+    });
+    setTimeout(() => {
+      center.scrollTop = 0;
+    }, 50);
+  });
+
+  lv.addEventListener("uveg:lessonback", () => {
+    lv.hide();
+    getPanels().forEach((el) => {
+      el.style.display = el.dataset.lvHidden || "";
+      delete el.dataset.lvHidden;
+    });
+    center.scrollTop = 0;
+  });
+}
+
 /* ── Init ───────────────────────────────────────────────────── */
 initProgressBar();
 initPresentacionIcons();
 initPresentacionCards();
 initViewToggle();
+initLessonView();

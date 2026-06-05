@@ -42,7 +42,8 @@ import "../../components/uveg-topbar/uveg-topbar.js";
 import "../../components/uveg-tabs/uveg-tabs.js";
 import "../../components/uveg-card/uveg-card.js";
 import "../../components/uveg-progress/uveg-progress.js";
-import "../../components/uveg-scorm-drawer/uveg-scorm-drawer.js";
+// import "../../components/uveg-scorm-drawer/uveg-scorm-drawer.js"; // reemplazado por uveg-lesson-view
+import "../../components/uveg-lesson-view/uveg-lesson-view.js";
 
 /* ── Componentes de Presentación ────────────────────────────── */
 import "../../components/uveg-presentacion/uveg-pres-alcances.js";
