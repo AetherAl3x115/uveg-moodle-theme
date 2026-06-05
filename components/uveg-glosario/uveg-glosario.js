@@ -204,10 +204,6 @@ class UvegGlosario extends HTMLElement {
         <div class="gl-body" id="gl-body-${id}" data-gl-body="${id}">
           <div class="gl-body-inner" data-gl-inner="${id}">
             <div class="gl-divider"></div>
-            <div class="gl-def-header">
-              ${hi("book", 13)}
-              Definición
-            </div>
             <p class="gl-body-text">${t.def}</p>
             <div class="gl-meta">
               ${t.author ? `<span class="gl-meta-item">${hi("profile", 12)} ${t.author}</span>` : ""}
@@ -238,10 +234,6 @@ class UvegGlosario extends HTMLElement {
         <div class="gl-body" id="gl-body-${id}" data-gl-body="${id}">
           <div class="gl-body-inner" data-gl-inner="${id}">
             <div class="gl-divider"></div>
-            <div class="gl-def-header">
-              ${hi("book", 13)}
-              Definición
-            </div>
             <p class="gl-body-text">${t.def}</p>
             <div class="gl-meta">
               ${t.author ? `<span class="gl-meta-item">${hi("profile", 12)} ${t.author}</span>` : ""}
@@ -272,10 +264,6 @@ class UvegGlosario extends HTMLElement {
         <div class="gl-body" id="gl-body-${id}" data-gl-body="${id}">
           <div class="gl-body-inner" data-gl-inner="${id}">
             <div class="gl-divider"></div>
-            <div class="gl-def-header">
-              ${hi("book", 13)}
-              Definición
-            </div>
             <p class="gl-body-text">${t.def}</p>
             <div class="gl-meta">
               ${t.author ? `<span class="gl-meta-item">${hi("profile", 12)} ${t.author}</span>` : ""}

@@ -147,7 +147,7 @@
 }
 .sv-dot-live     { background: var(--color-done-dot); }
 .sv-dot-upcoming { background: var(--color-accent); }
-.sv-dot-past     { background: var(--color-border); }
+.sv-dot-past     { background: var(--color-warning); }
 
 /* Info de la sesión */
 .sv-row-info { flex: 1; min-width: 0; }
@@ -279,6 +279,8 @@
   padding: 10px 16px;
 }
 
+.sv-rec-body:hover { background: var(--color-tint-bg); }
+
 .sv-rec-duration {
   display: inline-flex; align-items: center; gap: 4px;
   font-size: var(--font-size-xs);
@@ -290,16 +292,18 @@
   flex-shrink: 0;
 }
 .sv-rec-duration svg {
-  width: 10px; height: 10px;
+  width: 10px; height: 15px;
   stroke: currentColor; fill: none;
   stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
 }
 
 .sv-rec-host {
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   color: var(--color-text-faint);
   flex: 1;
 }
+
+
 
 /* ── Dot pulsante — en vivo ─────────────────────────────────── */
 @keyframes svPulse {

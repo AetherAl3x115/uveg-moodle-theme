@@ -228,19 +228,6 @@
   margin-bottom: 10px;
 }
 
-.gl-def-header {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 10px;
-  margin-bottom: 10px;
-  background: var(--color-done-bg);
-  border: .5px solid var(--color-done-text);
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-done-text);
-}
 
 .gl-def-header svg.hi {
   width: 13px; height: 13px;
@@ -252,6 +239,7 @@
   color: var(--color-text-primary);
   line-height: 1.7;
   margin-bottom: 12px;
+  margin-top: 30px;
   font-weight: var(--font-weight-semibold);
 }
 
