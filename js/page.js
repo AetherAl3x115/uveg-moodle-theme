@@ -202,9 +202,54 @@ function _bindLessonViewEvents(center, lv) {
   });
 }
 
+/* ── Sesiones View SPA ──────────────────────────────────────── */
+function initSesionesView() {
+  const center = document.querySelector(".center");
+  const sv = document.querySelector("uveg-sesiones-view");
+  if (!center || !sv) return;
+
+  customElements.whenDefined("uveg-sesiones-view").then(() => {
+    _bindSesionesViewEvents(center, sv);
+  });
+}
+
+function _bindSesionesViewEvents(center, sv) {
+  const getPanels = () =>
+    [
+      ...center.querySelectorAll("[data-panel]"),
+      center.querySelector("uveg-tabs"),
+      center.querySelector(".hrow"),
+      center.querySelector(".breadcrumb-nav"),
+    ].filter((el) => el && el !== sv);
+
+  document.addEventListener("uveg:opensesiones", (e) => {
+    const lv = document.querySelector("uveg-lesson-view");
+    if (lv) lv.hide();
+    getPanels().forEach((el) => {
+      el.dataset.svHidden = el.style.display || "";
+      el.style.display = "none";
+    });
+    sv.show(e.detail?.person || {});
+    setTimeout(() => {
+      center.scrollTop = 0;
+    }, 50);
+  });
+
+  document.addEventListener("uveg:sesionesback", () => {
+    const panels = getPanels();
+    sv.hide();
+    panels.forEach((el) => {
+      el.style.display = el.dataset.svHidden || "";
+      delete el.dataset.svHidden;
+    });
+    center.scrollTop = 0;
+  });
+}
+
 /* ── Init ───────────────────────────────────────────────────── */
 initProgressBar();
 initPresentacionIcons();
 initPresentacionCards();
 initViewToggle();
 initLessonView();
+initSesionesView();

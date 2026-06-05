@@ -39,6 +39,7 @@
 @import '../../../components/uveg-presentacion/uveg-pres-evaluacion.css';
 @import '../../../components/uveg-presentacion/uveg-pres-cronograma.css';
 @import '../../../components/uveg-lesson-view/uveg-lesson-view.css';
+@import '../../../components/uveg-sesiones-view/uveg-sesiones-view.css';
 @import "../../components/uveg-glosario/uveg-glosario.css";
 
 /* ── 4. Dark mode ───────────────────────────────────────────── */

@@ -1,0 +1,341 @@
+/**
+ * components/uveg-sesiones-view/uveg-sesiones-view.css
+ * Light DOM. Todos los colores via variables.css.
+ */
+
+/* ── Regresar ───────────────────────────────────────────────── */
+@keyframes sessionFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.sv-root {
+  animation: sessionFadeIn .25s cubic-bezier(.4, 0, .2, 1);
+}
+
+.sv-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  margin-bottom: 14px;
+  transition: color var(--transition-fast);
+}
+.sv-back:hover { color: var(--color-accent); }
+
+.sv-back-icon {
+  width: 20px; height: 20px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  border: .5px solid var(--color-border);
+  display: flex; align-items: center; justify-content: center;
+}
+.sv-back-icon svg {
+  width: 12px; height: 12px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* ── Hero ───────────────────────────────────────────────────── */
+.sv-hero {
+  background: var(--color-accent-dark);
+  border-radius: var(--radius-2xl);
+  padding: 12px 18px;
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 14px;
+  position: relative; overflow: hidden;
+}
+.sv-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.07) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.sv-hero-avatar {
+  width: 38px; height: 38px;
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  flex-shrink: 0;
+}
+
+.sv-hero-info { flex: 1; min-width: 0; }
+
+.sv-hero-role {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: rgba(255,255,255,.55);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+  display: flex; align-items: center; gap: 5px;
+}
+.sv-hero-role svg {
+  width: 11px; height: 11px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.sv-hero-name {
+  font-size: 15px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+
+.sv-hero-chips { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+.sv-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold);
+  background: rgba(255,255,255,.12); color: rgba(255,255,255,.85);
+  border: .5px solid rgba(255,255,255,.18);
+  border-radius: var(--radius-full); padding: 3px 9px;
+}
+.sv-chip svg {
+  width: 10px; height: 10px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* ── Section label ──────────────────────────────────────────── */
+.sv-section-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  margin-bottom: 8px;
+  padding-left: 2px;
+}
+
+/* ── Card contenedora de sesiones ───────────────────────────── */
+.sv-card {
+  background: var(--color-surface);
+  border: .5px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+/* ── Fila de sesión ─────────────────────────────────────────── */
+.sv-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 16px;
+  position: relative; overflow: hidden;
+  transition: background var(--transition-base);
+}
+.sv-row + .sv-row { border-top: .5px solid var(--color-border); }
+.sv-row:hover { background: var(--color-tint-bg); }
+
+/* Dot de estado */
+.sv-dot {
+  width: 8px; height: 8px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+.sv-dot-live     { background: var(--color-done-dot); }
+.sv-dot-upcoming { background: var(--color-accent); }
+.sv-dot-past     { background: var(--color-border); }
+
+/* Info de la sesión */
+.sv-row-info { flex: 1; min-width: 0; }
+
+.sv-row-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: 3px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.sv-row-meta {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+}
+.sv-row-meta span {
+  display: inline-flex; align-items: center; gap: 3px;
+}
+.sv-row-meta svg {
+  width: 10px; height: 10px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+/* Badge de estado */
+.sv-badge {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.sv-badge-live     { background: var(--color-done-bg);     color: var(--color-done-text); }
+.sv-badge-upcoming { background: var(--color-tint-bg);     color: var(--color-accent-dark); }
+.sv-badge-past     { background: #fee2e2;  color: #991b1b; }
+
+/* Botón BBB */
+.sv-btn-bbb {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  padding: 7px 14px;
+  border-radius: var(--radius-lg);
+  border: .5px solid var(--color-border);
+  color: var(--color-text-secondary);
+  background: transparent;
+  cursor: pointer;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.sv-btn-bbb svg {
+  width: 13px; height: 13px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  flex-shrink: 0;
+}
+.sv-btn-bbb:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background: var(--color-tint-bg);
+}
+
+/* Botón primario — sesión en vivo */
+.sv-btn-bbb-primary {
+  background: var(--color-accent-dark);
+  color: var(--color-white);
+  border-color: var(--color-accent-dark);
+  position: relative; overflow: hidden;
+}
+.sv-btn-bbb-primary::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.sv-btn-bbb-primary:hover {
+  opacity: .9;
+  color: var(--color-white);
+  border-color: var(--color-accent-dark);
+  background: var(--color-accent-dark);
+  transform: translateY(-1px);
+}
+.sv-btn-bbb-primary:active { transform: scale(.98); }
+
+/* ── Sección grabaciones ────────────────────────────────────── */
+.sv-rec-card {
+  background: var(--color-surface);
+  border: .5px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.sv-rec-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 16px;
+  background: var(--color-card-bg);
+  border-bottom: .5px solid var(--color-border);
+}
+.sv-rec-header svg {
+  width: 14px; height: 14px;
+  stroke: var(--color-accent); fill: none;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+.sv-rec-title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  flex: 1; min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.sv-rec-date {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-faint);
+  flex-shrink: 0;
+}
+
+.sv-rec-body {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px;
+}
+
+.sv-rec-duration {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  background: var(--color-tint-bg);
+  color: var(--color-accent-dark);
+  flex-shrink: 0;
+}
+.sv-rec-duration svg {
+  width: 10px; height: 10px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.sv-rec-host {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-faint);
+  flex: 1;
+}
+
+/* ── Dot pulsante — en vivo ─────────────────────────────────── */
+@keyframes svPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(34,197,94,.5); }
+  70%  { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+  100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+}
+.sv-dot-pulse {
+  animation: svPulse 1.8s ease-out infinite;
+}
+
+/* ── Estado vacío ───────────────────────────────────────────── */
+.sv-empty {
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--color-text-faint);
+  font-size: var(--font-size-sm);
+}
+.sv-empty svg {
+  width: 28px; height: 28px;
+  stroke: var(--color-border);
+  fill: none; stroke-width: 1.5;
+  stroke-linecap: round; stroke-linejoin: round;
+  display: block; margin: 0 auto 8px;
+}
+
+/* ── Divider ────────────────────────────────────────────────── */
+.sv-divider {
+  border: none;
+  border-top: .5px solid var(--color-border);
+  margin: 6px 0 14px;
+}
+
+/* ── Dark mode ──────────────────────────────────────────────── */
+[data-bs-theme="dark"] .sv-back-icon  { background: var(--color-surface); border-color: var(--color-border); }
+[data-bs-theme="dark"] .sv-card       { background: var(--color-surface); border-color: var(--color-border); }
+[data-bs-theme="dark"] .sv-rec-card   { background: var(--color-surface); border-color: var(--color-border); }
+[data-bs-theme="dark"] .sv-rec-header { background: var(--color-card-bg); border-color: var(--color-border); }
+[data-bs-theme="dark"] .sv-row:hover  { background: var(--color-tint-bg); }

@@ -70,6 +70,12 @@ class UvegGlosario extends HTMLElement {
     this.innerHTML = `
       <div class="gl-root">
 
+        <!-- Título sección -->
+        <div class="gl-section-title">
+          ${hi("language", 18)}
+          Glosario
+        </div>
+
         <!-- Toolbar: búsqueda + filtro alfabético -->
         <div class="gl-toolbar">
           <div class="gl-search">

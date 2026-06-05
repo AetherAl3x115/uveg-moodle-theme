@@ -515,7 +515,8 @@ class UvegSidebar extends HTMLElement {
           </button>
           <button class="sb-advisor-btn sb-advisor-btn--sessions"
                   aria-label="Ver sesiones grabadas de ${p.name}"
-                  onclick="window.location.href='${p.sessionsUrl}'">
+                  data-sv-open
+                  data-sv-person='${JSON.stringify({ initials: p.initials, name: p.name, role: p.role, email: p.email, phone: p.phone })}'>
             <span class="sb-sessions-icon-wrap">
               ${hi("video", 14)}
               <span class="sb-sessions-dot" aria-hidden="true"></span>
@@ -610,6 +611,19 @@ class UvegSidebar extends HTMLElement {
       this._toggleAdvisor(false);
       return;
     }
+    const sesionesBtn = e.target.closest("[data-sv-open]");
+    if (sesionesBtn) {
+      const person = JSON.parse(sesionesBtn.dataset.svPerson);
+      this.dispatchEvent(
+        new CustomEvent("uveg:opensesiones", {
+          bubbles: true,
+          composed: true,
+          detail: { person },
+        }),
+      );
+      return;
+    }
+
     const navItem = e.target.closest(".sb-item[data-key]");
     if (navItem) {
       this._activateItem(navItem.dataset.key);

@@ -97,7 +97,7 @@
   margin: 14px 0 6px 4px;
 }
 
-/* ── Entry card (standalone — 1 definición) ─────────────────── */
+/* ── Entry card ─────────────────────────────────────────────── */
 .gl-entry {
   background: var(--color-surface);
   border: 1.5px solid var(--color-sub-border);
@@ -109,7 +109,25 @@
   -webkit-font-smoothing: antialiased;
 }
 
-.gl-entry::before {
+.gl-entry:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(20,66,203,.08);
+}
+
+/* ── Entry row — fill azul solo aquí ───────────────────────── */
+.gl-entry-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  outline: none;
+  overflow: hidden;
+}
+
+.gl-entry-row::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -120,23 +138,7 @@
   z-index: 0;
 }
 
-.gl-entry:hover::before { width: 100%; }
-.gl-entry:hover {
-  border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(20,66,203,.08);
-}
-
-/* ── Entry row ──────────────────────────────────────────────── */
-.gl-entry-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  cursor: pointer;
-  position: relative;
-  z-index: 1;
-  outline: none;
-}
+.gl-entry:hover .gl-entry-row::before { width: 100%; }
 
 .gl-entry-row:focus-visible {
   outline: 2px solid var(--color-accent);
@@ -175,6 +177,8 @@
   color: var(--color-text-primary);
   margin-bottom: 2px;
   line-height: 1.3;
+  position: relative;
+  z-index: 1;
 }
 
 .gl-entry-preview {
@@ -183,6 +187,8 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  position: relative;
+  z-index: 1;
 }
 
 .gl-entry.open .gl-entry-preview { display: none; }
@@ -212,7 +218,7 @@
   padding: 0 16px 16px 62px;
   position: relative;
   z-index: 1;
-  background: linear-gradient(to bottom, var(--color-card-chip-bg) 0%, var(--color-surface) 100%);
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--color-tab-glossary) 10%, transparent) 0%, transparent 40%);
   border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
 }
 
@@ -335,7 +341,7 @@
 [data-bs-theme="dark"] .gl-toolbar    { background: var(--color-surface); border-color: var(--color-border); }
 [data-bs-theme="dark"] .gl-search     { background: var(--color-bg); border-color: var(--color-border); }
 [data-bs-theme="dark"] .gl-entry      { background: var(--color-tint-bg); border-color: var(--color-tint-border); }
-[data-bs-theme="dark"] .gl-entry::before { background: var(--color-surface); }
+[data-bs-theme="dark"] .gl-entry-row::before { background: var(--color-surface); }
 [data-bs-theme="dark"] .gl-initial    { background: var(--color-tint-bg); border-color: var(--color-tint-border); }
 
 /* ══════════════════════════════════════════════════════════════
@@ -378,12 +384,6 @@
   border-radius: 0 0 var(--radius-xl) var(--radius-xl);
 }
 
-/* El ::before del hover arranca 1px abajo para no tapar el border-top */
-.gl-multi-card .gl-entry::before {
-  top: 1px;
-}
-
-/* Hover dentro del multi-card: conserva el border-top, sin box-shadow extra */
 .gl-multi-card .gl-entry:hover {
   border-color: transparent;
   border-top-color: var(--color-border);
@@ -403,11 +403,36 @@
   flex-shrink: 0;
   position: relative;
   z-index: 1;
+  overflow: hidden;
+  transition: color var(--transition-base);
+}
+
+.gl-entry-badge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent-dark);
+  border-radius: var(--radius-md);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: none;
+  z-index: 0;
+}
+
+.gl-entry:hover .gl-entry-badge::before {
+  transform: scaleX(1);
+  transition: transform .38s cubic-bezier(.16, 1, .3, 1);
 }
 
 .gl-entry-badge svg.hi {
   width: 14px; height: 14px;
   stroke: currentColor;
+  position: relative;
+  z-index: 1;
+}
+
+.gl-entry:hover .gl-entry-badge {
+  color: var(--color-white);
 }
 
 /* Dark mode multi-card */
@@ -415,3 +440,23 @@
 [data-bs-theme="dark"] .gl-multi-card .gl-entry { border-top-color: var(--color-border); }
 [data-bs-theme="dark"] .gl-multi-avatar      { background: var(--color-tint-bg); color: var(--color-accent); }
 [data-bs-theme="dark"] .gl-entry-badge       { background: var(--color-tint-bg); color: var(--color-accent); }
+
+/* ── Título de sección ──────────────────────────────────────── */
+.gl-section-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  margin-bottom: 16px;
+  background: color-mix(in srgb, var(--color-tab-glossary) 12%, transparent);
+  border-radius: var(--radius-xl);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-tab-glossary);
+}
+
+.gl-section-title svg.hi {
+  width: 18px; height: 18px;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
