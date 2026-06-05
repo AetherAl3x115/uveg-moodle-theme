@@ -97,7 +97,7 @@
   margin: 14px 0 6px 4px;
 }
 
-/* ── Entry card ─────────────────────────────────────────────── */
+/* ── Entry card (standalone — 1 definición) ─────────────────── */
 .gl-entry {
   background: var(--color-surface);
   border: 1.5px solid var(--color-sub-border);
@@ -131,7 +131,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
+  padding: 14px 16px;
   cursor: pointer;
   position: relative;
   z-index: 1;
@@ -209,7 +209,7 @@
 }
 
 .gl-body-inner {
-  padding: 0 16px 14px 62px;
+  padding: 0 16px 16px 62px;
   position: relative;
   z-index: 1;
   background: linear-gradient(to bottom, var(--color-card-chip-bg) 0%, var(--color-surface) 100%);
@@ -337,3 +337,81 @@
 [data-bs-theme="dark"] .gl-entry      { background: var(--color-tint-bg); border-color: var(--color-tint-border); }
 [data-bs-theme="dark"] .gl-entry::before { background: var(--color-surface); }
 [data-bs-theme="dark"] .gl-initial    { background: var(--color-tint-bg); border-color: var(--color-tint-border); }
+
+/* ══════════════════════════════════════════════════════════════
+   Grupos con 2+ definiciones
+   ══════════════════════════════════════════════════════════════ */
+
+/* Card contenedor del grupo multi */
+.gl-multi-card {
+  background: var(--color-surface);
+  border: .5px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+/* Avatar sola en fila propia dentro del card */
+.gl-multi-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: var(--color-tint-bg);
+  color: var(--color-accent);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 12px 16px 10px;
+}
+
+/* Entries dentro del multi-card — resetear estilos del standalone */
+.gl-multi-card .gl-entry {
+  border: none;
+  border-top: .5px solid var(--color-border);
+  border-radius: 0;
+  margin-bottom: 0;
+  box-shadow: none;
+}
+
+.gl-multi-card .gl-entry:last-child {
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+}
+
+/* El ::before del hover arranca 1px abajo para no tapar el border-top */
+.gl-multi-card .gl-entry::before {
+  top: 1px;
+}
+
+/* Hover dentro del multi-card: conserva el border-top, sin box-shadow extra */
+.gl-multi-card .gl-entry:hover {
+  border-color: transparent;
+  border-top-color: var(--color-border);
+  box-shadow: none;
+}
+
+/* Badge azul (entradas 2..N) */
+.gl-entry-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-md);
+  background: var(--color-tint-bg);
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.gl-entry-badge svg.hi {
+  width: 14px; height: 14px;
+  stroke: currentColor;
+}
+
+/* Dark mode multi-card */
+[data-bs-theme="dark"] .gl-multi-card        { background: var(--color-surface); border-color: var(--color-border); }
+[data-bs-theme="dark"] .gl-multi-card .gl-entry { border-top-color: var(--color-border); }
+[data-bs-theme="dark"] .gl-multi-avatar      { background: var(--color-tint-bg); color: var(--color-accent); }
+[data-bs-theme="dark"] .gl-entry-badge       { background: var(--color-tint-bg); color: var(--color-accent); }

@@ -15,9 +15,10 @@
  *     ...
  *   ]
  *
- * Uso en index.html:
- *   <uveg-glosario data='[{"term":"...","def":"..."}]'>
- *   </uveg-glosario>
+ * Layout:
+ *   - 1 definición por letra  → avatar inline con título (diseño original)
+ *   - 2+ definiciones         → avatar solo en fila propia, entradas con
+ *                               badge-ícono azul sin título repetido
  * ─────────────────────────────────────────────────────────────
  */
 
@@ -145,18 +146,42 @@ class UvegGlosario extends HTMLElement {
 
     return Object.keys(groups)
       .sort()
-      .map(
-        (letter) => `
-      <div class="gl-group">
-        <div class="gl-group-label" aria-hidden="true">${letter}</div>
-        ${groups[letter].map((t, i) => this._renderEntry(t, `${letter}-${i}`)).join("")}
-      </div>
-    `,
-      )
+      .map((letter) => {
+        const items = groups[letter];
+        const isMulti = items.length > 1;
+
+        if (!isMulti) {
+          // ── 1 definición: diseño original ──────────────────
+          return `
+            <div class="gl-group">
+              <div class="gl-group-label" aria-hidden="true">${letter}</div>
+              ${this._renderEntrySingle(items[0], `${letter}-0`)}
+            </div>`;
+        }
+
+        // ── 2+ definiciones: avatar en fila propia, badges ──
+        const entries = items
+          .map((t, i) =>
+            i === 0
+              ? this._renderEntryFirst(t, `${letter}-${i}`)
+              : this._renderEntrySub(t, `${letter}-${i}`),
+          )
+          .join("");
+
+        return `
+          <div class="gl-group gl-group-multi">
+            <div class="gl-group-label" aria-hidden="true">${letter}</div>
+            <div class="gl-multi-card">
+              <div class="gl-multi-avatar" aria-hidden="true">${letter}</div>
+              ${entries}
+            </div>
+          </div>`;
+      })
       .join("");
   }
 
-  _renderEntry(t, id) {
+  /* Diseño original — 1 sola definición por letra */
+  _renderEntrySingle(t, id) {
     return `
       <div class="gl-entry" data-gl-entry="${id}">
         <div class="gl-entry-row" data-gl-toggle="${id}" role="button" tabindex="0"
@@ -184,8 +209,75 @@ class UvegGlosario extends HTMLElement {
             </div>
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
+  }
+
+  /* Primera entrada de grupo multi — badge azul + título visible */
+  _renderEntryFirst(t, id) {
+    return `
+      <div class="gl-entry gl-entry-first" data-gl-entry="${id}">
+        <div class="gl-entry-row" data-gl-toggle="${id}" role="button" tabindex="0"
+          aria-expanded="false" aria-controls="gl-body-${id}">
+          <div class="gl-entry-badge" aria-hidden="true">
+            ${hi("book", 14)}
+          </div>
+          <div class="gl-entry-info">
+            <div class="gl-entry-term">${t.term}</div>
+            <div class="gl-entry-preview">${t.def}</div>
+          </div>
+          <div class="gl-chevron" aria-hidden="true">
+            ${hi("chevron-down", 16)}
+          </div>
+        </div>
+        <div class="gl-body" id="gl-body-${id}" data-gl-body="${id}">
+          <div class="gl-body-inner" data-gl-inner="${id}">
+            <div class="gl-divider"></div>
+            <div class="gl-def-header">
+              ${hi("book", 13)}
+              Definición
+            </div>
+            <p class="gl-body-text">${t.def}</p>
+            <div class="gl-meta">
+              ${t.author ? `<span class="gl-meta-item">${hi("profile", 12)} ${t.author}</span>` : ""}
+              ${t.date ? `<span class="gl-meta-item">${hi("calendar", 12)} ${t.date}</span>` : ""}
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  /* Entradas 2..N de grupo multi — badge azul, sin título */
+  _renderEntrySub(t, id) {
+    return `
+      <div class="gl-entry gl-entry-sub" data-gl-entry="${id}">
+        <div class="gl-entry-row" data-gl-toggle="${id}" role="button" tabindex="0"
+          aria-expanded="false" aria-controls="gl-body-${id}">
+          <div class="gl-entry-badge" aria-hidden="true">
+            ${hi("book", 14)}
+          </div>
+          <div class="gl-entry-info">
+            <div class="gl-entry-term">${t.term}</div>
+            <div class="gl-entry-preview">${t.def}</div>
+          </div>
+          <div class="gl-chevron" aria-hidden="true">
+            ${hi("chevron-down", 16)}
+          </div>
+        </div>
+        <div class="gl-body" id="gl-body-${id}" data-gl-body="${id}">
+          <div class="gl-body-inner" data-gl-inner="${id}">
+            <div class="gl-divider"></div>
+            <div class="gl-def-header">
+              ${hi("book", 13)}
+              Definición
+            </div>
+            <p class="gl-body-text">${t.def}</p>
+            <div class="gl-meta">
+              ${t.author ? `<span class="gl-meta-item">${hi("profile", 12)} ${t.author}</span>` : ""}
+              ${t.date ? `<span class="gl-meta-item">${hi("calendar", 12)} ${t.date}</span>` : ""}
+            </div>
+          </div>
+        </div>
+      </div>`;
   }
 
   /* ── Eventos ────────────────────────────────────────────── */
@@ -243,7 +335,6 @@ class UvegGlosario extends HTMLElement {
     const list = this.querySelector("[data-gl-list]");
     if (!list) return;
     list.innerHTML = this._renderEntries(terms);
-    // Re-bind solo los toggles nuevos
     this.querySelectorAll("[data-gl-toggle]").forEach((toggle) => {
       toggle.addEventListener("click", () => this._toggleEntry(toggle));
       toggle.addEventListener("keydown", (e) => {
