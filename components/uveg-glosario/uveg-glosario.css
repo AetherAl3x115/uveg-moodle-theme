@@ -5,7 +5,10 @@
  * ─────────────────────────────────────────────────────────────
  */
 
-/* ── Toolbar ────────────────────────────────────────────────── */
+.gl-root {
+
+  padding: 18px 20px;
+}
 .gl-toolbar {
   background: var(--color-surface);
   border: .5px solid var(--color-border);
@@ -220,11 +223,31 @@
   margin-bottom: 10px;
 }
 
-.gl-body-text {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-  line-height: 1.65;
+.gl-def-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
   margin-bottom: 10px;
+  background: var(--color-done-bg);
+  border: .5px solid var(--color-done-text);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-done-text);
+}
+
+.gl-def-header svg.hi {
+  width: 13px; height: 13px;
+  stroke: currentColor; flex-shrink: 0;
+}
+
+.gl-body-text {
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  line-height: 1.7;
+  margin-bottom: 12px;
+  font-weight: var(--font-weight-semibold);
 }
 
 .gl-meta {
