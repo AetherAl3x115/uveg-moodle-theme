@@ -1,0 +1,317 @@
+/**
+ * components/uveg-glosario/uveg-glosario.css
+ * ─────────────────────────────────────────────────────────────
+ * Light DOM. Todos los colores via variables.css.
+ * ─────────────────────────────────────────────────────────────
+ */
+
+/* ── Toolbar ────────────────────────────────────────────────── */
+.gl-toolbar {
+  background: var(--color-surface);
+  border: .5px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 6px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.gl-search {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-bg);
+  border: .5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 7px 12px;
+}
+
+.gl-search svg.hi {
+  width: 16px; height: 16px;
+  stroke: var(--color-text-faint);
+  flex-shrink: 0;
+}
+
+.gl-search-input {
+  border: none;
+  background: transparent;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  outline: none;
+  width: 100%;
+  font-family: inherit;
+}
+
+.gl-search-input::placeholder {
+  color: var(--color-text-faint);
+}
+
+/* ── Filtro alfabético ──────────────────────────────────────── */
+.gl-alpha {
+  display: flex;
+  gap: 3px;
+  overflow-x: auto;
+  padding: 2px 0;
+  flex-shrink: 0;
+  max-width: 55%;
+}
+
+.gl-alpha::-webkit-scrollbar { display: none; }
+
+.gl-pill {
+  padding: 5px 10px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: transparent;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-base);
+}
+
+.gl-pill:hover {
+  background: var(--color-tint-bg);
+  color: var(--color-accent);
+}
+
+.gl-pill.active {
+  background: var(--color-accent-dark);
+  color: var(--color-white);
+}
+
+/* ── Grupo por letra ────────────────────────────────────────── */
+.gl-group { margin-bottom: 8px; }
+
+.gl-group-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-faint);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin: 14px 0 6px 4px;
+}
+
+/* ── Entry card ─────────────────────────────────────────────── */
+.gl-entry {
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-sub-border);
+  border-radius: var(--radius-2xl);
+  margin-bottom: 8px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  -webkit-font-smoothing: antialiased;
+}
+
+.gl-entry::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-tint-bg);
+  width: 0%;
+  transition: width 1.2s cubic-bezier(.16,1,.3,1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.gl-entry:hover::before { width: 100%; }
+.gl-entry:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(20,66,203,.08);
+}
+
+/* ── Entry row ──────────────────────────────────────────────── */
+.gl-entry-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  outline: none;
+}
+
+.gl-entry-row:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+  border-radius: var(--radius-xl);
+}
+
+.gl-initial {
+  width: 34px; height: 34px;
+  border-radius: var(--radius-md);
+  background: var(--color-tint-bg);
+  border: .5px solid var(--color-tint-border);
+  color: var(--color-accent);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background var(--transition-base), color var(--transition-base);
+  position: relative;
+  z-index: 1;
+}
+
+.gl-entry:hover .gl-initial {
+  background: var(--color-accent-dark);
+  color: var(--color-white);
+  border-color: transparent;
+}
+
+.gl-entry-info { flex: 1; min-width: 0; }
+
+.gl-entry-term {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: 2px;
+  line-height: 1.3;
+}
+
+.gl-entry-preview {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gl-entry.open .gl-entry-preview { display: none; }
+
+.gl-chevron {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  color: var(--color-text-faint);
+  transition: transform var(--transition-base);
+}
+
+.gl-chevron svg.hi {
+  width: 16px; height: 16px;
+  stroke: currentColor;
+}
+
+.gl-entry.open .gl-chevron { transform: rotate(180deg); }
+
+/* ── Body expandible ────────────────────────────────────────── */
+.gl-body {
+  height: 0;
+  overflow: hidden;
+}
+
+.gl-body-inner {
+  padding: 0 16px 14px 62px;
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(to bottom, var(--color-card-chip-bg) 0%, var(--color-surface) 100%);
+  border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
+}
+
+.gl-divider {
+  height: .5px;
+  background: var(--color-border-light);
+  margin-bottom: 10px;
+}
+
+.gl-body-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.65;
+  margin-bottom: 10px;
+}
+
+.gl-meta {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.gl-meta-item {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-faint);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.gl-meta-item svg.hi {
+  width: 12px; height: 12px;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
+/* ── Empty state ────────────────────────────────────────────── */
+.gl-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 48px 0;
+  color: var(--color-text-faint);
+}
+
+.gl-empty svg.hi {
+  width: 32px; height: 32px;
+  stroke: currentColor;
+  opacity: .4;
+}
+
+.gl-empty p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-faint);
+}
+
+/* ── FAB ────────────────────────────────────────────────────── */
+.gl-fab-wrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.gl-fab {
+  background: var(--color-accent-dark);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: 9px 16px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: opacity var(--transition-fast), transform .1s;
+  position: relative;
+  overflow: hidden;
+}
+
+.gl-fab::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.gl-fab:hover  { opacity: .92; transform: translateY(-1px); }
+.gl-fab:active { transform: scale(.98); }
+
+.gl-fab svg.hi {
+  width: 16px; height: 16px;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
+/* ── Dark mode ──────────────────────────────────────────────── */
+[data-bs-theme="dark"] .gl-toolbar    { background: var(--color-surface); border-color: var(--color-border); }
+[data-bs-theme="dark"] .gl-search     { background: var(--color-bg); border-color: var(--color-border); }
+[data-bs-theme="dark"] .gl-entry      { background: var(--color-tint-bg); border-color: var(--color-tint-border); }
+[data-bs-theme="dark"] .gl-entry::before { background: var(--color-surface); }
+[data-bs-theme="dark"] .gl-initial    { background: var(--color-tint-bg); border-color: var(--color-tint-border); }
