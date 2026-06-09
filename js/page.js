@@ -3,10 +3,7 @@
  * ─────────────────────────────────────────────────────────────
  * Lógica específica de index.html.
  * Maneja: animación de progreso, cards de presentación,
- * toggle vista tarjetas/lista.
- *
- * Caché de componentes uveg-pres-* — se montan una sola vez
- * y se muestran/ocultan con display para evitar re-render.
+ * toggle vista tarjetas/lista, SPA para lesson/reto/scorm views.
  * ─────────────────────────────────────────────────────────────
  */
 
@@ -25,7 +22,6 @@ const PRES_SVG = {
   cronograma: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="22" height="22" fill="currentColor"><path d="m39.5 30.6c-2.3 2.3-4.5 4.5-6.8 6.8-1.4-1.4-2.9-2.9-4.3-4.3-1.8-1.8-4.7 1-2.8 2.8 1.9 1.9 3.8 3.8 5.7 5.7.8.8 2.1.8 2.8 0l8.2-8.2c1.9-1.8-.9-4.6-2.8-2.8z"/><path d="m51.6 8.8c0-.2 0-.4 0-.6 0-1-.9-2-2-2s-2 .9-2 2v.6h-24.7v-.1c0-.2 0-.4 0-.6 0-1-.9-2-2-2s-2 .9-2 2v.8c-4.6 0-8.4 3.8-8.4 8.4v7.7c-.1.3-.2.5-.2.8-.6 4.3-1.6 8.6-3 12.7-.7 1.9-1.5 3.9-2.4 5.7-.8 1.7-.7 3.6.3 5.1s2.6 2.4 4.4 2.4h1.1c.9 3.7 4.2 6.4 8.2 6.4h32.4c4.6 0 8.4-3.8 8.4-8.4v-32.5c0-4.6-3.6-8.2-8.1-8.4zm-32.8 4v.4c0 1 .9 2 2 2s2-.9 2-2c0-.1 0-.3 0-.4h24.8v.6c0 1 .9 2 2 2s2-.9 2-2c0-.2 0-.4 0-.6 2.3.2 4.1 2.1 4.1 4.4v4.8c-.1 0-.3 0-.4 0h-40.9v-4.8c0-2.5 2-4.4 4.4-4.4zm-10.3 34.3c-.2-.4-.3-.8-.1-1.2.9-2 1.8-4 2.5-6.1 1.5-4.4 2.6-8.9 3.2-13.5 0-.1.1-.2.2-.2h40.9s.1 0 .2.1c0 0 .1.1.1.2-.5 4.5-1.5 8.9-2.9 13.1-.7 2.1-1.6 4.2-2.6 6.3-.6 1.2-1.9 2-3.3 2h-37.1c-.5-.2-.9-.4-1.1-.7zm42.8 6.9h-32.5c-1.7 0-3.1-1-3.9-2.4h31.7c2.9 0 5.6-1.7 6.9-4.3.8-1.6 1.5-3.3 2.1-5v7.3c.1 2.4-1.9 4.4-4.3 4.4z"/></svg>`,
 };
 
-/* ── Mapa key → tag del Web Component ──────────────────────── */
 const PRES_COMPONENT = {
   alcances: "uveg-pres-alcances",
   esquema: "uveg-pres-esquema",
@@ -34,7 +30,6 @@ const PRES_COMPONENT = {
   cronograma: "uveg-pres-cronograma",
 };
 
-/* ── Inyectar SVGs en las cards de presentación ─────────────── */
 function initPresentacionIcons() {
   document.querySelectorAll("[data-pres]").forEach((card) => {
     const key = card.dataset.pres;
@@ -43,7 +38,6 @@ function initPresentacionIcons() {
   });
 }
 
-/* ── Animación barra de progreso ────────────────────────────── */
 function initProgressBar() {
   const pbar = document.querySelector(".pbar[aria-valuenow]");
   const fill = document.querySelector(".pfill");
@@ -56,11 +50,9 @@ function initProgressBar() {
   );
 }
 
-/* ── Cards de presentación ──────────────────────────────────── */
 function initPresentacionCards() {
   const first = document.querySelector("[data-pres]");
   if (first) _activatePres(first);
-
   document.addEventListener("click", (e) => {
     const card = e.target.closest("[data-pres]");
     if (!card) return;
@@ -68,7 +60,6 @@ function initPresentacionCards() {
   });
 }
 
-/* Caché: cada key se monta una sola vez, luego display none/block */
 const _presCache = {};
 
 function _activatePres(card) {
@@ -98,6 +89,8 @@ function _activatePres(card) {
 
   Object.values(_presCache).forEach((el) => (el.style.display = "none"));
 
+  if (key === "cronograma") _flushCronoPending();
+
   if (!_presCache[key]) {
     const header = document.createElement("div");
     header.className = "pres-content-header";
@@ -106,8 +99,7 @@ function _activatePres(card) {
       <span class="pres-content-pill">
         <span class="pres-content-pill-icon">${PRES_SVG[key] || ""}</span>
         ${label}
-      </span>
-    `;
+      </span>`;
 
     const comp = document.createElement(componentTag);
     if (key === "esquema") {
@@ -127,7 +119,6 @@ function _activatePres(card) {
   }
 }
 
-/* ── Toggle vista tarjetas / lista ──────────────────────────── */
 function initViewToggle() {
   document.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-view]");
@@ -153,56 +144,154 @@ function initViewToggle() {
   });
 }
 
-/* ── Lesson View SPA ────────────────────────────────────────── */
-function initLessonView() {
-  const center = document.querySelector(".center");
-  const lv = document.querySelector("uveg-lesson-view");
-  if (!center || !lv) return;
+/* ── Helpers SPA ────────────────────────────────────────────── */
+function _getPanels(center, ...exclude) {
+  return [
+    ...center.querySelectorAll("[data-panel]"),
+    center.querySelector("uveg-tabs"),
+    center.querySelector(".hrow"),
+    center.querySelector(".breadcrumb-nav"),
+  ].filter((el) => el && !exclude.includes(el));
+}
 
-  customElements.whenDefined("uveg-lesson-view").then(() => {
-    _bindLessonViewEvents(center, lv);
+function _hidePanels(panels) {
+  panels.forEach((el) => {
+    el.dataset.lvHidden = el.style.display || "";
+    el.style.display = "none";
   });
 }
 
-function _bindLessonViewEvents(center, lv) {
-  const getPanels = () =>
-    [
-      ...center.querySelectorAll("[data-panel]"),
-      center.querySelector("uveg-tabs"),
-      center.querySelector(".hrow"),
-      center.querySelector(".breadcrumb-nav"),
-    ].filter((el) => el && el !== lv);
+function _showPanels(panels) {
+  panels.forEach((el) => {
+    el.style.display = el.dataset.lvHidden || "";
+    delete el.dataset.lvHidden;
+  });
+}
 
+/* ── Reto View SPA ──────────────────────────────────────────── */
+function initRetoView() {
+  const center = document.querySelector(".center");
+  const rv = document.querySelector("uveg-reto-view");
+  if (!center || !rv) return;
+
+  customElements.whenDefined("uveg-reto-view").then(() => {
+    _bindRetoViewEvents(center, rv);
+  });
+}
+
+function _bindRetoViewEvents(center, rv) {
   document.addEventListener("uveg:openscorm", (e) => {
-    const { title = "", cardId = "", scormTitle = "" } = e.detail || {};
-    getPanels().forEach((el) => {
-      el.dataset.lvHidden = el.style.display || "";
-      el.style.display = "none";
-    });
-    lv.show({
+    const { viewType = "scorm" } = e.detail || {};
+    if (viewType !== "reto") return;
+
+    const { title = "", scormTitle = "", cardId = "", actId = "" } = e.detail;
+    _hidePanels(_getPanels(center, rv));
+    rv.show({
       title: scormTitle || title,
       cardId,
-      type: "lesson",
+      actId,
+      type: "reto",
       state: "progress",
-      dateEnd: "—",
-      attempts: 3, // demo — cambiar a 1 en producción
+      attempts: 3,
     });
     setTimeout(() => {
       center.scrollTop = 0;
     }, 50);
   });
 
-  lv.addEventListener("uveg:lessonback", () => {
-    lv.hide();
-    getPanels().forEach((el) => {
-      el.style.display = el.dataset.lvHidden || "";
-      delete el.dataset.lvHidden;
-    });
+  rv.addEventListener("uveg:retoback", () => {
+    rv.hide();
+    _showPanels(_getPanels(center, rv));
     center.scrollTop = 0;
   });
 }
 
-/* ── Sesiones View SPA ──────────────────────────────────────── */
+/* ── Scorm View SPA ─────────────────────────────────────────── */
+function initScormView() {
+  const center = document.querySelector(".center");
+  const sv = document.querySelector("uveg-scorm-view");
+  if (!center || !sv) return;
+
+  customElements.whenDefined("uveg-scorm-view").then(() => {
+    _bindScormViewEvents(center, sv);
+  });
+}
+
+function _bindScormViewEvents(center, sv) {
+  document.addEventListener("uveg:openscorm", (e) => {
+    const { viewType = "scorm" } = e.detail || {};
+    if (viewType !== "scorm") return;
+
+    const {
+      title = "",
+      scormTitle = "",
+      cardId = "",
+      actId = "",
+      type = "lectura",
+      src = "",
+    } = e.detail;
+    _hidePanels(_getPanels(center, sv));
+    sv.show({
+      title: scormTitle || title,
+      cardId,
+      actId,
+      type,
+      state: "progress",
+      src,
+    });
+    setTimeout(() => {
+      center.scrollTop = 0;
+    }, 50);
+  });
+
+  sv.addEventListener("uveg:scormback", () => {
+    sv.hide();
+    _showPanels(_getPanels(center, sv));
+    center.scrollTop = 0;
+  });
+}
+
+const _cronoPending = new Set();
+
+function _markCronoAct(actId) {
+  const crono = document.querySelector("uveg-pres-cronograma");
+  if (crono && typeof crono.markCompleted === "function") {
+    crono.markCompleted(actId);
+  } else {
+    _cronoPending.add(actId);
+  }
+}
+
+function _flushCronoPending() {
+  const crono = document.querySelector("uveg-pres-cronograma");
+  if (!crono || typeof crono.markCompleted !== "function") return;
+  _cronoPending.forEach((id) => crono.markCompleted(id));
+  _cronoPending.clear();
+}
+
+/* ── Activity Complete — conecta con cronograma y card ──────── */
+function initActivityComplete() {
+  document.addEventListener("uveg:activitycomplete", (e) => {
+    const { actId, cardId } = e.detail || {};
+
+    // 1. Marcar en cronograma
+    _markCronoAct(actId);
+
+    // 2. Actualizar estado de la uveg-card correspondiente
+    if (cardId !== undefined && cardId !== null) {
+      const card = document.querySelector(`uveg-card[card-id="${cardId}"]`);
+      if (!card) return;
+      const isReto = card.getAttribute("variant") === "reto";
+      if (isReto) {
+        card.markRetoDone?.(e.detail?.score);
+      } else {
+        card.markSubActDone?.(actId);
+      }
+    }
+  });
+}
+
+/* ── Sesiones View SPA (sin cambios) ────────────────────────── */
 function initSesionesView() {
   const center = document.querySelector(".center");
   const sv = document.querySelector("uveg-sesiones-view");
@@ -214,33 +303,31 @@ function initSesionesView() {
 }
 
 function _bindSesionesViewEvents(center, sv) {
-  const getPanels = () =>
+  const getSiblings = () =>
     [
-      ...center.querySelectorAll("[data-panel]"),
       center.querySelector("uveg-tabs"),
       center.querySelector(".hrow"),
       center.querySelector(".breadcrumb-nav"),
-    ].filter((el) => el && el !== sv);
+    ].filter(Boolean);
 
   document.addEventListener("uveg:opensesiones", (e) => {
     const lv = document.querySelector("uveg-lesson-view");
     if (lv) lv.hide();
-    getPanels().forEach((el) => {
-      el.dataset.svHidden = el.style.display || "";
+    getSiblings().forEach((el) => {
       el.style.display = "none";
     });
+    center.classList.add("sv-active");
     sv.show(e.detail?.person || {});
     setTimeout(() => {
       center.scrollTop = 0;
     }, 50);
   });
 
-  document.addEventListener("uveg:sesionesback", () => {
-    const panels = getPanels();
+  sv.addEventListener("uveg:sesionesback", () => {
     sv.hide();
-    panels.forEach((el) => {
-      el.style.display = el.dataset.svHidden || "";
-      delete el.dataset.svHidden;
+    center.classList.remove("sv-active");
+    getSiblings().forEach((el) => {
+      el.style.display = "";
     });
     center.scrollTop = 0;
   });
@@ -251,5 +338,7 @@ initProgressBar();
 initPresentacionIcons();
 initPresentacionCards();
 initViewToggle();
-initLessonView();
+initRetoView();
+initScormView();
+initActivityComplete();
 initSesionesView();

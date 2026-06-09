@@ -25,46 +25,28 @@ import { hi } from "../../js/utils/icons.js";
 
 const DEFAULT_DATA = [
   {
+    unit: "Unidad 1",
     icon: "check-circle",
-    title: "Reto 1. Planeación estratégica",
+    title: "Reto 1. Planeación estratégica institucional",
+    points: 100,
     warning: false,
     content: [
-      "Lección 1. Gestión estratégica educativa",
-      "Lección 2. Gestión estratégica educativa",
-      "Lección 3. Gestión estratégica educativa",
+      "Lección 1. Introducción al módulo",
+      "Lección 2. Diagnóstico y análisis del contexto",
+      "Lección 3. Diseño del mapa estratégico",
+      "Lección 4. Implementación y evaluación",
     ],
   },
   {
+    unit: "Unidad 2",
     icon: "check-circle",
-    title: "Reto 2. Planeación estratégica educativa",
+    title: "Reto 2. Implementación y evaluación tecnológica",
+    points: 100,
     warning: false,
     content: [
-      "Lección 1. Gestión estratégica educativa",
-      "Lección 2. Gestión estratégica educativa",
-      "Lección 3. Gestión estratégica educativa",
+      "Lección 5. Evaluación de impacto tecnológico",
+      "Lección 6. Innovación pedagógica y KPIs",
     ],
-  },
-  {
-    icon: "check-circle",
-    title: "Reto 3. Proyecto educativo",
-    warning: false,
-    content: [
-      "Lección 1. Gestión estratégica educativa",
-      "Lección 2. Gestión estratégica educativa",
-      "Lección 3. Gestión estratégica educativa",
-    ],
-  },
-  {
-    icon: "check-circle",
-    title: "Reto 4. Ciclo de vida del proyecto",
-    warning: false,
-    content: ["Lección 1. Gestión estratégica educativa"],
-  },
-  {
-    icon: "check-circle",
-    title: "Reto 5. Proyecto educativo",
-    warning: false,
-    content: ["Lección 1. Gestión estratégica educativa"],
   },
 ];
 
@@ -84,16 +66,22 @@ class UvegPresEvaluacion extends HTMLElement {
     }
   }
 
-  _renderSection({ icon, title, warning, content }) {
+  _renderSection({ icon, title, warning, content, points }) {
     const warningClass = warning ? " is-warning" : "";
     const items = content.map((item) => `<li>${item}</li>`).join("");
-
+    const pts =
+      points != null
+        ? `<span class="pres-eval-points">${points} pts</span>`
+        : "";
     return `
       <div class="pres-eval-section">
-        <h4 class="pres-eval-title${warningClass}">
-          ${hi(icon, 16)}
-          ${title}
-        </h4>
+        <div class="pres-eval-title-row">
+          <h4 class="pres-eval-title${warningClass}">
+            ${hi(icon, 16)}
+            ${title}
+          </h4>
+          ${pts}
+        </div>
         <div class="pres-eval-body">
           <ul class="pres-eval-list">
             ${items}
@@ -105,11 +93,18 @@ class UvegPresEvaluacion extends HTMLElement {
 
   _render() {
     const sections = this._parseData();
-    this.innerHTML = `
-      <div class="pres-eval">
-        ${sections.map((s) => this._renderSection(s)).join("")}
-      </div>
-    `;
+    let lastUnit = null;
+    const html = sections
+      .map((s) => {
+        let unitHeader = "";
+        if (s.unit && s.unit !== lastUnit) {
+          lastUnit = s.unit;
+          unitHeader = `<div class="pres-eval-unit-header">${s.unit}</div>`;
+        }
+        return unitHeader + this._renderSection(s);
+      })
+      .join("");
+    this.innerHTML = `<div class="pres-eval">${html}</div>`;
   }
 }
 

@@ -90,11 +90,11 @@
   transition: border-color var(--transition-base);
   will-change: transform;
   position: relative;
-  /* Font smoothing: compensa el pixelado por GPU composite del scale */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
+
 .card:hover {
   border-color: var(--color-card-border-hover);
   box-shadow: 0 2px 10px rgba(20,69,196,.07);
@@ -139,7 +139,6 @@
   gap: 0;
 }
 
-/* Barra de acento izquierda del card */
 .c-accent-bar { display: none; }
 
 .c-row {
@@ -168,12 +167,12 @@
 }
 
 .av-pending  { background: var(--color-av-bg); color: var(--color-accent); }
-.av-progress { background: var(--color-av-bg); color: var(--color-accent); }
+.av-progress { background: var(--color-act-podcast-bg); color: var(--color-act-podcast-text); }
 .av-done     { background: var(--color-done-bg); color: #1a2e1a; overflow: hidden; }
 
 .av-done::after { display: none; }
 
-.av i { position: relative; z-index: 2; }
+.av svg.hi { position: relative; z-index: 2; }
 .av-reto-base { background: var(--color-tint-bg); color: var(--color-accent); }
 
 /* Dot de estado */
@@ -191,7 +190,7 @@
 .card.open .av-dot { transform: scale(1.15); }
 
 .dot-pending  { background: var(--color-pending-dot); }
-.dot-progress { background: var(--color-progress-dot); }
+.dot-progress { background: var(--color-examen-accent); }
 .dot-done     { background: var(--color-done-dot); }
 
 /* ── State circle ───────────────────────────────────────────── */
@@ -203,16 +202,19 @@
   cursor: pointer;
 }
 
-.state-circle svg {
+.state-circle > svg:not(.hi) {
   position: absolute;
   top: 0;
   left: 0;
+  pointer-events: none;
   transition: opacity var(--transition-spring);
 }
 
 .sc-icon {
   position: absolute;
-  inset: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -221,15 +223,23 @@
 }
 
 .sc-icon.pending  { color: var(--color-pending-dot); }
-.sc-icon.progress { color: var(--color-progress-dot); }
+.sc-icon.progress { color: var(--color-examen-accent); }
 .sc-icon.done     { color: var(--color-done-dot); }
+
+.sc-icon svg.hi {
+  position: static !important;
+  width: 14px !important;
+  height: 14px !important;
+  top: auto !important;
+  left: auto !important;
+}
 
 @keyframes spinIn {
   from { transform: rotate(-180deg) scale(0); opacity: 0; }
   to   { transform: rotate(0) scale(1);       opacity: 1; }
 }
 
-.sc-icon.done i {
+.sc-icon.done svg.hi {
   animation: spinIn .4s cubic-bezier(.4, 0, .2, 1) forwards;
 }
 
@@ -245,12 +255,16 @@
   opacity: 0;
   transition: opacity var(--transition-spring);
   pointer-events: none;
-  background: var(--color-surface);
+  background: transparent;
   border-radius: var(--radius-full);
 }
 
-.state-circle.bar-mode svg            { opacity: 0 !important; }
-.state-circle.bar-mode .sc-icon       { opacity: 0 !important; }
+.card:not(.card-reto) .state-bar-wrap {
+  background: var(--color-surface);
+}
+
+.state-circle.bar-mode > svg:not(.hi)  { opacity: 0 !important; }
+.state-circle.bar-mode .sc-icon        { opacity: 0 !important; }
 .state-circle.bar-mode .state-bar-wrap {
   opacity: 1 !important;
   pointer-events: auto;
@@ -280,7 +294,7 @@
 .c-info { flex: 1; min-width: 0; }
 
 .c-title {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
   line-height: 1.35;
@@ -294,7 +308,7 @@
   margin-bottom: 5px;
 }
 
-/* Badges */
+/* Badges — solo reto los usa, lecciones no renderizan badge */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -306,10 +320,12 @@
   transition: all var(--transition-spring);
 }
 
+.card:not(.card-reto) [data-badge] { display: none !important; }
+
 .b-pending  { background: var(--color-tint-bg); color: var(--color-accent); border: .5px solid var(--color-tint-border); }
-.b-progress { background: var(--color-progress-bg); color: var(--color-progress-text); }
-.b-done     { background: var(--color-done-bg);     color: var(--color-done-text); }
-.b-reto     { background: var(--color-tint-bg);     color: var(--color-reto-text); }
+.b-progress { background: var(--color-act-podcast-bg); color: var(--color-act-podcast-text); }
+.b-done     { background: var(--color-done-bg); color: var(--color-done-text); }
+.b-reto     { background: var(--color-tint-bg); color: var(--color-reto-text); }
 
 /* ── Card footer ────────────────────────────────────────────── */
 .c-footer {
@@ -319,8 +335,6 @@
   padding: 8px 14px;
   border-top: .5px solid var(--color-border-light);
 }
-
-/* cf-date eliminado — fechas removidas del card */
 
 .cf-sep { flex: 1; }
 
@@ -333,6 +347,16 @@
   border-radius: var(--radius-full);
   border: .5px solid var(--color-card-chip-border);
 }
+
+.cf-date {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.cf-date svg.hi { flex-shrink: 0; }
 
 /* ── Blob expand ────────────────────────────────────────────── */
 .blob-wrap  { height: 0; overflow: hidden; }
@@ -371,6 +395,8 @@
   border-color: var(--color-accent);
 }
 
+.sim-btn svg.hi { flex-shrink: 0; }
+
 /* ── Sub-actividades ────────────────────────────────────────── */
 .sub-section-title {
   font-size: var(--font-size-xs);
@@ -401,7 +427,6 @@
   z-index: 0;
 }
 
-/* Hover fill por color de tipo */
 .sub-act-card.video::before        { background: var(--color-act-video-bg); }
 .sub-act-card.podcast::before      { background: var(--color-act-podcast-bg); }
 .sub-act-card.infografia::before   { background: var(--color-act-infografia-bg); }
@@ -409,13 +434,19 @@
 .sub-act-card.lectura::before      { background: var(--color-act-lectura-bg); }
 .sub-act-card.tarea::before        { background: #eef2ff; }
 .sub-act-card.examen::before       { background: #fdf4ff; }
-.sub-act-card.entrega::before      { background: #fff7ed; }
+.sub-act-card.entrega::before { background: #fff1f2; }
 
 .sub-act-card:hover::before { width: 100%; }
-.sub-act-card:hover {
+.sub-act-card:not(.entrega):hover {
   border-color: #1942cb;
   box-shadow: 0 0 0 3px rgba(20, 66, 203, 0.08);
 }
+
+.sub-act-card.entrega:hover {
+  border-color: #e11d48;
+  box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.08);
+}
+
 .sub-act-top {
   display: flex;
   align-items: flex-start;
@@ -425,7 +456,6 @@
   z-index: 1;
 }
 
-/* Nueva fila compacta icono + nombre + badge */
 .sub-act-row {
   display: flex;
   align-items: center;
@@ -434,10 +464,7 @@
   z-index: 1;
 }
 
-.sub-act-row .sub-act-name {
-  flex: 1;
-  margin-bottom: 0;
-}
+.sub-act-row .sub-act-name  { flex: 1; margin-bottom: 0; }
 
 .sub-act-row .sub-act-badge {
   opacity: 0;
@@ -445,9 +472,7 @@
   flex-shrink: 0;
 }
 
-.sub-act-card:hover .sub-act-row .sub-act-badge {
-  opacity: 1;
-}
+.sub-act-card:hover .sub-act-row .sub-act-badge { opacity: 1; }
 
 .sub-act-icon {
   width: 34px;
@@ -465,13 +490,14 @@
 .sub-act-icon.infografia   { background: var(--color-act-infografia-bg);   transition: background var(--transition-base); }
 .sub-act-icon.presentacion { background: var(--color-act-presentacion-bg); transition: background var(--transition-base); }
 .sub-act-icon.lectura      { background: var(--color-act-lectura-bg);      transition: background var(--transition-base); }
+.sub-act-icon.entrega      { background: transparent; transition: background var(--transition-base); overflow: visible; }
 
-/* En hover el ícono se oscurece para no perderse con el fill */
 .sub-act-card.video:hover        .sub-act-icon.video        { background: var(--color-act-video-border); }
 .sub-act-card.podcast:hover      .sub-act-icon.podcast      { background: var(--color-act-podcast-border); }
 .sub-act-card.infografia:hover   .sub-act-icon.infografia   { background: var(--color-act-infografia-border); }
 .sub-act-card.presentacion:hover .sub-act-icon.presentacion { background: var(--color-act-presentacion-border); }
 .sub-act-card.lectura:hover      .sub-act-icon.lectura      { background: var(--color-act-lectura-border); }
+
 .sub-act-badge {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
@@ -485,6 +511,9 @@
 .sub-act-badge.infografia   { background: var(--color-act-infografia-bg);   color: var(--color-act-infografia-text);   border: .5px solid var(--color-act-infografia-border); }
 .sub-act-badge.presentacion { background: var(--color-act-presentacion-bg); color: var(--color-act-presentacion-text); border: .5px solid var(--color-act-presentacion-border); }
 .sub-act-badge.lectura      { background: var(--color-act-lectura-bg);      color: var(--color-act-lectura-text);      border: .5px solid var(--color-act-lectura-border); }
+
+
+.sub-act-badge.entrega     { background: var(--color-act-presentacion-bg); color: var(--color-act-presentacion-text); border: .5px solid var(--color-act-presentacion-border); }
 
 .sub-act-open { display: none; }
 
@@ -545,7 +574,6 @@
   letter-spacing: .3px;
 }
 
-/* Pts donut */
 .pts-donut {
   position: relative;
   width: 38px;
@@ -661,10 +689,7 @@
   transition: opacity var(--transition-fast), transform .1s;
 }
 
-/* Ocultar btn-go en lecciones normales, conservar en reto */
-.card:not(.card-reto) .btn-go {
-  display: none;
-}
+.card:not(.card-reto) .btn-go { display: none; }
 
 .btn-go:hover  { opacity: .88; }
 .btn-go:active { transform: scale(.97); }
@@ -681,6 +706,7 @@
   padding: 11px !important;
 }
 
+.btn-reto svg.hi { flex-shrink: 0; }
 
 .note {
   font-size: var(--font-size-sm);
@@ -691,90 +717,44 @@
   margin-top: 12px;
 }
 
-/* ── PATCH: i → svg.hi para Heroicons en uveg-card.css ─────────
-   Agregar al final de uveg-card.css
-   ─────────────────────────────────────────────────────────────── */
+.note svg.hi { flex-shrink: 0; }
 
-/* sc-icon: el font-size no aplica a SVG, forzar tamaño explícito */
-.sc-icon svg.hi {
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-}
+/* ── SVG helpers ────────────────────────────────────────────── */
+.badge svg.hi      { flex-shrink: 0; vertical-align: middle; }
+.tv-btn svg.hi     { flex-shrink: 0; }
 
-/* Animación spinIn en done — era .sc-icon.done i, ahora svg.hi */
-.sc-icon.done svg.hi {
-  animation: spinIn .4s cubic-bezier(.4, 0, .2, 1) forwards;
-}
-
-/* av: el z-index del <i> ahora va al svg */
-.av svg.hi {
-  position: relative;
-  z-index: 2;
-}
-
-/* badge: ícono pequeño alineado */
-.badge svg.hi {
-  flex-shrink: 0;
-  vertical-align: middle;
-}
-
-/* sim-btn: ícono play alineado */
-.sim-btn svg.hi {
-  flex-shrink: 0;
-}
-
-/* note: ícono info alineado */
-.note svg.hi {
-  flex-shrink: 0;
-}
-
-/* btn-reto: ícono bolt alineado */
-.btn-reto svg.hi {
-  flex-shrink: 0;
-}
-
-/* cf-date: íconos calendario y reloj */
-.cf-date {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-}
-.cf-date svg.hi {
-  flex-shrink: 0;
-}
-
-/* tv-btn: íconos de vista tarjetas/lista */
-.tv-btn svg.hi {
-  flex-shrink: 0;
-}
-
-/* chevron de expand — era <i>, ahora <span data-chevron> con svg adentro */
 [data-chevron] {
   display: flex;
   align-items: center;
   flex-shrink: 0;
 }
-[data-chevron] svg.hi {
+
+.reto-pts-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.reto-pts-wrap .pts-donut {
+  width: 44px;
+  height: 44px;
+}
+
+.reto-face {
   flex-shrink: 0;
 }
 
-/* ── FIX: state-circle svg agarraba el svg.hi del sc-icon ── */
-.state-circle > svg:not(.hi) {
-  position: absolute;
-  top: 0;
-  left: 0;
+.sub-act-card.entrega {
+  padding: 12px 16px;
 }
 
-.state-circle .sc-icon svg.hi {
-  position: static !important;
-  width: 14px !important;
-  height: 14px !important;
-  top: auto !important;
-  left: auto !important;
+.sub-act-card.entrega .sub-act-row {
+  align-items: center;
 }
+
+[data-chevron] svg.hi { flex-shrink: 0; }
 
 /* ── Dark mode ──────────────────────────────────────────────── */
 [data-bs-theme="dark"] .card           { background: var(--color-tint-bg); border-color: var(--color-tint-border); }
@@ -787,7 +767,9 @@
 [data-bs-theme="dark"] .cf-date        { color: var(--color-text-faint); }
 [data-bs-theme="dark"] .cf-chip        { background: var(--color-tint-bg); color: var(--color-accent); border-color: var(--color-tint-border); }
 [data-bs-theme="dark"] .av-pending     { background: var(--color-tint-bg); color: var(--color-accent); }
+[data-bs-theme="dark"] .av-progress    { background: var(--color-act-tag-foro-bg); color: var(--color-act-tag-foro-text); }
 [data-bs-theme="dark"] .b-pending      { background: var(--color-tint-bg); color: var(--color-accent); }
+[data-bs-theme="dark"] .b-progress     { background: var(--color-act-tag-foro-bg); color: var(--color-act-tag-foro-text); }
 [data-bs-theme="dark"] .b-div          { background: var(--color-border-light); }
 [data-bs-theme="dark"] .b-desc         { color: var(--color-text-muted); }
 [data-bs-theme="dark"] .bd-lbl         { color: var(--color-text-faint); }

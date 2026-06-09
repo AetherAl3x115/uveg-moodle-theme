@@ -78,6 +78,33 @@
   top: 5px;
 }
 
+/* ── Header de unidad ───────────────────────────────────────── */
+.pres-eval-unit-header {
+  background: var(--pres-color, var(--color-accent));
+  color: #fff;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 7px 14px;
+  border-radius: var(--radius-md);
+  margin-bottom: 4px;
+}
+/* ── Fila título + puntos ────────────────────────────────────── */
+.pres-eval-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+/* ── Puntos ─────────────────────────────────────────────────── */
+.pres-eval-points {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--pres-color, var(--color-accent));
+  white-space: nowrap;
+  flex-shrink: 0;
+}
 /* ── Dark mode ──────────────────────────────────────────────── */
 [data-bs-theme="dark"] .pres-eval-section {
   border-bottom-color: var(--color-border);

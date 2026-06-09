@@ -285,10 +285,9 @@
               card-id="0"
               title="Lección 1. Introducción al módulo"
               type="Lectura + actividad"
-              state="done"
               date-start="25 may"
               date-end="28 may"
-              progress-done="2"
+              progress-done="0"
               progress-total="2"
               scorm-title="Lección 1 — Introducción al módulo">
             </uveg-card>
@@ -297,10 +296,10 @@
               card-id="1"
               title="Lección 2. Diagnóstico y análisis del contexto"
               type="Lectura + actividad"
-              state="pending"
+              progress-done="0"
               date-start="26 may"
               date-end="30 may"
-              progress-done="1"
+              progress-done="0"
               progress-total="2"
               scorm-title="Lección 2 — Diagnóstico y análisis">
             </uveg-card>
@@ -330,8 +329,9 @@
             </uveg-card>
 
             <!-- Reto integrador — variant="reto" activa el diseño especial -->
-            <uveg-card
+           <uveg-card
               card-id="4"
+              unit-idx="0"
               variant="reto"
               title="Reto 1. Planeación estratégica institucional"
               subtitle="Entrega individual · hasta 100 pts"
@@ -382,6 +382,7 @@
 
             <uveg-card
               card-id="7"
+              unit-idx="1"
               variant="reto"
               title="Reto 2. Implementación y evaluación tecnológica"
               subtitle="Entrega individual · hasta 100 pts"
@@ -432,8 +433,10 @@
 ]'></uveg-glosario>
         </section>
 
-    <uveg-lesson-view></uveg-lesson-view>
-      <uveg-sesiones-view></uveg-sesiones-view>
+  <uveg-lesson-view></uveg-lesson-view>
+    <uveg-reto-view></uveg-reto-view>
+    <uveg-scorm-view></uveg-scorm-view>
+    <uveg-sesiones-view></uveg-sesiones-view>
       </main><!-- /center -->
     </div><!-- /content-row -->
   </div><!-- /main -->

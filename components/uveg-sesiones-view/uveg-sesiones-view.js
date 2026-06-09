@@ -248,8 +248,8 @@ class UvegSesionesView extends HTMLElement {
 
   _bindEvents() {
     this.querySelector("[data-sv-back]")?.addEventListener("click", () => {
-      document.dispatchEvent(
-        new CustomEvent("uveg:sesionesback", { bubbles: true }),
+      this.dispatchEvent(
+        new CustomEvent("uveg:sesionesback", { bubbles: true, composed: true }),
       );
     });
   }

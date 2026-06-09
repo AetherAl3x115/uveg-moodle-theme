@@ -678,6 +678,17 @@ class UvegPresCronograma extends HTMLElement {
       this._bindEvents();
     });
   }
+
+  /* ── API pública ──────────────────────────────────────────── */
+  markCompleted(actId) {
+    if (!actId) return;
+    this._state.completed[actId] = true;
+    this._saveState();
+    this._simPct = null;
+    this._schedule = this._buildSchedule();
+    this._render();
+    this._bindEvents();
+  }
 }
 
 /* ── Helpers ────────────────────────────────────────────────── */

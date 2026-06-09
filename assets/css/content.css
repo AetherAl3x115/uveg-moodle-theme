@@ -449,3 +449,8 @@ background: linear-gradient(to bottom, color-mix(in srgb, var(--pres-bg, var(--c
 [data-bs-theme="dark"] .pres-content h3 { color: var(--color-text-primary); }
 [data-bs-theme="dark"] .pres-content p  { color: var(--color-text-muted); }
 [data-bs-theme="dark"] .pres-list li   { color: var(--color-text-secondary); }
+
+/* Ocultar panels cuando sesiones-view está activa */
+.center.sv-active [data-panel] {
+  display: none !important;
+}

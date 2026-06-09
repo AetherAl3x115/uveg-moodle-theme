@@ -44,6 +44,8 @@ import "../../components/uveg-card/uveg-card.js";
 import "../../components/uveg-progress/uveg-progress.js";
 // import "../../components/uveg-scorm-drawer/uveg-scorm-drawer.js"; // reemplazado por uveg-lesson-view
 import "../../components/uveg-lesson-view/uveg-lesson-view.js";
+import "../../components/uveg-reto-view/uveg-reto-view.js";
+import "../../components/uveg-scorm-view/uveg-scorm-view.js";
 import "../../components/uveg-sesiones-view/uveg-sesiones-view.js";
 import "../components/uveg-glosario/uveg-glosario.js";
 

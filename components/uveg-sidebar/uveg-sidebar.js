@@ -9,9 +9,9 @@ import { springWidth, liquidOpen, liquidClose } from "../../js/utils/spring.js";
 import { hi } from "../../js/utils/icons.js";
 
 const NAV_ITEMS = [
-  { key: "dashboard", icon: "dashboard", label: "Dashboard" },
+  { key: "dashboard", icon: "dashboard", label: "Escritorio" },
   { key: "modulos", icon: "modules", label: "Módulos" },
-  { key: "cursos", icon: "courses", label: "Cursos" },
+  { key: "cursos", icon: "courses", label: "Mis Cursos" },
   { key: "mensajes", icon: "messages", label: "Mensajes", badge: 3 },
 ];
 

@@ -3,6 +3,10 @@
  * ─────────────────────────────────────────────────────────────
  * Web Component <uveg-card>
  * Iconografía: Heroicons 2 Outline via js/utils/icons.js
+ *
+ * Estado derivado de progreso real — el simulador fue eliminado.
+ * El estado se actualiza cuando page.js llama a markSubActDone(actId).
+ * ─────────────────────────────────────────────────────────────
  */
 
 import { springScale, liquidOpen, liquidClose } from "../../js/utils/spring.js";
@@ -13,13 +17,11 @@ const STATE_CONFIG = {
   pending: {
     avClass: "av-pending",
     dotClass: "dot-pending",
-    badgeClass: "b-pending",
-    badgeIcon: "clock",
-    badgeLabel: "Pendiente",
     ringStroke: "#cbd5e1",
     ringDash: "26.7 80.1",
     iconClass: "pending",
     iconKey: "clock",
+    avatarIcon: "clipboard-document",
     barColor: "#cbd5e1",
     barWidth: "0%",
     barVal: "0%",
@@ -29,35 +31,113 @@ const STATE_CONFIG = {
   progress: {
     avClass: "av-progress",
     dotClass: "dot-progress",
-    badgeClass: "b-progress",
-    badgeIcon: "play",
-    badgeLabel: "En progreso",
-    ringStroke: "#3b82f6",
+    ringStroke: "#7c3aed",
     ringDash: "53.4 53.4",
     iconClass: "progress",
-    iconKey: "clock",
-    barColor: "#3b82f6",
+    iconKey: "play-circle",
+    avatarIcon: "pencil-square",
+    barColor: "#7c3aed",
     barWidth: "50%",
     barVal: "50%",
-    barValColor: "#1e40af",
-    chipText: (done, total) => `${Math.ceil(total / 2)}/${total}`,
+    barValColor: "#92400e",
+    chipText: (done, total) => `${done}/${total}`,
   },
   done: {
     avClass: "av-done",
     dotClass: "dot-done",
-    badgeClass: "b-done",
-    badgeIcon: "check",
-    badgeLabel: "Completada",
     ringStroke: "#22c55e",
     ringDash: "106.8 0",
     iconClass: "done",
     iconKey: "check",
+    avatarIcon: "clipboard-list",
     barColor: "#22c55e",
     barWidth: "100%",
     barVal: "100%",
     barValColor: "#166534",
     chipText: (done, total) => `${total}/${total}`,
   },
+};
+
+function deriveState(done, total) {
+  if (done <= 0) return "pending";
+  if (total <= 1 || done >= total) return "done";
+  return "progress";
+}
+
+/* ── Mapa card-id → sub-actividades con sus IDs de cronograma ── */
+const SUB_ACT_MAP = {
+  0: [
+    {
+      actId: "l1-video",
+      tipo: "video",
+      nombre: "L1. Video — ¿Qué es la planeación estratégica?",
+    },
+    {
+      actId: "l1-lect",
+      tipo: "lectura",
+      nombre: "L1. Lectura — Fundamentos del módulo",
+    },
+  ],
+  1: [
+    {
+      actId: "l2-pod",
+      tipo: "podcast",
+      nombre: "L2. Podcast — Diagnóstico educativo en contexto",
+    },
+    {
+      actId: "l2-pres",
+      tipo: "presentacion",
+      nombre: "L2. Presentación — Herramientas de análisis situacional",
+    },
+  ],
+  2: [
+    {
+      actId: "l3-info",
+      tipo: "infografia",
+      nombre: "L3. Infografía — Componentes del mapa estratégico",
+    },
+    {
+      actId: "l3-lect",
+      tipo: "lectura",
+      nombre: "L3. Lectura — Diseño institucional por objetivos",
+    },
+  ],
+  3: [
+    {
+      actId: "l4-pres",
+      tipo: "presentacion",
+      nombre: "L4. Presentación — Fases de implementación",
+    },
+    {
+      actId: "l4-video",
+      tipo: "video",
+      nombre: "L4. Video — Casos de éxito en gestión educativa",
+    },
+  ],
+  5: [
+    {
+      actId: "l5-pod",
+      tipo: "podcast",
+      nombre: "L5. Podcast — Impacto de la tecnología en el aula",
+    },
+    {
+      actId: "l5-info",
+      tipo: "infografia",
+      nombre: "L5. Infografía — Indicadores de evaluación tecnológica",
+    },
+  ],
+  6: [
+    {
+      actId: "l6-lect",
+      tipo: "lectura",
+      nombre: "L6. Lectura — Innovación pedagógica aplicada",
+    },
+    {
+      actId: "l6-pres",
+      tipo: "presentacion",
+      nombre: "L6. Presentación — KPIs para proyectos educativos",
+    },
+  ],
 };
 
 class UvegCard extends HTMLElement {
@@ -84,6 +164,7 @@ class UvegCard extends HTMLElement {
   }
 
   connectedCallback() {
+    this._loadProgress();
     this._render();
     this._bindEvents();
   }
@@ -104,23 +185,112 @@ class UvegCard extends HTMLElement {
     return this._attr("variant") === "reto";
   }
 
+  /* ── Persistencia localStorage ──────────────────────────── */
+  _storageKey() {
+    return `uveg-card-${this._attr("card-id")}`;
+  }
+
+  _loadProgress() {
+    try {
+      const saved = localStorage.getItem(this._storageKey());
+      if (!saved) return;
+      const { done, completedActs } = JSON.parse(saved);
+      if (done > 0) this.setAttribute("progress-done", done);
+      this._completedActs = new Set(completedActs || []);
+    } catch (_) {
+      this._completedActs = new Set();
+    }
+
+    if (this._isReto()) {
+      try {
+        const s = parseInt(
+          localStorage.getItem(`uveg-reto-${this._attr("card-id")}`),
+          10,
+        );
+        if (!isNaN(s)) this._retoScore = s;
+      } catch (_) {}
+    }
+  }
+
+  _saveProgress(done, actId) {
+    if (!this._completedActs) this._completedActs = new Set();
+    if (actId) this._completedActs.add(actId);
+    try {
+      localStorage.setItem(
+        this._storageKey(),
+        JSON.stringify({ done, completedActs: [...this._completedActs] }),
+      );
+    } catch (_) {}
+  }
+
+  /* ── API pública: marcar sub-actividad completada ───────── */
+  markSubActDone(actId) {
+    const id = parseInt(this._attr("card-id"), 10);
+    const subActs = SUB_ACT_MAP[id] || [];
+    const total =
+      subActs.length || parseInt(this._attr("progress-total", "2"), 10);
+
+    const card = this.querySelector(".card");
+    if (!card) return;
+
+    // Evitar doble conteo si ya estaba completada
+    if (!this._completedActs) this._completedActs = new Set();
+    if (this._completedActs.has(actId)) return;
+
+    const subEl = this.querySelector(`[data-act-id="${actId}"]`);
+    if (subEl) subEl.classList.add("is-done");
+
+    const doneCurrent = parseInt(this._attr("progress-done", "0"), 10);
+    const doneNext = Math.min(doneCurrent + 1, total);
+    this._saveProgress(doneNext, actId);
+    this.setAttribute("progress-done", doneNext);
+    // attributeChangedCallback re-renderiza automáticamente
+  }
+
   /* ── Render ─────────────────────────────────────────────── */
 
   _render() {
     const id = this._attr("card-id", "0");
-    const state = this._attr("state", "pending");
-    const cfg = STATE_CONFIG[state] || STATE_CONFIG.pending;
     const done = parseInt(this._attr("progress-done", "0"), 10);
     const total = parseInt(this._attr("progress-total", "2"), 10);
+
+    const stateAttr = this.hasAttribute("progress-done")
+      ? ""
+      : this._attr("state", "");
+    const state = stateAttr || deriveState(done, total);
+    const cfg = STATE_CONFIG[state] || STATE_CONFIG.pending;
 
     this.innerHTML = this._isReto()
       ? this._renderReto(id, state, cfg)
       : this._renderLesson(id, state, cfg, done, total);
+
+    // Restaurar is-done visual en sub-acts ya completadas
+    if (this._completedActs?.size) {
+      this._completedActs.forEach((aid) => {
+        const el = this.querySelector(`[data-act-id="${aid}"]`);
+        if (el) el.classList.add("is-done");
+      });
+    }
+
+    if (this._isReto()) {
+      const barVal = this.querySelector("[data-barval]");
+      const barFill = this.querySelector("[data-barfill]");
+      if (this._retoScore !== undefined) {
+        _applyRetoScore(this._retoScore, barVal, barFill);
+      } else {
+        if (barVal) {
+          barVal.textContent = "--";
+          barVal.style.color = "rgba(255,255,255,.5)";
+        }
+        if (barFill) {
+          barFill.style.width = "0%";
+        }
+      }
+    }
   }
 
   _renderLesson(id, state, cfg, done, total) {
     const title = this._attr("title");
-    const scormTitle = this._attr("scorm-title", title);
 
     return `
       <div class="card" data-card-id="${id}" data-state="${state}">
@@ -128,23 +298,16 @@ class UvegCard extends HTMLElement {
           <div class="c-accent-bar ${state}" data-accentbar></div>
           <div class="c-row" style="flex:1">
 
-            <!-- Avatar con dot de estado — ícono cambia según estado -->
             <div class="av ${cfg.avClass}" data-av>
-              ${hi(state === "done" ? "clipboard-list" : "pencil-square", 18)}
+              ${hi(cfg.avatarIcon, 18)}
               <span class="av-dot ${cfg.dotClass}" data-dot></span>
             </div>
 
-            <!-- Info -->
             <div class="c-info">
               <div class="c-title">${title}</div>
               <div class="c-desc">${this._attr("desc", "Explora los contenidos y actividades de esta lección para avanzar en el módulo.")}</div>
-              <span class="badge ${cfg.badgeClass}" data-badge>
-                ${hi(cfg.badgeIcon, 9)}
-                ${cfg.badgeLabel}
-              </span>
             </div>
 
-            <!-- Columna derecha: ring + chevron arriba, chip abajo -->
             <div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:4px;flex-shrink:0">
               <div style="display:flex;align-items:center;gap:5px">
                 <div class="state-circle" data-sc role="button" tabindex="0" aria-label="Ver progreso">
@@ -164,19 +327,13 @@ class UvegCard extends HTMLElement {
           </div>
         </div>
 
-        <!-- Footer vacío — estructura conservada -->
         <div class="c-footer" style="padding:0;border:none;min-height:0"></div>
 
-        <!-- Blob expandible -->
         <div class="blob-wrap" data-bw>
           <div class="blob-inner" data-bi>
             <div class="b-div"></div>
-            <button class="sim-btn" data-sim aria-label="Simular progreso">
-              ${hi("play", 10)}
-              Simular progreso
-            </button>
             <div class="sub-acts-grid">
-              ${this._renderSubActs(state)}
+              ${this._renderSubActs(id)}
             </div>
             <button class="btn-go${state === "pending" ? " btn-locked" : ""}"
               data-scorm-btn
@@ -197,25 +354,20 @@ class UvegCard extends HTMLElement {
       "subtitle",
       "Entrega individual · hasta 100 pts",
     );
-    const dateStart = this._attr("date-start");
-    const dateEnd = this._attr("date-end");
 
     return `
       <div class="card card-reto" data-card-id="${id}" data-state="${state}">
         <div class="c-top" style="padding:14px 14px 0;display:block">
-
-          <!-- Header gradient UVEG -->
           <div class="reto-header">
             <div class="reto-header-icon">
               ${hi("trophy", 20)}
             </div>
             <div class="reto-header-info">
-              <div class="reto-header-tag">RETO INTEGRADOR</div>
               <div class="reto-header-title">${title}</div>
               <div class="reto-header-sub">${subtitle}</div>
             </div>
             <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
-              <span class="badge" data-badge
+              <span class="badge"
                 style="background:rgba(255,255,255,.15);color:#fff;border:.5px solid rgba(255,255,255,.2)">
                 ${hi("clock", 9)}
                 Vence pronto
@@ -234,46 +386,31 @@ class UvegCard extends HTMLElement {
               </div>
             </div>
           </div>
-
         </div>
 
-        <!-- Footer -->
         <div class="c-footer">
-          <div class="cf-date">${hi("calendar", 11)} ${dateStart}</div>
-          <div class="cf-date">${hi("clock", 11)} Vence: ${dateEnd}</div>
-          <div class="cf-sep"></div>
-          <span class="cf-chip" data-chip>0/1</span>
+          <div class="c-desc" style="flex:1;margin:0;font-size:var(--font-size-sm)">${this._attr("desc", "Diseña un plan estratégico viable para una institución educativa ficticia, aplicando los marcos de gestión revisados en esta unidad.")}</div>
+          <span class="cf-chip" data-chip style="flex-shrink:0;align-self:flex-start">0/1</span>
         </div>
 
-        <!-- Blob expandible -->
         <div class="blob-wrap" data-bw>
           <div class="blob-inner" data-bi>
             <div class="b-div"></div>
-            <button class="sim-btn" data-sim aria-label="Simular progreso">
-              ${hi("play", 10)}
-              Simular progreso
-            </button>
-            <div class="b-desc">
-              Diseña un plan estratégico viable para una institución educativa ficticia,
-              aplicando los marcos de gestión revisados en esta unidad.
-            </div>
-            <div class="b-dates">
-              <div class="bd-item">
-                <span class="bd-lbl">Apertura</span>
-                <span class="bd-val">${dateStart}</span>
-              </div>
-              <div class="bd-item">
-                <span class="bd-lbl">Entrega</span>
-                <span class="bd-val">${dateEnd}</span>
+            <div class="sub-acts-grid">
+              <div class="sub-act-card entrega"
+                data-scorm-btn
+                data-scorm-title="${title}"
+                data-act-type="reto">
+                <div class="sub-act-row">
+                  <div class="sub-act-icon entrega"><img src="/assets/img/icons/pdf.png" width="28" height="28" style="object-fit:contain" alt="PDF"></div>
+                 <div class="sub-act-name">Recurso en PDF</div>
+                  <div class="reto-score-pill" data-reto-pill>
+                   <span data-barval style="font-size:11px;font-weight:700;color:#94a3b8">--</span>
+                    <span style="font-size:9px;color:#cbd5e1;text-transform:uppercase;letter-spacing:.04em">pts</span>
+                  </div>
+                </div>
               </div>
             </div>
-            <button class="btn-go btn-reto" data-scorm-btn data-scorm-title="${title}">
-              ${hi("bolt", 14)} Ver instrucciones del Reto
-            </button>
-            <p class="note">
-              ${hi("info-circle", 12)}
-              2 intentos permitidos · Calificación mínima: 70
-            </p>
           </div>
         </div>
       </div>
@@ -283,7 +420,7 @@ class UvegCard extends HTMLElement {
   _renderRing(id, cfg, whiteTrack = false) {
     const trackColor = whiteTrack ? "rgba(255,255,255,.2)" : "#e5e7eb";
     return `
-      <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true">
+      <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true" style="position:absolute;top:0;left:0;pointer-events:none">
         <circle cx="22" cy="22" r="17" fill="none" stroke="${trackColor}" stroke-width="3"/>
         <circle cx="22" cy="22" r="17" fill="none"
           stroke="${cfg.ringStroke}" stroke-width="3"
@@ -295,7 +432,7 @@ class UvegCard extends HTMLElement {
     `;
   }
 
-  _svgByType(type) {
+  _svgByType(tipo) {
     const svgs = {
       video: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><rect x="24" y="50" width="156" height="156" rx="14" fill="#e50061" opacity=".18"/><rect x="24" y="50" width="156" height="156" rx="14" stroke="#e50061" stroke-width="14" fill="none"/><path d="M180 128L236 92v72z" fill="#e50061" opacity=".5"/><path d="M180 128L236 92v72z" stroke="#e50061" stroke-width="12" stroke-linejoin="round" fill="none"/></svg>`,
       podcast: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><rect x="88" y="16" width="80" height="120" rx="40" fill="#7c3aed" opacity=".2"/><rect x="88" y="16" width="80" height="120" rx="40" stroke="#7c3aed" stroke-width="14" fill="none"/><path d="M48 128c0 44.2 35.8 80 80 80s80-35.8 80-80" stroke="#7c3aed" stroke-width="14" stroke-linecap="round" fill="none"/><line x1="128" y1="208" x2="128" y2="240" stroke="#7c3aed" stroke-width="14" stroke-linecap="round"/><line x1="96" y1="240" x2="160" y2="240" stroke="#7c3aed" stroke-width="14" stroke-linecap="round"/></svg>`,
@@ -303,70 +440,37 @@ class UvegCard extends HTMLElement {
       presentacion: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><rect x="16" y="40" width="224" height="152" rx="12" fill="#d97706" opacity=".15"/><rect x="16" y="40" width="224" height="152" rx="12" stroke="#d97706" stroke-width="14" fill="none"/><line x1="128" y1="192" x2="128" y2="224" stroke="#d97706" stroke-width="14" stroke-linecap="round"/><line x1="80" y1="224" x2="176" y2="224" stroke="#d97706" stroke-width="14" stroke-linecap="round"/><path d="M72 116 L108 80 L144 108 L184 68" stroke="#d97706" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
       lectura: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><path d="M128 208C128 208 24 160 24 80V48L128 16L232 48V80C232 160 128 208 128 208Z" fill="#16a34a" opacity=".15"/><path d="M128 208C128 208 24 160 24 80V48L128 16L232 48V80C232 160 128 208 128 208Z" stroke="#16a34a" stroke-width="14" stroke-linejoin="round" fill="none"/><path d="M88 128 L112 152 L168 96" stroke="#16a34a" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
     };
-    return svgs[type] || svgs.lectura;
+    return svgs[tipo] || svgs.lectura;
   }
 
-  _renderSubActs(state) {
-    const TIPOS = {
-      video: { label: "VIDEO", badgeClass: "video" },
-      podcast: { label: "PODCAST", badgeClass: "podcast" },
-      infografia: { label: "INFOGRAFÍA", badgeClass: "infografia" },
-      presentacion: { label: "PRESENTACIÓN", badgeClass: "presentacion" },
-      lectura: { label: "LECTURA", badgeClass: "lectura" },
+  _renderSubActs(id) {
+    const cardId = parseInt(id, 10);
+    const subActs = SUB_ACT_MAP[cardId];
+    if (!subActs) return "";
+
+    const TIPO_LABELS = {
+      video: "VIDEO",
+      podcast: "PODCAST",
+      infografia: "INFOGRAFÍA",
+      presentacion: "PRESENTACIÓN",
+      lectura: "LECTURA",
     };
 
-    const id = parseInt(this._attr("card-id"), 10);
-    const DISTRIBUCIONES = {
-      0: ["video", "lectura"],
-      1: ["podcast", "presentacion"],
-      2: ["infografia", "lectura"],
-      3: ["presentacion", "video"],
-      5: ["podcast", "infografia"],
-      6: ["lectura", "presentacion"],
-    };
-    const NOMBRES = {
-      0: [
-        "L1. Video — ¿Qué es la planeación estratégica?",
-        "L1. Lectura — Fundamentos del módulo",
-      ],
-      1: [
-        "L2. Podcast — Diagnóstico educativo en contexto",
-        "L2. Presentación — Herramientas de análisis situacional",
-      ],
-      2: [
-        "L3. Infografía — Componentes del mapa estratégico",
-        "L3. Lectura — Diseño institucional por objetivos",
-      ],
-      3: [
-        "L4. Presentación — Fases de implementación",
-        "L4. Video — Casos de éxito en gestión educativa",
-      ],
-      5: [
-        "L5. Podcast — Impacto de la tecnología en el aula",
-        "L5. Infografía — Indicadores de evaluación tecnológica",
-      ],
-      6: [
-        "L6. Lectura — Innovación pedagógica aplicada",
-        "L6. Presentación — KPIs para proyectos educativos",
-      ],
-    };
-
-    const tipos = DISTRIBUCIONES[id] ?? ["lectura", "presentacion"];
-    const nombres = NOMBRES[id] ?? ["Actividad 1", "Actividad 2"];
-
-    return tipos
-      .map((tipo, i) => {
-        const cfg = TIPOS[tipo];
-        return `
-        <div class="sub-act-card ${tipo}">
-          <div class="sub-act-row">
-            <div class="sub-act-icon ${tipo}">${this._svgByType(tipo)}</div>
-            <div class="sub-act-name">${nombres[i]}</div>
-            <span class="sub-act-badge ${tipo}">${cfg.label}</span>
-          </div>
+    return subActs
+      .map(
+        ({ actId, tipo, nombre }) => `
+      <div class="sub-act-card ${tipo}"
+           data-act-id="${actId}"
+           data-act-type="${tipo}"
+           data-scorm-title="${nombre}">
+        <div class="sub-act-row">
+          <div class="sub-act-icon ${tipo}">${this._svgByType(tipo)}</div>
+          <div class="sub-act-name">${nombre}</div>
+          <span class="sub-act-badge ${tipo}">${TIPO_LABELS[tipo] || tipo.toUpperCase()}</span>
         </div>
-      `;
-      })
+      </div>
+    `,
+      )
       .join("");
   }
 
@@ -389,16 +493,55 @@ class UvegCard extends HTMLElement {
   }
 
   _handleCardClick(e) {
-    if (e.target.closest("[data-sim]")) {
-      e.stopPropagation();
-      this._simulateProgress();
-      return;
-    }
     if (e.target.closest("[data-sc]")) {
       e.stopPropagation();
       this._toggleBarMode();
       return;
     }
+
+    // Sub-act-card con data-act-id → uveg-scorm-view (contenido)
+    const subAct = e.target.closest("[data-act-id]");
+    if (subAct) {
+      e.stopPropagation();
+      this.dispatchEvent(
+        new CustomEvent("uveg:openscorm", {
+          bubbles: true,
+          composed: true,
+          detail: {
+            title: this._attr("title"),
+            scormTitle: subAct.dataset.scormTitle || this._attr("title"),
+            cardId: this._attr("card-id"),
+            actId: subAct.dataset.actId,
+            type: subAct.dataset.actType || "lectura",
+            viewType: "scorm", // → uveg-scorm-view
+          },
+        }),
+      );
+      return;
+    }
+
+    // Entrega del reto → uveg-reto-view
+    const retoBtn = e.target.closest("[data-act-type='reto']");
+    if (retoBtn) {
+      e.stopPropagation();
+      this.dispatchEvent(
+        new CustomEvent("uveg:openscorm", {
+          bubbles: true,
+          composed: true,
+          detail: {
+            title: this._attr("title"),
+            scormTitle: retoBtn.dataset.scormTitle || this._attr("title"),
+            cardId: this._attr("card-id"),
+            actId: `reto-${this._attr("unit-idx", "0")}`,
+            type: "reto",
+            viewType: "reto", // → uveg-reto-view
+          },
+        }),
+      );
+      return;
+    }
+
+    // btn-go de lección (botón inferior del blob)
     if (e.target.closest("[data-scorm-btn]")) {
       e.stopPropagation();
       const btn = e.target.closest("[data-scorm-btn]");
@@ -409,30 +552,14 @@ class UvegCard extends HTMLElement {
           detail: {
             title: btn.dataset.scormTitle,
             cardId: this._attr("card-id"),
+            type: "lectura",
+            viewType: "scorm",
           },
         }),
       );
       return;
     }
 
-    if (e.target.closest(".sub-act-card")) {
-      e.stopPropagation();
-      const sub = e.target.closest(".sub-act-card");
-      const name =
-        sub.querySelector(".sub-act-name")?.textContent?.trim() || "";
-      this.dispatchEvent(
-        new CustomEvent("uveg:openscorm", {
-          bubbles: true,
-          composed: true,
-          detail: {
-            title: this._attr("title"),
-            scormTitle: name,
-            cardId: this._attr("card-id"),
-          },
-        }),
-      );
-      return;
-    }
     this._toggleExpand();
   }
 
@@ -470,28 +597,35 @@ class UvegCard extends HTMLElement {
     if (!sc) return;
     sc.classList.toggle("bar-mode");
     springScale(sc, 0.85, 1);
-  }
 
-  _simulateProgress() {
-    const card = this.querySelector(".card");
-    const next = card.dataset.state === "pending" ? "done" : "pending";
-    const wasOpen = this._isOpen;
-
-    this.setAttribute("state", next);
-
-    if (wasOpen) {
-      const bw = this.querySelector("[data-bw]");
-      const bi = this.querySelector("[data-bi]");
-      const cardNew = this.querySelector(".card");
-      cardNew?.classList.add("open");
-      if (bw && bi)
-        requestAnimationFrame(() => {
-          bw.style.height = bi.scrollHeight + "px";
-        });
+    if (this._isReto()) {
+      const barVal = this.querySelector("[data-reto-pill] [data-barval]");
+      const barFill = this.querySelector("[data-barfill]");
+      if (this._retoScore === undefined) {
+        this._retoScore = Math.floor(Math.random() * 101);
+      }
+      _applyRetoScore(this._retoScore, barVal, barFill);
     }
   }
 
   /* ── Public API ─────────────────────────────────────────── */
+
+  markRetoDone(score) {
+    if (!this._isReto()) return;
+
+    const cardId = this._attr("card-id");
+    let pts = score ?? null;
+    if (pts === null) {
+      try {
+        pts = parseInt(localStorage.getItem(`uveg-reto-${cardId}`), 10) || null;
+      } catch (_) {}
+    }
+    if (pts !== null && !isNaN(pts)) this._retoScore = pts;
+
+    const chip = this.querySelector("[data-chip]");
+    if (chip) chip.textContent = "1/1";
+    this.setAttribute("state", "done");
+  }
 
   close() {
     if (!this._isOpen) return;
@@ -501,6 +635,25 @@ class UvegCard extends HTMLElement {
     if (bw && bi) liquidClose(bw, bi);
     card?.classList.remove("open");
     this._isOpen = false;
+  }
+}
+
+function _applyRetoScore(pts, barVal, barFill) {
+  if (!barVal) return;
+  const pct = pts + "%";
+  const face =
+    pts >= 70
+      ? `<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>`
+      : pts >= 50
+        ? `<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>`
+        : `<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>`;
+  const color = pts >= 70 ? "#166534" : pts >= 50 ? "#92400e" : "#991b1b";
+  const bg = pts >= 70 ? "#22c55e" : pts >= 50 ? "#f59e0b" : "#ef4444";
+  barVal.innerHTML = `${face} ${pts}`;
+  barVal.style.color = color;
+  if (barFill) {
+    barFill.style.width = pct;
+    barFill.style.background = bg;
   }
 }
 
