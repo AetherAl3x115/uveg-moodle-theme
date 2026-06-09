@@ -321,7 +321,6 @@ class UvegCard extends HTMLElement {
                   ${hi("chevron-down", 14)}
                 </span>
               </div>
-              <span class="cf-chip" data-chip>${cfg.chipText(done, total)}</span>
             </div>
 
           </div>
@@ -350,10 +349,6 @@ class UvegCard extends HTMLElement {
 
   _renderReto(id, state, cfg) {
     const title = this._attr("title");
-    const subtitle = this._attr(
-      "subtitle",
-      "Entrega individual · hasta 100 pts",
-    );
 
     return `
       <div class="card card-reto" data-card-id="${id}" data-state="${state}">
@@ -364,7 +359,6 @@ class UvegCard extends HTMLElement {
             </div>
             <div class="reto-header-info">
               <div class="reto-header-title">${title}</div>
-              <div class="reto-header-sub">${subtitle}</div>
             </div>
             <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
               <span class="badge"

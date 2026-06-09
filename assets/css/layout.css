@@ -421,11 +421,6 @@ uveg-card:has(.card-reto) {
 
 .hrow-left { flex: 1; }
 
-.mod-meta {
-font-size: var(--font-size-base);
-  color: var(--color-text-faint);
-  margin-bottom: 4px;
-}
 
 .mod-name {
   font-size: 22px;
@@ -441,9 +436,9 @@ font-size: var(--font-size-base);
   gap: 4px;
   font-size: 11px;
   font-weight: var(--font-weight-semibold);
-  color: var(--color-accent);
-  background: var(--color-tint-bg);
-  border: .5px solid var(--color-tint-border);
+  color: var(--color-semana-orange-text);
+  background: var(--color-semana-orange-bg);
+  border: .5px solid var(--color-semana-orange-border);
   padding: 2px 8px;
   border-radius: var(--radius-full);
 }

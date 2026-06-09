@@ -49,9 +49,6 @@ const PROG_STATES = {
   },
 };
 
-// Valores del simulador para ciclar los 4 estados
-const SIM_STEPS = [0, 35, 70, 100];
-
 function _getProgState(pct) {
   return (
     Object.values(PROG_STATES).find((s) => pct >= s.min && pct < s.max) ||
@@ -101,7 +98,6 @@ class UvegPresCronograma extends HTMLElement {
     this._view = VIEWS.MES;
     this._viewIdx = 0;
     this._filter = null;
-    this._simStep = 0; // índice en SIM_STEPS
     this._simPct = null; // null = usa progreso real
     this._viewDate = new Date(this._data.startDate + "T00:00:00");
     this._render();
@@ -233,41 +229,13 @@ class UvegPresCronograma extends HTMLElement {
     const { done, total, pct } = this._progress();
     const progState = _getProgState(pct);
     const modEnd = _addDays(this._data.startDate, this._data.totalDays - 1);
-    const isSim = this._simPct !== null;
 
     this.innerHTML = `
       <div class="pres-crono">
 
-        <div class="pres-crono-topbar">
-          <div class="pres-crono-prog-face-row">
-            <div class="pres-crono-prog-face ${progState.cls}">
-              ${hi(progState.icon, 20)}
-            </div>
-            <div class="pres-crono-prog-nums">
-              <div class="pres-crono-prog-pct ${progState.cls}">${pct}<small>%</small></div>
-              <div class="pres-crono-prog-sublabel">${done} de ${total} actividades</div>
-            </div>
-            <div class="pres-crono-prog-status-msg ${progState.cls}">${progState.msg}</div>
-            <button class="pres-crono-sim-btn" data-action="sim">
-              ${hi("play", 12)}
-              ${isSim ? `Simulando ${pct}%` : "Simular estados"}
-            </button>
-          </div>
-
-          <div class="pres-crono-prog-track">
-            <div class="pres-crono-prog-fill ${progState.cls}" style="width:${pct}%"></div>
-            <div class="pres-crono-prog-segments">${this._renderSegments()}</div>
-          </div>
-
-          <div class="pres-crono-prog-dates">
-            <span>${_formatDate(new Date(this._data.startDate + "T00:00:00"))}</span>
-            <span>${_formatDate(new Date(modEnd + "T00:00:00"))}</span>
-          </div>
-
-          <div class="pres-crono-hint">
-   ${hi("info-circle", 14)}
-            Fechas sugeridas por el algoritmo — arrastra las actividades libremente
-          </div>
+        <div class="pres-crono-hint">
+          ${hi("info-circle", 14)}
+          Fechas sugeridas por el algoritmo — arrastra las actividades libremente
         </div>
 
         <div class="pres-crono-toolbar">
@@ -543,21 +511,10 @@ class UvegPresCronograma extends HTMLElement {
   /* ── Eventos ──────────────────────────────────────────────── */
 
   _bindEvents() {
-    // Nav + simulador
+    // Nav
     this.addEventListener("click", (e) => {
       const btn = e.target.closest("[data-action]");
       if (!btn) return;
-
-      if (btn.dataset.action === "sim") {
-        // Cicla entre los 4 estados del simulador
-        this._simStep = (this._simStep + 1) % SIM_STEPS.length;
-        const next = SIM_STEPS[this._simStep];
-        // Al llegar al último paso (100%) y volver a 0, limpiar simulación
-        this._simPct = next === 0 && this._simStep === 0 ? null : next;
-        this._render();
-        this._bindEvents();
-        return;
-      }
 
       const fwd = btn.dataset.action === "next";
       if (this._view === VIEWS.MES) {

@@ -60,14 +60,22 @@
 
 /* ── Progress box ───────────────────────────────────────────── */
 .pbox {
-  background: var(--color-surface);
-  border: .5px solid var(--color-border);
+  background: var(--color-card-pbox-bg);
+  border: 1px solid var(--color-card-pbox-border); /* Cambiado a 1px para mantener consistencia con tu UI */
   border-radius: var(--radius-xl);
-  padding: 12px 18px;
+  padding: var(--space-3) var(--space-4); /* Mapeado a tus tokens de spacing (12px 16px) */
   display: flex;
   gap: 14px;
   align-items: center;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-sm); /* ¡Corregido! Usa tu token de sombra nativo */
+  transition: all var(--transition-base); /* Prepara la tarjeta para la animación del hover */
+}
+
+/* El estado Hover integrado */
+.pbox:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .pbox .pl:first-child {
@@ -267,13 +275,14 @@
 }
 
 .pres-card {
-  background: var(--color-surface);
-  border: 1.5px solid var(--pres-bg, var(--color-border));
+  background: var(--pres-color, var(--color-accent));
+  border: 1.5px solid var(--pres-color, var(--color-accent));
   border-radius: var(--radius-xl);
   padding: 12px 14px;
   cursor: pointer;
   transition: background var(--transition-fast),
               border-color var(--transition-fast),
+              box-shadow var(--transition-fast),
               transform var(--transition-fast);
   display: flex;
   align-items: center;
@@ -284,6 +293,7 @@
 
 .pres-card:hover {
   transform: translateY(-1px);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--pres-color, var(--color-accent)) 30%, transparent);
 }
 
 /* Ripple desde el centro */
@@ -309,13 +319,9 @@
   z-index: 1;
 }
 
-/* Card activa — sin ripple, ya tiene fondo sólido */
-.pres-card.active::before {
-  display: none;
-}
-
+/* Card activa — fondo pastel */
 .pres-card.active {
-  background: var(--pres-color, var(--color-accent));
+  background: var(--pres-bg, var(--color-tint-bg));
   border-color: var(--pres-color, var(--color-accent));
 }
 
@@ -325,9 +331,8 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: var(--pres-color, var(--color-accent));
-  transition: transform 200ms ease,
-              filter var(--transition-fast);
+ color: #ffffff;
+  transition: transform 200ms ease;
   width: 22px;
   height: 22px;
 }
@@ -338,7 +343,7 @@
 }
 
 .pres-card.active .pres-icon-wrap {
-  color: #ffffff;
+  color: var(--pres-color, var(--color-accent));
 }
 
 .pres-icon-wrap svg {
@@ -349,13 +354,13 @@
 .pres-label {
   font-size: 11px;
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text-secondary);
+  color: #ffffff;
   line-height: 1.3;
   transition: color var(--transition-fast);
 }
 
 .pres-card.active .pres-label {
-  color: #ffffff;
+  color: var(--pres-color, var(--color-accent));
 }
 
 /* Header pill dentro del contenido */
@@ -432,6 +437,29 @@ background: linear-gradient(to bottom, color-mix(in srgb, var(--pres-bg, var(--c
   flex-shrink: 0;
 }
 
+
+/* ── Section row / unit title ───────────────────────────────── */
+.sec-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.sec-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: color-mix(in srgb, var(--color-accent-navy) 12%, transparent);
+   color: var(--color-accent-navy) !important;
+  border: 1.5px solid color-mix(in srgb, var(--color-accent-navy) 40%, transparent);
+  border-radius: var(--radius-full);
+  padding: 5px 16px;
+  font-size: var(--font-size-sm) !important;;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.01em;
+}
+
 /* ── Note ───────────────────────────────────────────────────── */
 .note {
   font-size: var(--font-size-sm);
@@ -453,8 +481,9 @@ background: linear-gradient(to bottom, color-mix(in srgb, var(--pres-bg, var(--c
 [data-bs-theme="dark"] .aviso-title    { color: var(--color-text-primary); }
 [data-bs-theme="dark"] .aviso-desc     { color: var(--color-text-muted); }
 [data-bs-theme="dark"] .aviso-date     { color: var(--color-text-faint); }
-[data-bs-theme="dark"] .pres-card      { background: var(--color-surface); border-color: var(--color-border); }
-[data-bs-theme="dark"] .pres-label     { color: var(--color-text-secondary); }
+[data-bs-theme="dark"] .pres-card      { background: var(--pres-color, var(--color-accent)); border-color: var(--pres-color, var(--color-accent)); }
+[data-bs-theme="dark"] .pres-card.active { background: color-mix(in srgb, var(--pres-bg, var(--color-tint-bg)) 20%, var(--color-surface)); }
+[data-bs-theme="dark"] .pres-label     { color: #ffffff; }
 [data-bs-theme="dark"] .pres-content   { background: linear-gradient(to bottom, var(--color-tint-bg) 0%, var(--color-surface) 40%); border-color: var(--color-border); }
 [data-bs-theme="dark"] .pres-content h3 { color: var(--color-text-primary); }
 [data-bs-theme="dark"] .pres-content p  { color: var(--color-text-muted); }

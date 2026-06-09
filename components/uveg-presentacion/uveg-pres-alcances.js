@@ -100,8 +100,11 @@ class UvegPresAlcances extends HTMLElement {
 
   _render() {
     const sections = this._parseData();
+    const imgSrc = this.getAttribute("img") || "assets/img/alcance.jpg";
+
     this.innerHTML = `
       <div class="pres-alcances">
+        <img class="pres-alcances-avatar" src="${imgSrc}" alt="Imagen del módulo" />
         ${sections.map((s) => this._renderSection(s)).join("")}
       </div>
     `;

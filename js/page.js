@@ -145,7 +145,7 @@ function _activatePres(card) {
 
     const comp = document.createElement(componentTag);
     if (key === "esquema") {
-      comp.setAttribute("src", "./assets/img/esquema.png");
+      comp.setAttribute("src", "./assets/img/esquema.jpg");
       comp.setAttribute("alt", "Ciclo de Planeación Estratégica Educativa");
     }
 

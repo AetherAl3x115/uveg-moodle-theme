@@ -62,6 +62,10 @@
   --color-examen-accent:  #7c3aed;
   --color-entrega-accent: #ea580c;
 
+  --color-semana-orange-bg:    #fff3e6; 
+  --color-semana-orange-text:  #ea580c; 
+  --color-semana-orange-border:#ffe4c4;
+
   /* ── Sidebar Blocks ───────────────────────────────────────── */
 --color-block-menu-icon-bg:     var(--color-tint-bg);
 --color-block-menu-icon-border: var(--color-tint-border);
@@ -77,6 +81,19 @@
 --color-act-tag-lectura-text:   var(--color-accent-dark);
 --color-act-tag-actividad-bg:   #ffedd5;
 --color-act-tag-actividad-text: #c2410c;
+
+/* ── Pbox Base ────────────────────────────────────────────── */
+  --color-card-pbox-bg:         var(--color-tint-bg);     /* #eef2ff */
+  --color-card-pbox-border:     var(--color-tint-border); /* #d4d8f0 */
+  --color-card-pbox-divider:    #c7d2fe;
+  --color-card-pbox-label:      #4338ca;
+  --color-card-pbox-data:       var(--color-accent);       /* #2662eb */
+
+  /* ── Pbox Hover Sólido (¡Cero Grises!) ────────────────────── */
+  --color-card-pbox-bg-hover:   var(--color-accent);       /* Azul sólido de la marca */
+  --color-card-pbox-brd-hover:  var(--color-accent-dark);  /* #1445c4 */
+  --color-card-pbox-div-hover:  #60a5fa;                  /* Azul claro para la línea en hover */
+  --color-card-pbox-txt-hover:  var(--color-white);        /* Texto e iconos pasan a blanco */
 
   /* ── Activity type tokens (uveg-card + cronograma) ────────── */
   --color-act-video-bg:           #fff0f6;
@@ -244,4 +261,9 @@
 --color-advisor-tutor-bg:       #0d2e1f;
 --color-advisor-tutor-text:     #4ade80;
 --color-advisor-tutor-dot:      #4ade80;
+
+--color-card-pbox-bg-hover:   var(--color-accent-navy);  /* #4c45e5 */
+  --color-card-pbox-brd-hover:  #818cf8;
+  --color-card-pbox-div-hover:  #3b82f6;
+  --color-card-pbox-txt-hover:  #ffffff;
 }
