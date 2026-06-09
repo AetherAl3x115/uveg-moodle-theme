@@ -39,14 +39,56 @@ function initPresentacionIcons() {
 }
 
 function initProgressBar() {
-  const pbar = document.querySelector(".pbar[aria-valuenow]");
   const fill = document.querySelector(".pfill");
-  if (!pbar || !fill) return;
-  const target = pbar.getAttribute("aria-valuenow") + "%";
-  requestAnimationFrame(() =>
-    setTimeout(() => {
-      fill.style.width = target;
-    }, 100),
+  const ppct = document.querySelector(".ppct");
+  const pbar = document.querySelector(".pbar");
+  if (!fill) return;
+
+  function calcPct() {
+    try {
+      const raw = localStorage.getItem("uveg-cronograma-state");
+      const state = raw ? JSON.parse(raw) : { completed: {} };
+      const total = 14;
+      const done = Object.values(state.completed).filter(Boolean).length;
+      return total ? Math.round((done / total) * 100) : 0;
+    } catch {
+      return 0;
+    }
+  }
+
+  function updateBar(pct) {
+    if (pbar) pbar.setAttribute("aria-valuenow", pct);
+    fill.style.width = pct + "%";
+    if (ppct) ppct.textContent = pct + "%";
+
+    // Mismo criterio que PROG_STATES en uveg-pres-cronograma.js
+    fill.classList.remove(
+      "state-atrasado",
+      "state-regular",
+      "state-corriente",
+      "state-completo",
+    );
+    ppct.classList.remove(
+      "state-atrasado",
+      "state-regular",
+      "state-corriente",
+      "state-completo",
+    );
+
+    let state;
+    if (pct >= 99) state = "state-completo";
+    else if (pct >= 65) state = "state-corriente";
+    else if (pct >= 30) state = "state-regular";
+    else state = "state-atrasado";
+
+    fill.classList.add(state);
+    if (ppct) ppct.classList.add(state);
+  }
+
+  requestAnimationFrame(() => setTimeout(() => updateBar(calcPct()), 100));
+
+  document.addEventListener("uveg:cronoprogress", (e) =>
+    updateBar(e.detail.pct),
   );
 }
 

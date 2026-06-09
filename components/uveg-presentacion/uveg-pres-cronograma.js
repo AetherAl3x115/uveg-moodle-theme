@@ -330,6 +330,15 @@ class UvegPresCronograma extends HTMLElement {
     `;
 
     this._renderBody();
+
+    if (this._simPct === null) {
+      this.dispatchEvent(
+        new CustomEvent("uveg:cronoprogress", {
+          bubbles: true,
+          detail: { pct },
+        }),
+      );
+    }
   }
 
   _renderSegments() {
@@ -629,9 +638,17 @@ class UvegPresCronograma extends HTMLElement {
       this._state.completed[id] = !this._state.completed[id];
       this._saveState();
       this._schedule = this._buildSchedule();
-      this._simPct = null; // sale de modo simulación al interactuar
+      this._simPct = null;
       this._render();
       this._bindEvents();
+      // Disparar después de guardar y renderizar
+      const { pct } = this._progress();
+      this.dispatchEvent(
+        new CustomEvent("uveg:cronoprogress", {
+          bubbles: true,
+          detail: { pct },
+        }),
+      );
     });
 
     // Drag & drop
@@ -688,6 +705,13 @@ class UvegPresCronograma extends HTMLElement {
     this._schedule = this._buildSchedule();
     this._render();
     this._bindEvents();
+    const { pct } = this._progress();
+    this.dispatchEvent(
+      new CustomEvent("uveg:cronoprogress", {
+        bubbles: true,
+        detail: { pct },
+      }),
+    );
   }
 }
 

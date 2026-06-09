@@ -115,11 +115,21 @@
   transition: var(--pfill-transition);
 }
 
+.pfill.state-atrasado  { background: var(--color-warning); }
+.pfill.state-regular   { background: #eab308; }
+.pfill.state-corriente { background: var(--color-progress-dot); }
+.pfill.state-completo  { background: var(--color-done-dot); }
+
 .ppct {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-black);
   color: var(--color-progress-pct);
 }
+
+.ppct.state-atrasado  { color: var(--color-warning); }
+.ppct.state-regular   { color: #eab308; }
+.ppct.state-corriente { color: var(--color-progress-dot); }
+.ppct.state-completo  { color: var(--color-done-dot); }
 
 .cnum {
   font-size: 28px;

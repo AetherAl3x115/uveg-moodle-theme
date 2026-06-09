@@ -75,17 +75,17 @@ class UvegPresEvaluacion extends HTMLElement {
         : "";
     return `
       <div class="pres-eval-section">
+       <div class="pres-eval-body">
+          <ul class="pres-eval-list">
+            ${items}
+          </ul>
+        </div>
         <div class="pres-eval-title-row">
           <h4 class="pres-eval-title${warningClass}">
             ${hi(icon, 16)}
             ${title}
           </h4>
           ${pts}
-        </div>
-        <div class="pres-eval-body">
-          <ul class="pres-eval-list">
-            ${items}
-          </ul>
         </div>
       </div>
     `;
