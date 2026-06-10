@@ -261,17 +261,6 @@
             <div class="unit-outer-header">
               <span class="unit-outer-chip">Unidad 1. Gestión estratégica educativa</span>
               <div class="unit-outer-controls">
-                <div class="reto-tabs" role="group" aria-label="Seleccionar reto" id="reto-tabs-u1">
-                  <div class="reto-tab-node active" data-reto="r1" tabindex="0" role="button" aria-pressed="true">
-                  <div class="reto-tab-circle">R1</div>
-                  <span class="reto-tab-label">Reto 1</span>
-               </div>
-            <div class="reto-tab-line"></div>
-            <div class="reto-tab-node" data-reto="r2" tabindex="0" role="button" aria-pressed="false">
-            <div class="reto-tab-circle">R2</div>
-              <span class="reto-tab-label">Reto 2</span>
-              </div>
-              </div>
               <div class="tv-wrap" role="group" aria-label="Cambiar vista">
               <button class="tv-btn active" data-view="grid" aria-pressed="true">
                 <!-- ti-layout-grid → squares-2x2 (Heroicons) -->
@@ -301,6 +290,7 @@
                   date-end="28 may"
                   progress-done="0"
                   progress-total="2"
+                 duration="2 h"
                   scorm-title="Lección 1 — Introducción al módulo">
                 </uveg-card>
                 <uveg-card
@@ -312,6 +302,7 @@
                   date-end="30 may"
                   progress-done="0"
                   progress-total="2"
+                duration="3 h"
                   scorm-title="Lección 2 — Diagnóstico y análisis">
                 </uveg-card>
                 <uveg-card
@@ -324,6 +315,7 @@
                   date-end="4 jun"
                   progress-done="0"
                   progress-total="2"
+                 duration="2 h"
                   scorm-title="Lección 3 — Diseño del mapa estratégico">
                 </uveg-card>
               </div>
@@ -344,27 +336,47 @@
             </div>
           </div>
 
+        </div><!-- /unit-outer-card R1 -->
+
           <!-- R2 -->
-          <div class="unit-block" id="u1-r2" style="display:none">
+          <div class="unit-outer-card">
+            <div class="unit-outer-header">
+              <span class="unit-outer-chip">Reto 2</span>
+            </div>
+          <div class="unit-block" id="u1-r2">
             <div class="unit-block-section">
               <div class="unit-block-label">Lecciones</div>
               <div class="cards-grid">
                 <uveg-card
                   card-id="8"
-                  title="Lección 4. Implementación del plan estratégico"
-                  desc="Desarrolla las fases de implementación de un plan estratégico educativo considerando recursos, tiempos y actores involucrados."
+                  title="Lección 4. Alineación de estrategias"
+                  desc="Establece las directrices de la estrategia educativa con base a los objetivos a través del plan estratégico para la atención de necesidades educativas estrategicas."
                   type="Lectura + actividad"
                   state="pending"
                   date-start="5 jun"
                   date-end="12 jun"
                   progress-done="0"
                   progress-total="2"
+                  duration="3 h"
                   scorm-title="Lección 4 — Implementación del plan">
                 </uveg-card>
                 <uveg-card
                   card-id="9"
-                  title="Lección 5. Evaluación y seguimiento estratégico"
-                  desc="Aplica herramientas de evaluación y seguimiento para verificar el cumplimiento de los objetivos estratégicos institucionales."
+                  title="Lección 5. Estrategia aplicada"
+                  desc="Implementa la estrategia aplicada al contexto educativo a través del plan táctico y operativo para el logro de los objetivos institucionales."
+                  type="Lectura + actividad"
+                  state="pending"
+                  date-start="12 jun"
+                  date-end="19 jun"
+                  progress-done="0"
+                  progress-total="2"
+                 duration="2 h"
+                  scorm-title="Lección 5 — Evaluación estratégica">
+                </uveg-card>
+                 <uveg-card
+                  card-id="10"
+                  title="Lección 6. La evaluación y monitoreo de la estrategia"
+                  desc="Evalua la estrategia educativa a través del seguimiento, medición, análisis y retroalimentación del plan estratégico para la mejora de los objetivos estratégicos educativos."
                   type="Lectura + actividad"
                   state="pending"
                   date-start="12 jun"
@@ -382,7 +394,8 @@
                   card-id="10"
                   unit-idx="1"
                   variant="reto"
-                  title="Reto 2. Evaluación del plan estratégico"
+                 title="Reto 2. Evaluación del plan estratégico"
+                  desc="Este Reto te permitirá integrar el plan estratégico de la organización en donde colaboras, ya que agregarás un tablero de control que te ayude a dar seguimiento y cumplimiento a la estrategia."
                   state="pending"
                   date-start="19 jun"
                   date-end="26 jun">

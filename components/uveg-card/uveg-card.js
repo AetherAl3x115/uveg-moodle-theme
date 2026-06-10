@@ -102,28 +102,41 @@ const SUB_ACT_MAP = {
       nombre: "El Diagnóstico",
     },
   ],
-  5: [
+  8: [
     {
-      actId: "l5-pod",
-      tipo: "podcast",
-      nombre: "L5. Podcast — Impacto de la tecnología en el aula",
+      actId: "l4-pres",
+      tipo: "presentacion",
+      nombre: "Alineación de Estrategias",
     },
     {
-      actId: "l5-info",
-      tipo: "infografia",
-      nombre: "L5. Infografía — Indicadores de evaluación tecnológica",
+      actId: "l4-ej",
+      tipo: "ejercicio",
+      nombre: "Alineación de Estrategias",
     },
   ],
-  6: [
+  9: [
     {
-      actId: "l6-lect",
-      tipo: "lectura",
-      nombre: "L6. Lectura — Innovación pedagógica aplicada",
+      actId: "l5-pres",
+      tipo: "presentacion",
+      nombre: "Estrategia aplicada",
     },
+    {
+      actId: "l5-ej",
+      tipo: "ejercicio",
+      nombre: "Estrategia aplicada",
+    },
+  ],
+
+  10: [
     {
       actId: "l6-pres",
       tipo: "presentacion",
-      nombre: "L6. Presentación — KPIs para proyectos educativos",
+      nombre: "La evaluación y monitoreo de la estrategia",
+    },
+    {
+      actId: "l6-ej",
+      tipo: "ejercicio",
+      nombre: "La evaluación y monitoreo de la estrategia",
     },
   ],
 };
@@ -291,8 +304,12 @@ class UvegCard extends HTMLElement {
               <span class="av-dot ${cfg.dotClass}" data-dot></span>
             </div>
 
-            <div class="c-info">
+           <div class="c-info">
               <div class="c-title">${title}</div>
+              <div class="c-duration">
+                ${hi("clock", 12)}
+                <span>${this._attr("duration", "2 h")}</span>
+              </div>
               <div class="c-desc">${this._attr("desc", "Explora los contenidos y actividades de esta lección para avanzar en el módulo.")}</div>
             </div>
 
