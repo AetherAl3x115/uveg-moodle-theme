@@ -421,10 +421,15 @@
   content: '';
   position: absolute;
   inset: 0;
-  width: 0%;
-  transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
+  opacity: 0.45;
+  transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity var(--transition-base);
   pointer-events: none;
   z-index: 0;
+}
+
+.sub-act-card:hover::before {
+  opacity: 1;
 }
 
 .sub-act-card.video::before        { background: var(--color-act-video-bg); }
@@ -434,12 +439,14 @@
 .sub-act-card.lectura::before      { background: var(--color-act-lectura-bg); }
 .sub-act-card.tarea::before        { background: #eef2ff; }
 .sub-act-card.examen::before       { background: #fdf4ff; }
-.sub-act-card.entrega::before { background: #fff1f2; }
+.sub-act-card.entrega::before    { background: #fff1f2; }
+.sub-act-card.ejercicio::before  { background: var(--color-act-ejercicio-bg); }
 
 .sub-act-card:hover::before { width: 100%; }
 .sub-act-card:not(.entrega):hover {
   border-color: #1942cb;
   box-shadow: 0 0 0 3px rgba(20, 66, 203, 0.08);
+  filter: saturate(1.4) brightness(0.97);
 }
 
 .sub-act-card.entrega:hover {
@@ -490,6 +497,7 @@
 .sub-act-icon.infografia   { background: var(--color-act-infografia-bg);   transition: background var(--transition-base); }
 .sub-act-icon.presentacion { background: var(--color-act-presentacion-bg); transition: background var(--transition-base); }
 .sub-act-icon.lectura      { background: var(--color-act-lectura-bg);      transition: background var(--transition-base); }
+.sub-act-icon.ejercicio    { background: var(--color-act-ejercicio-bg); transition: background var(--transition-base); }
 .sub-act-icon.entrega      { background: transparent; transition: background var(--transition-base); overflow: visible; }
 
 .sub-act-card.video:hover        .sub-act-icon.video        { background: var(--color-act-video-border); }
@@ -497,6 +505,7 @@
 .sub-act-card.infografia:hover   .sub-act-icon.infografia   { background: var(--color-act-infografia-border); }
 .sub-act-card.presentacion:hover .sub-act-icon.presentacion { background: var(--color-act-presentacion-border); }
 .sub-act-card.lectura:hover      .sub-act-icon.lectura      { background: var(--color-act-lectura-border); }
+.sub-act-card.ejercicio:hover    .sub-act-icon.ejercicio    { background: var(--color-act-ejercicio-border); }
 
 .sub-act-badge {
   font-size: var(--font-size-xs);
@@ -513,6 +522,7 @@
 .sub-act-badge.lectura      { background: var(--color-act-lectura-bg);      color: var(--color-act-lectura-text);      border: .5px solid var(--color-act-lectura-border); }
 
 
+.sub-act-badge.ejercicio   { background: var(--color-act-ejercicio-bg); color: var(--color-act-ejercicio-text); border: .5px solid var(--color-act-ejercicio-border); }
 .sub-act-badge.entrega     { background: var(--color-act-presentacion-bg); color: var(--color-act-presentacion-text); border: .5px solid var(--color-act-presentacion-border); }
 
 .sub-act-open { display: none; }

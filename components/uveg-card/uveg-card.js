@@ -68,50 +68,38 @@ function deriveState(done, total) {
 const SUB_ACT_MAP = {
   0: [
     {
-      actId: "l1-video",
-      tipo: "video",
-      nombre: "L1. Video — ¿Qué es la planeación estratégica?",
+      actId: "l1-pres",
+      tipo: "presentacion",
+      nombre: "Gestión Estratégica Educativa",
     },
     {
-      actId: "l1-lect",
-      tipo: "lectura",
-      nombre: "L1. Lectura — Fundamentos del módulo",
+      actId: "l1-ej",
+      tipo: "ejercicio",
+      nombre: "Gestión Estratégica Educativa",
     },
   ],
   1: [
     {
-      actId: "l2-pod",
-      tipo: "podcast",
-      nombre: "L2. Podcast — Diagnóstico educativo en contexto",
-    },
-    {
       actId: "l2-pres",
       tipo: "presentacion",
-      nombre: "L2. Presentación — Herramientas de análisis situacional",
+      nombre: "Planeación Estratégica",
+    },
+    {
+      actId: "l2-ej",
+      tipo: "ejercicio",
+      nombre: "Planeación Estratégica",
     },
   ],
   2: [
     {
-      actId: "l3-info",
-      tipo: "infografia",
-      nombre: "L3. Infografía — Componentes del mapa estratégico",
-    },
-    {
-      actId: "l3-lect",
-      tipo: "lectura",
-      nombre: "L3. Lectura — Diseño institucional por objetivos",
-    },
-  ],
-  3: [
-    {
-      actId: "l4-pres",
+      actId: "l3-pres",
       tipo: "presentacion",
-      nombre: "L4. Presentación — Fases de implementación",
+      nombre: "El Diagnóstico",
     },
     {
-      actId: "l4-video",
-      tipo: "video",
-      nombre: "L4. Video — Casos de éxito en gestión educativa",
+      actId: "l3-ej",
+      tipo: "ejercicio",
+      nombre: "El Diagnóstico",
     },
   ],
   5: [
@@ -361,11 +349,6 @@ class UvegCard extends HTMLElement {
               <div class="reto-header-title">${title}</div>
             </div>
             <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
-              <span class="badge"
-                style="background:rgba(255,255,255,.15);color:#fff;border:.5px solid rgba(255,255,255,.2)">
-                ${hi("clock", 9)}
-                Vence pronto
-              </span>
               <div class="state-circle" data-sc role="button" tabindex="0" aria-label="Ver progreso">
                 ${this._renderRing(id, cfg, true)}
                 <div class="sc-icon ${cfg.iconClass}" data-scicon style="color:rgba(255,255,255,.6)">
@@ -383,8 +366,7 @@ class UvegCard extends HTMLElement {
         </div>
 
         <div class="c-footer">
-          <div class="c-desc" style="flex:1;margin:0;font-size:var(--font-size-sm)">${this._attr("desc", "Diseña un plan estratégico viable para una institución educativa ficticia, aplicando los marcos de gestión revisados en esta unidad.")}</div>
-          <span class="cf-chip" data-chip style="flex-shrink:0;align-self:flex-start">0/1</span>
+          <div class="c-desc" style="flex:1;margin:0;font-size:var(--font-size-sm)">${this._attr("desc", "Este Reto te permitirá aplicar los elementos de la fase inicial de una planeación estratégica. En este Reto elaborarás la contextualización, justificación, filosofía institucional (Misión, Visión, Valores), Objetivos estratégicos y realizarás un diagnóstico FODA y PESTEL de la organización en la cual colaboras, empleando ambas herramientas.")}</div>
         </div>
 
         <div class="blob-wrap" data-bw>
@@ -432,6 +414,7 @@ class UvegCard extends HTMLElement {
       podcast: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><rect x="88" y="16" width="80" height="120" rx="40" fill="#7c3aed" opacity=".2"/><rect x="88" y="16" width="80" height="120" rx="40" stroke="#7c3aed" stroke-width="14" fill="none"/><path d="M48 128c0 44.2 35.8 80 80 80s80-35.8 80-80" stroke="#7c3aed" stroke-width="14" stroke-linecap="round" fill="none"/><line x1="128" y1="208" x2="128" y2="240" stroke="#7c3aed" stroke-width="14" stroke-linecap="round"/><line x1="96" y1="240" x2="160" y2="240" stroke="#7c3aed" stroke-width="14" stroke-linecap="round"/></svg>`,
       infografia: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><rect x="32" y="140" width="48" height="76" rx="6" fill="#0891b2" opacity=".2"/><rect x="104" y="96" width="48" height="120" rx="6" fill="#0891b2" opacity=".35"/><rect x="176" y="48" width="48" height="168" rx="6" fill="#0891b2" opacity=".55"/><rect x="32" y="140" width="48" height="76" rx="6" stroke="#0891b2" stroke-width="12" fill="none"/><rect x="104" y="96" width="48" height="120" rx="6" stroke="#0891b2" stroke-width="12" fill="none"/><rect x="176" y="48" width="48" height="168" rx="6" stroke="#0891b2" stroke-width="12" fill="none"/></svg>`,
       presentacion: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><rect x="16" y="40" width="224" height="152" rx="12" fill="#d97706" opacity=".15"/><rect x="16" y="40" width="224" height="152" rx="12" stroke="#d97706" stroke-width="14" fill="none"/><line x1="128" y1="192" x2="128" y2="224" stroke="#d97706" stroke-width="14" stroke-linecap="round"/><line x1="80" y1="224" x2="176" y2="224" stroke="#d97706" stroke-width="14" stroke-linecap="round"/><path d="M72 116 L108 80 L144 108 L184 68" stroke="#d97706" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
+      ejercicio: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3730a3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"/></svg>`,
       lectura: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><path d="M128 208C128 208 24 160 24 80V48L128 16L232 48V80C232 160 128 208 128 208Z" fill="#16a34a" opacity=".15"/><path d="M128 208C128 208 24 160 24 80V48L128 16L232 48V80C232 160 128 208 128 208Z" stroke="#16a34a" stroke-width="14" stroke-linejoin="round" fill="none"/><path d="M88 128 L112 152 L168 96" stroke="#16a34a" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
     };
     return svgs[tipo] || svgs.lectura;
@@ -446,6 +429,7 @@ class UvegCard extends HTMLElement {
       video: "VIDEO",
       podcast: "PODCAST",
       infografia: "INFOGRAFÍA",
+      ejercicio: "EJERCICIO",
       presentacion: "PRESENTACIÓN",
       lectura: "LECTURA",
     };

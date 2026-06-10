@@ -375,6 +375,25 @@ function _bindSesionesViewEvents(center, sv) {
   });
 }
 
+// ── Reto tabs U1 ─────────────────────────────────────────
+document.querySelectorAll("#reto-tabs-u1 .reto-tab-node").forEach((node) => {
+  node.addEventListener("click", () => {
+    const tabs = document.getElementById("reto-tabs-u1");
+    document.querySelectorAll("#reto-tabs-u1 .reto-tab-node").forEach((n) => {
+      n.classList.remove("active");
+      n.setAttribute("aria-pressed", "false");
+    });
+    node.classList.add("active");
+    node.setAttribute("aria-pressed", "true");
+    const reto = node.dataset.reto;
+    tabs.dataset.active = reto;
+    document.getElementById("u1-r1").style.display =
+      reto === "r1" ? "" : "none";
+    document.getElementById("u1-r2").style.display =
+      reto === "r2" ? "" : "none";
+  });
+});
+
 /* ── Init ───────────────────────────────────────────────────── */
 initProgressBar();
 initPresentacionIcons();
