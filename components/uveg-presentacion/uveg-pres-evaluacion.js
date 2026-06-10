@@ -27,26 +27,56 @@ const DEFAULT_DATA = [
   {
     unit: "Unidad 1",
     icon: "check-circle",
-    title: "Reto 1. Planeación estratégica institucional",
-    points: 100,
+    title: "Reto 1. Planeación estratégica",
+    points: 15,
     warning: false,
     content: [
-      "Lección 1. Introducción al módulo",
-      "Lección 2. Diagnóstico y análisis del contexto",
-      "Lección 3. Diseño del mapa estratégico",
-      "Lección 4. Implementación y evaluación",
+      "Lección 1. Gestión estratégica educativa",
+      "Lección 2. Planeación estratégica",
+      "Lección 3. El diagnóstico",
     ],
   },
   {
-    unit: "Unidad 2",
+    unit: "Unidad 1",
     icon: "check-circle",
-    title: "Reto 2. Implementación y evaluación tecnológica",
-    points: 100,
+    title: "Reto 2. Planeación estratégica educativa",
+    points: 20,
     warning: false,
     content: [
-      "Lección 5. Evaluación de impacto tecnológico",
-      "Lección 6. Innovación pedagógica y KPIs",
+      "Lección 4. Alineación de estrategias",
+      "Lección 5. Estrategia aplicada",
+      "Lección 6. La evaluación y monitoreo de la estrategia",
     ],
+  },
+
+  {
+    unit: "Unidad 2",
+    icon: "check-circle",
+    title: "Reto 3. Proyecto educativo",
+    points: 20,
+    warning: false,
+    content: [
+      "Lección 7. Proyecto educativo",
+      "Lección 8. Diversidad de proyectos educativos",
+    ],
+  },
+
+  {
+    unit: "Unidad 2",
+    icon: "check-circle",
+    title: "Reto 4. Ciclo de vida del proyecto educativo",
+    points: 20,
+    warning: false,
+    content: ["Lección 9. Planificación"],
+  },
+
+  {
+    unit: "Unidad 2",
+    icon: "check-circle",
+    title: "Reto 5. Proyecto",
+    points: 25,
+    warning: false,
+    content: ["Lección 10. Procesos de un proyecto"],
   },
 ];
 

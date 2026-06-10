@@ -38,7 +38,7 @@ const DEFAULT_DATA = [
     warning: false,
     content: [
       "CG1. Conceptualiza y transforma los procesos de enseñanza – aprendizaje para la mejora de la práctica educativa, a partir de los diferentes escenarios que regulan el aprendizaje humano, a través de las 4 líneas de generación y aplicación del conocimiento: educación disruptiva en la era digital, gestión educativa, política y ética en la educación e innovación educativa.",
-      "CG1. Conceptualiza y transforma los procesos de enseñanza – aprendizaje para la mejora de la práctica educativa, a partir de los diferentes escenarios que regulan el aprendizaje humano, a través de las 4 líneas de generación y aplicación del conocimiento: educación disruptiva en la era digital, gestión educativa, política y ética en la educación e innovación educativa.",
+      "CG2. Aplica conocimientos, habilidades y técnicas para desarrollar de forma eficiente y eficaz los procesos de enseñanza y aprendizaje en los educandos que se encuentran en un ambiente de aprendizaje.",
     ],
   },
   {
@@ -46,8 +46,8 @@ const DEFAULT_DATA = [
     title: "Competencias específicas",
     warning: false,
     content: [
-      "CG1. Conceptualiza y transforma los procesos de enseñanza – aprendizaje para la mejora de la práctica educativa, a partir de los diferentes escenarios que regulan el aprendizaje humano, a través de las 4 líneas de generación y aplicación del conocimiento: educación disruptiva en la era digital, gestión educativa, política y ética en la educación e innovación educativa.",
-      "CG1. Conceptualiza y transforma los procesos de enseñanza – aprendizaje para la mejora de la práctica educativa, a partir de los diferentes escenarios que regulan el aprendizaje humano, a través de las 4 líneas de generación y aplicación del conocimiento: educación disruptiva en la era digital, gestión educativa, política y ética en la educación e innovación educativa.",
+      "CE1. Analiza la educación disruptiva en la era digital para ejecutar planeaciones y evaluaciones que conduzcan al logro del aprendizaje, a través del uso de herramientas tecnológicas de vanguardia para la educación.",
+      "CE2. Integra los conocimientos adquiridos para generar propuestas de proyectos que contribuyan a la generación de valor para las organizaciones al coadyuvar en el logro de sus objetivos estratégicos.",
     ],
   },
   {
@@ -55,10 +55,11 @@ const DEFAULT_DATA = [
     title: "Aprendizajes esperados",
     warning: false,
     content: [
-      "CG1. Conceptualiza y transforma los procesos de enseñanza – aprendizaje para la mejora de la práctica educativa, a partir de los diferentes escenarios que regulan el aprendizaje humano, a través de las 4 líneas de generación y aplicación del conocimiento: educación disruptiva en la era digital, gestión educativa, política y ética en la educación e innovación educativa.",
-      "CG1. Conceptualiza y transforma los procesos de enseñanza – aprendizaje para la mejora de la práctica educativa, a partir de los diferentes escenarios que regulan el aprendizaje humano, a través de las 4 líneas de generación y aplicación del conocimiento: educación disruptiva en la era digital, gestión educativa, política y ética en la educación e innovación educativa.",
-      "CG1. Conceptualiza y transforma los procesos de enseñanza – aprendizaje para la mejora de la práctica educativa, a partir de los diferentes escenarios que regulan el aprendizaje humano, a través de las 4 líneas de generación y aplicación del conocimiento: educación disruptiva en la era digital, gestión educativa, política y ética en la educación e innovación educativa.",
-      "CG1. Conceptualiza y transforma los procesos de enseñanza – aprendizaje para la mejora de la práctica educativa, a partir de los diferentes escenarios que regulan el aprendizaje humano, a través de las 4 líneas de generación y aplicación del conocimiento: educación disruptiva en la era digital, gestión educativa, política y ética en la educación e innovación educativa.",
+      "Analiza la situación de una organización con base en un diagnóstico integral, tanto interno como externo, empleando herramientas especializadas con un enfoque sistémico para tomar decisiones respecto a la planeación educativa que contribuyan al alcance de los objetivos estratégicos.",
+      "Integra los conocimientos y habilidades para generar la planeación estratégica que contribuya a la generación de valor en el logro de los objetivos educativos estratégicos.",
+      "Analiza la educación disruptiva en la era digital para ejecutar planeaciones y evaluaciones que conduzcan al logro del aprendizaje, a través del uso de herramientas tecnológicas de vanguardia establecidas en un proyecto para el logro de objetivos educativos estratégicos.",
+      "Elabora una síntesis con los conocimientos adquiridos a través de la descripción de los elementos a considerar en el planteamiento de proyectos educativos estratégicos.",
+      "Aplica el enfoque de procesos en la dirección y gestión de los proyectos empleando herramientas especializadas para alinear todas las acciones emprendidas con la estrategia general de la organización.",
     ],
   },
 ];

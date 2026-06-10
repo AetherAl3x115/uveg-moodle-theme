@@ -62,6 +62,7 @@ const ADVISOR_DATA = [
     email: "danperezm@uveg.edu.mx",
     phone: "4493069160",
     sessionsUrl: "#sesiones-asesor",
+    img: "assets/img/hom.jpg",
   },
   {
     role: "tutor",
@@ -72,6 +73,7 @@ const ADVISOR_DATA = [
     email: "lumanuell@uveg.edu.mx",
     phone: null,
     sessionsUrl: "#sesiones-tutor",
+    img: "assets/img/muj.webp",
   },
 ];
 
@@ -468,8 +470,12 @@ class UvegSidebar extends HTMLElement {
            role="button" tabindex="0" aria-label="Ver asesor y tutor"
            style="${isOpen ? "display:none" : ""}">
         <div class="sb-advisor-stack" aria-hidden="true">
-          <div class="sb-advisor-av sb-advisor-av--asesor">${ADVISOR_DATA[0].initials}</div>
-          <div class="sb-advisor-av sb-advisor-av--tutor">${ADVISOR_DATA[1].initials}</div>
+          <div class="sb-advisor-av sb-advisor-av--asesor">
+            <img src="${ADVISOR_DATA[0].img}" alt="${ADVISOR_DATA[0].name}" class="sb-advisor-av-img">
+          </div>
+          <div class="sb-advisor-av sb-advisor-av--tutor">
+            <img src="${ADVISOR_DATA[1].img}" alt="${ADVISOR_DATA[1].name}" class="sb-advisor-av-img">
+          </div>
         </div>
         <div class="sb-advisor-closed-info">
           <div class="sb-advisor-closed-names">${ADVISOR_DATA[0].name.split(" ")[0]} · ${ADVISOR_DATA[1].name.split(" ")[0]}</div>
@@ -484,7 +490,9 @@ class UvegSidebar extends HTMLElement {
       <div class="sb-advisor-person">
         <div class="sb-advisor-person-top">
           <div class="sb-advisor-av-wrap">
-            <div class="sb-advisor-av sb-advisor-av--${p.role}">${p.initials}</div>
+           <div class="sb-advisor-av sb-advisor-av--${p.role}">
+              <img src="${p.img}" alt="${p.name}" class="sb-advisor-av-img">
+            </div>
             <div class="sb-advisor-av-dot sb-advisor-av-dot--${p.role}" aria-hidden="true"></div>
           </div>
           <div class="sb-advisor-meta">
@@ -513,16 +521,6 @@ class UvegSidebar extends HTMLElement {
             ${hi("message", 14)}
             Mensaje
           </button>
-          <button class="sb-advisor-btn sb-advisor-btn--sessions"
-                  aria-label="Ver sesiones grabadas de ${p.name}"
-                  data-sv-open
-                  data-sv-person='${JSON.stringify({ initials: p.initials, name: p.name, role: p.role, email: p.email, phone: p.phone })}'>
-            <span class="sb-sessions-icon-wrap">
-              ${hi("video", 14)}
-              <span class="sb-sessions-dot" aria-hidden="true"></span>
-            </span>
-            Sesiones
-          </button>
         </div>
       </div>
     `,
@@ -533,15 +531,30 @@ class UvegSidebar extends HTMLElement {
            style="${isOpen ? "" : "display:none"}">
         <div class="sb-advisor-open-hdr"
              role="button" tabindex="0" aria-label="Cerrar panel asesor y tutor">
-          ${hi("users", 16)}
-          <span class="sb-advisor-open-title">Mi asesor / tutor</span>
+          <div class="sb-advisor-open-hdr-icon" aria-hidden="true">
+            ${hi("users", 18)}
+          </div>
+          <div class="sb-advisor-open-hdr-info">
+            <span class="sb-advisor-open-title">Asesor y Tutor</span>
+            <span class="sb-advisor-open-sub">Tu red de apoyo académica</span>
+          </div>
           ${hi("chevron-up", 14, "sb-advisor-open-ch")}
         </div>
         <div class="sb-advisor-body-wrap" id="sb-advisor-body-wrap"
              style="height:0;overflow:hidden">
           <div class="sb-advisor-body-inner" id="sb-advisor-body-inner"
                style="transform:scaleY(0.92);opacity:0;transform-origin:top center">
-            ${personsHtml}
+           ${personsHtml}
+            <button class="sb-advisor-btn sb-advisor-btn--sessions sb-advisor-btn--sessions-full"
+                    aria-label="Ver sesiones"
+                    data-sv-open
+                    data-sv-person='${JSON.stringify({ name: "Asesor y Tutor" })}'>
+              <span class="sb-sessions-icon-wrap">
+                ${hi("video", 14)}
+                <span class="sb-sessions-dot" aria-hidden="true"></span>
+              </span>
+              Sesiones
+            </button>
           </div>
         </div>
       </div>

@@ -29,8 +29,9 @@ const DEFAULT_DATA = [
     title: "Estructura y Evaluación",
     warning: false,
     content: [
-      "El Módulo está dividido en <strong>2 Unidades</strong>. La calificación final mínima necesaria para aprobar el Módulo es de <strong>80</strong>.",
-      "Cada Unidad está conformada por Lecciones, en las cuales podrás encontrar Ejercicios de práctica necesarios para que realices el Reto o Retos que integran la Unidad. Algunos Retos serán evaluados a través de Rúbricas (rejillas o matrices de evaluación), por lo que debes tomar en cuenta los criterios que aparecen en ellas.",
+      "El Módulo está dividido en <strong>2 Unidades</strong>.",
+      " La calificación final mínima necesaria para aprobar el Módulo es de <strong>80</strong>.",
+      "Cada Unidad está conformada por Lecciones, en las cuales podrás encontrar Ejercicios de práctica necesarios para que realices el Reto o Retos que integran la Unidad.",
     ],
   },
   {
@@ -38,7 +39,8 @@ const DEFAULT_DATA = [
     title: "Duración y Dedicación",
     warning: false,
     content: [
-      "La duración total del Módulo es de <strong>6.5 semanas (45 días)</strong>. Se contempla que dediques un aproximado de <strong>2.5 horas diarias</strong> para el reconocimiento de la estructura del Módulo y la realización de las Lecciones, en las que deberás llevar a cabo la revisión de los contenidos, lecturas, videos, infografía y otros recursos, así como los procesos necesarios (investigación, reflexión, análisis, etc.) para la elaboración de los Retos.",
+      "La duración total del Módulo es de 6.5 semanas (45 días). Se contempla que dediques un aproximado de 2.5 horas diarias para el reconocimiento de la estructura del Módulo y la realización de las Lecciones, en las que deberás llevar a cabo la revisión de los contenidos, lecturas, videos, infografía y otros recursos, así como los procesos necesarios (investigación, reflexión, análisis, etc.) para la elaboración de los Retos.",
+      "Algunos Retos serán evaluados a través de Rúbricas (rejillas o matrices de evaluación), por lo que debes tomar en cuenta los criterios que aparecen en ellas.",
     ],
   },
   {

@@ -407,6 +407,15 @@
   font-weight: var(--font-weight-bold);
   flex-shrink: 0;
   border: 2px solid var(--color-bg);
+  overflow: hidden;
+}
+
+.sb-advisor-av-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-full);
+  display: block;
 }
 
 .sb-advisor-av--asesor { background: var(--color-advisor-asesor-bg); color: var(--color-accent); }
@@ -456,18 +465,45 @@
 
 .sb-advisor-open-hdr:hover { background: var(--color-tint-hover); }
 
-.sb-advisor-open-hdr > i:first-child {
-  font-size: 16px;
-  color: var(--color-accent);
+.sb-advisor-open-hdr-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sb-advisor-open-hdr-icon svg.hi { color: var(--color-accent); }
+
+.sb-advisor-open-hdr-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
 }
 
 .sb-advisor-open-title {
-  flex: 1;
-  font-size: 10px;
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
-  letter-spacing: .07em;
-  text-transform: uppercase;
+  color: var(--color-text-primary);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.sb-advisor-open-sub {
+  font-size: var(--font-size-xs);
   color: var(--color-text-muted);
+}
+
+.sb-advisor-btn--sessions-full {
+  width: calc(100% - 20px);
+  margin: 8px 10px 12px;
+  flex: none;
+  padding: 7px 10px;
+  border-radius: var(--radius-full);
 }
 
 .sb-advisor-open-ch {
@@ -623,8 +659,8 @@
 
 .sb-advisor-btn--sessions {
   border-color: var(--color-btn-glosario-bg);
-  color: var(--color-btn-glosario-bg);
-  background: transparent;
+  color: var(--color-white);
+  background: var(--color-warning);
   position: relative;
 }
 

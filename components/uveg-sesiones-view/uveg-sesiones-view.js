@@ -57,7 +57,7 @@ const DOT_CLS = {
 const DEMO_SESSIONS = [
   {
     id: "bbb-001",
-    title: "Clase demo — Planeación estratégica",
+    title: "Clase 01 — Planeación estratégica",
     date: "Hoy, 4:00 pm",
     group: "Todos los participantes",
     duration: "—",
@@ -94,7 +94,7 @@ const DEMO_RECORDINGS = [
   },
   {
     id: "rec-002",
-    title: "Clase demo — Módulo 0 introducción",
+    title: "Clase 00 — Módulo 0 introducción",
     date: "26 may 2025",
     duration: "1h 08 min",
     url: "#",
@@ -107,6 +107,7 @@ class UvegSesionesView extends HTMLElement {
   }
 
   show(detail = {}) {
+    // Normaliza: si viene una sola persona, construye el objeto dual
     this._detail = detail;
     this.style.display = "block";
     this._render();
@@ -122,24 +123,33 @@ class UvegSesionesView extends HTMLElement {
   _render() {
     const d = this._detail || {};
 
-    // Persona — fallback demo si no viene data
-    const initials = d.initials || "DP";
-    const name = d.name || "Daniel Pérez";
-    const role = d.role || "asesor";
-    const email = d.email || "danperezm@uveg.edu.mx";
-    const phone = d.phone || null;
+    const PEOPLE = [
+      {
+        initials: "DP",
+        name: "Daniel Pérez",
+        role: "asesor",
+        email: "danperezm@uveg.edu.mx",
+        phone: "4493069160",
+        img: "assets/img/hom.jpg",
+      },
+      {
+        initials: "LA",
+        name: "Lucía de los Ángeles",
+        role: "tutor",
+        email: "lumanuell@uveg.edu.mx",
+        phone: "4493069160",
+        img: "assets/img/muj.webp",
+      },
+    ];
     const sessions = Array.isArray(d.sessions) ? d.sessions : DEMO_SESSIONS;
     const recordings = Array.isArray(d.recordings)
       ? d.recordings
       : DEMO_RECORDINGS;
 
-    const roleLabel = ROLE_LABEL[role] || "Asesor";
-    const roleIcon = ROLE_ICON[role] || "profile";
-
     this.innerHTML = `
       <div class="sv-root">
       <!-- Regresar -->
-     <button class="sv-back" type="button" data-sv-back>
+      <button class="sv-back" type="button" data-sv-back>
         <span class="sv-back-icon">
           <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
         </span>
@@ -148,25 +158,38 @@ class UvegSesionesView extends HTMLElement {
 
       <!-- Hero -->
       <div class="sv-hero">
-        <div class="sv-hero-avatar">${initials}</div>
-        <div class="sv-hero-info">
-          <div class="sv-hero-role">
-            ${hi(roleIcon, 11)}
-            ${roleLabel}
-          </div>
-          <div class="sv-hero-name">${name}</div>
-          <div class="sv-hero-chips">
-            <span class="sv-chip">
-              ${hi("mail", 10)}
-              ${email}
-            </span>
-            ${phone ? `<span class="sv-chip">${hi("phone", 10)} ${phone}</span>` : ""}
-          </div>
+        <div class="sv-hero-people">
+          ${PEOPLE.map(
+            (p) => `
+            <div class="sv-hero-person sv-hero-person--${p.role}">
+              <div class="sv-hero-av sv-hero-av--${p.role}">
+                <img src="${p.img}" alt="${p.name}" class="sv-hero-av-img">
+              </div>
+              <div class="sv-hero-person-info">
+                <div class="sv-hero-role-badge">
+                  ${hi(ROLE_ICON[p.role] || "profile", 10)}
+                  ${ROLE_LABEL[p.role] || p.role}
+                </div>
+                <div class="sv-hero-person-name">${p.name}</div>
+                <div class="sv-hero-person-contact">
+                  <span class="sv-chip sv-chip--sm">
+                    ${hi("mail", 9)} ${p.email}
+                  </span>
+                  ${p.phone ? `<span class="sv-chip sv-chip--sm">${hi("phone", 9)} ${p.phone}</span>` : ""}
+                </div>
+              </div>
+            </div>
+          `,
+          ).join("")}
         </div>
+        <button class="sv-hero-add-sala" data-add-sala type="button">
+          <span class="sv-hero-add-icon">+</span>
+          Agregar sala
+        </button>
       </div>
 
       <!-- Sesiones programadas -->
-      <div class="sv-section-label">Sesiones programadas</div>
+      <div class="sv-section-label" style="margin-top:4px">Sesiones programadas</div>
       <div class="sv-card">
         ${
           sessions.length
