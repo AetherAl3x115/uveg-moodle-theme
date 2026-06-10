@@ -132,7 +132,7 @@ class UvegSidebar extends HTMLElement {
       progreso: false,
       menu: false,
       actividades: true,
-      advisor: false,
+      advisor: true,
     };
     this._progreso = { ...PROGRESO_DEFAULT };
   }
@@ -584,6 +584,10 @@ class UvegSidebar extends HTMLElement {
         this._bounceHeader(header);
       }, 120);
     });
+
+    if (this._blocks.advisor) {
+      setTimeout(() => this._toggleAdvisor(true), 140);
+    }
   }
 
   /* ── Events ─────────────────────────────────────────────── */
