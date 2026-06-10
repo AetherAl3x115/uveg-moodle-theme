@@ -415,47 +415,156 @@
         <!-- ── Panel: Unidad 2 ──────────────────────────────── -->
        <section data-panel="unidad2" aria-labelledby="tab-unidad2" data-unit-title="Unidad 2. Proyecto educativo">
 
-          <div class="sec-row">
-            <span class="sec-title">Unidad 2. Proyecto educativo</span>
+        <!-- U2 R1 -->
+          <div class="unit-outer-card">
+            <div class="unit-outer-header">
+              <span class="unit-outer-chip">Unidad 2. Proyecto educativo</span>
+              <div class="unit-outer-controls">
+                <div class="tv-wrap" role="group" aria-label="Cambiar vista">
+                  <button class="tv-btn active" data-view="grid" aria-pressed="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/></svg>
+                    Tarjetas
+                  </button>
+                 <button class="tv-btn" data-view="list" aria-pressed="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/></svg>
+                    Lista
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="unit-block" id="u2-r1">
+              <div class="unit-block-section">
+                <div class="unit-block-label">Lecciones</div>
+                <div class="cards-grid">
+                  <uveg-card
+                    card-id="5"
+                    title="Lección 7. Proyecto educativo"
+                    desc="Establece la matriz del marco lógico a través del análisis de necesidades del contexto y del planteamiento del propósito, finalidades, componentes y supuestos para la definición del proyecto educativo estratégico."
+                    type="Lectura + actividad"
+                    state="pending"
+                    date-start="15 jun"
+                    date-end="22 jun"
+                    progress-done="0"
+                    progress-total="2"
+                    duration="2 h"
+                    scorm-title="Lección 7 — Proyecto educativo">
+                  </uveg-card>
+                  <uveg-card
+                    card-id="6"
+                    title="Lección 8. Diversidad de proyectos educativos"
+                    desc="Reconoce los tipos de proyectos con base en la relevancia, pertinencia y factibilidad para el logro de objetivos educativos estratégicos."
+                    type="Lectura + actividad"
+                    state="pending"
+                    date-start="22 jun"
+                    date-end="29 jun"
+                    progress-done="0"
+                    progress-total="2"
+                    duration="3 h"
+                    scorm-title="Lección 8 — Diversidad de proyectos educativos">
+                  </uveg-card>
+                </div>
+              </div>
+              <div class="unit-block-section">
+                <div class="unit-block-label">Reto</div>
+                <div class="cards-grid">
+                  <uveg-card
+                    card-id="7"
+                    unit-idx="1"
+                    variant="reto"
+                    title="Reto 3. Proyecto educativo"
+                    desc="En este Reto analizarás a los involucrados del proyecto, el problema, los objetivos, la selección de la estrategia a implementar, la estructura analítica y el resumen narrativo para un proyecto específico de la institución en la cual colaboras."
+                    state="pending"
+                    date-start="29 jun"
+                    date-end="6 jul">
+                  </uveg-card>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="cards-grid" id="cards-grid-u2">
-
-            <uveg-card
-              card-id="5"
-              title="Lección 5. Evaluación de impacto tecnológico"
-              type="Lectura + actividad"
-              state="pending"
-              date-start="15 jun"
-              date-end="22 jun"
-              progress-done="0"
-              progress-total="2">
-            </uveg-card>
-
-            <uveg-card
-              card-id="6"
-              title="Lección 6. Innovación pedagógica y KPIs"
-              type="Lectura + actividad"
-              state="pending"
-              date-start="22 jun"
-              date-end="29 jun"
-              progress-done="0"
-              progress-total="2">
-            </uveg-card>
-
-            <uveg-card
-              card-id="7"
-              unit-idx="1"
-              variant="reto"
-              title="Reto 2. Implementación y evaluación tecnológica"
-              subtitle="Entrega individual · hasta 100 pts"
-              state="pending"
-              date-start="29 jun"
-              date-end="6 jul">
-            </uveg-card>
-
+          <!-- U2 R2 -->
+          <div class="unit-outer-card">
+            <div class="unit-outer-header">
+              <span class="unit-outer-chip">Reto 4</span>
+            </div>
+            <div class="unit-block" id="u2-r2">
+              <div class="unit-block-section">
+                <div class="unit-block-label">Lecciones</div>
+                <div class="cards-grid">
+                  <uveg-card
+                    card-id="12"
+                    title="Lección 9. Planificación del proyecto"
+                    desc="Reconoce las etapas del ciclo de vida del proyecto a través del análisis de las fases y las actividades a desarrollar para la dirección y logro del proyecto educativo."
+                    type="Lectura + actividad"
+                    state="pending"
+                    date-start="6 jul"
+                    date-end="13 jul"
+                    progress-done="0"
+                    progress-total="2"
+                    duration="3 h"
+                    scorm-title="Lección 9 — Planificación del proyecto">
+                  </uveg-card>
+                </div>
+              </div>
+              <div class="unit-block-section">
+                <div class="unit-block-label">Reto</div>
+                <div class="cards-grid">
+                  <uveg-card
+                    card-id="13"
+                    unit-idx="2"
+                    variant="reto"
+                    title="Reto 4. Ciclo de vida del proyecto educativo"
+                    desc="En este Reto reconocerás las etapas del ciclo de vida del proyecto, a través de las secuencias, progresión jerárquica y el involucramiento del personal que participa en el proyecto para lograr mejores resultados."
+                    state="pending"
+                    date-start="13 jul"
+                    date-end="20 jul">
+                  </uveg-card>
+                </div>
+              </div>
+            </div>
           </div>
 
+          <!-- U2 R3 -->
+          <div class="unit-outer-card">
+            <div class="unit-outer-header">
+              <span class="unit-outer-chip">Reto 5</span>
+            </div>
+            <div class="unit-block" id="u2-r3">
+              <div class="unit-block-section">
+                <div class="unit-block-label">Lecciones</div>
+                <div class="cards-grid">
+                  <uveg-card
+                    card-id="14"
+                    title="Lección 10. Procesos de un proyecto"
+                    desc="Establece el proyecto educativo a través de la planificación de los grupos de procesos involucrados en cada etapa para la dirección eficaz y eficiente del proyecto."
+                    type="Lectura + actividad"
+                    state="pending"
+                    date-start="20 jul"
+                    date-end="27 jul"
+                    progress-done="0"
+                    progress-total="2"
+                    duration="4 h"
+                    scorm-title="Lección 10 — Procesos de un proyecto">
+                  </uveg-card>
+                </div>
+              </div>
+              <div class="unit-block-section">
+                <div class="unit-block-label">Reto</div>
+                <div class="cards-grid">
+                  <uveg-card
+                    card-id="15"
+                    unit-idx="3"
+                    variant="reto"
+                    title="Reto 5. Proyecto"
+                    desc="Tomando en cuenta la institución educativa en la que colaboras, en este Reto desarrollarás la tabla con la descripción de los elementos de cada uno de los grupos de proceso y desglose de las actividades en las etapas del proyecto. Además, con esta información podrás describir los objetivos del proyecto educativo."
+                    state="pending"
+                    date-start="27 jul"
+                    date-end="3 ago">
+                  </uveg-card>
+                </div>
+              </div>
+            </div>
+          </div>
           <p class="note">
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="hi"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/></svg>
             Completa la Unidad 1 para desbloquear estas actividades.

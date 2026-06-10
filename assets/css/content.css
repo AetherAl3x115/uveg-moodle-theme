@@ -684,6 +684,19 @@ background: linear-gradient(to bottom, color-mix(in srgb, var(--pres-bg, var(--c
   padding: 12px 12px 14px;
 }
 
+.unit-block-section .cards-grid {
+  align-items: stretch;
+}
+
+.unit-block-section .cards-grid uveg-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.unit-block-section .cards-grid uveg-card .card {
+  flex: 1;
+}
+
 .unit-block-label {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);

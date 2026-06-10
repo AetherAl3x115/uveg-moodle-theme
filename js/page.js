@@ -161,28 +161,65 @@ function _activatePres(card) {
   }
 }
 
+function _applyViewMode(tvWrap, mode) {
+  const outerCard = tvWrap.closest(".unit-outer-card");
+  if (!outerCard) return;
+  tvWrap.querySelectorAll("[data-view]").forEach((b) => {
+    const active = b.dataset.view === mode;
+    b.classList.toggle("active", active);
+    b.setAttribute("aria-pressed", String(active));
+  });
+  outerCard.querySelectorAll(".cards-grid").forEach((grid) => {
+    grid.classList.toggle("view-list", mode === "list");
+  });
+  outerCard.querySelectorAll("uveg-card").forEach((card) => {
+    const bw = card.querySelector("[data-bw]");
+    const bi = card.querySelector("[data-bi]");
+    if (bw && bi && card.querySelector(".card.open")) {
+      bw.style.height = "auto";
+      requestAnimationFrame(() => {
+        bw.style.height = bi.scrollHeight + "px";
+      });
+    }
+  });
+}
+
+function _applyViewModeToPanel(panel, mode) {
+  // Actualizar botones del tv-wrap que existe en el panel
+  panel.querySelectorAll(".tv-wrap [data-view]").forEach((b) => {
+    const active = b.dataset.view === mode;
+    b.classList.toggle("active", active);
+    b.setAttribute("aria-pressed", String(active));
+  });
+  // Aplicar a todos los cards-grid del panel
+  panel.querySelectorAll(".cards-grid").forEach((grid) => {
+    grid.classList.toggle("view-list", mode === "list");
+  });
+  // Recalcular altura de cards abiertos
+  panel.querySelectorAll("uveg-card").forEach((card) => {
+    const bw = card.querySelector("[data-bw]");
+    const bi = card.querySelector("[data-bi]");
+    if (bw && bi && card.querySelector(".card.open")) {
+      bw.style.height = "auto";
+      requestAnimationFrame(() => {
+        bw.style.height = bi.scrollHeight + "px";
+      });
+    }
+  });
+}
+
 function initViewToggle() {
+  // Default lista en todos los paneles al cargar
+  document.querySelectorAll("[data-panel]").forEach((panel) => {
+    _applyViewModeToPanel(panel, "list");
+  });
+
   document.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-view]");
     if (!btn) return;
-    const mode = btn.dataset.view;
-    document.querySelectorAll("[data-view]").forEach((b) => {
-      b.classList.toggle("active", b === btn);
-      b.setAttribute("aria-pressed", String(b === btn));
-    });
-    document.querySelectorAll(".cards-grid").forEach((grid) => {
-      grid.classList.toggle("view-list", mode === "list");
-    });
-    document.querySelectorAll("uveg-card").forEach((card) => {
-      const bw = card.querySelector("[data-bw]");
-      const bi = card.querySelector("[data-bi]");
-      if (bw && bi && card.querySelector(".card.open")) {
-        bw.style.height = "auto";
-        requestAnimationFrame(() => {
-          bw.style.height = bi.scrollHeight + "px";
-        });
-      }
-    });
+    const panel = btn.closest("[data-panel]");
+    if (!panel) return;
+    _applyViewModeToPanel(panel, btn.dataset.view);
   });
 }
 

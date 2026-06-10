@@ -102,6 +102,30 @@ const SUB_ACT_MAP = {
       nombre: "El Diagnóstico",
     },
   ],
+  5: [
+    {
+      actId: "l7-pres",
+      tipo: "presentacion",
+      nombre: "Proyecto Educativo",
+    },
+    {
+      actId: "l7-ej",
+      tipo: "ejercicio",
+      nombre: "Proyecto Educativo",
+    },
+  ],
+  6: [
+    {
+      actId: "l8-pres",
+      tipo: "presentacion",
+      nombre: "Diversidad de Proyectos Educativos",
+    },
+    {
+      actId: "l8-ej",
+      tipo: "ejercicio",
+      nombre: "Diversidad de Proyectos Educativos",
+    },
+  ],
   8: [
     {
       actId: "l4-pres",
@@ -137,6 +161,30 @@ const SUB_ACT_MAP = {
       actId: "l6-ej",
       tipo: "ejercicio",
       nombre: "La evaluación y monitoreo de la estrategia",
+    },
+  ],
+  12: [
+    {
+      actId: "l9-pres",
+      tipo: "presentacion",
+      nombre: "Planificación del proyecto",
+    },
+    {
+      actId: "l9-ej",
+      tipo: "ejercicio",
+      nombre: "Planificación del proyecto",
+    },
+  ],
+  14: [
+    {
+      actId: "l10-pres",
+      tipo: "presentacion",
+      nombre: "Procesos de un proyecto",
+    },
+    {
+      actId: "l10-ej",
+      tipo: "ejercicio",
+      nombre: "Procesos de un proyecto",
     },
   ],
 };
