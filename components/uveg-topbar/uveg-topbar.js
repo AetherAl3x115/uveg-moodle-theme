@@ -68,7 +68,8 @@ class UvegTopbar extends HTMLElement {
         <!-- Izquierda: brand -->
         <div class="tb-left">
           <span class="tb-brand">UVEG</span>
-          <span class="tb-sep" aria-hidden="true"></span>
+          <span class="tb-sep tb-sep--brand" aria-hidden="true"></span>
+          <!-- tb-subtitle se oculta en móvil vía responsive.css -->
           <span class="tb-subtitle">Universidad Virtual del Estado de Guanajuato</span>
         </div>
 
@@ -103,7 +104,7 @@ class UvegTopbar extends HTMLElement {
               aria-label="Notificaciones${notifications > 0 ? ` (${notifications} nuevas)` : ""}"
               title="Notificaciones"
               style="background:none;border:none;cursor:pointer;padding:0;line-height:1">
-             ${hi("bell", 18)}
+              ${hi("bell", 18)}
             </button>
             ${notifDot}
           </div>
@@ -115,12 +116,12 @@ class UvegTopbar extends HTMLElement {
             aria-label="Mensajes"
             title="Mensajes"
             style="background:none;border:none;cursor:pointer;padding:0;line-height:1">
-        ${hi("message", 18)}
+            ${hi("message", 18)}
           </button>
 
           <span class="tb-sep" aria-hidden="true"></span>
 
-          <!-- Usuario -->
+          <!-- Usuario — tb-username oculto en móvil vía responsive.css -->
           ${roleBadge}
           <div
             class="tb-avatar"
@@ -148,14 +149,12 @@ class UvegTopbar extends HTMLElement {
     const themeBtn = e.target.closest("#tb-theme-btn");
     if (themeBtn) {
       toggleTheme();
-      springScale(themeBtn, 0.8, 1);
       return;
     }
 
     // Búsqueda
     const searchBtn = e.target.closest("#tb-search-btn");
     if (searchBtn) {
-      springScale(searchBtn, 0.85, 1);
       this.dispatchEvent(
         new CustomEvent("uveg:search", {
           bubbles: true,
@@ -168,7 +167,6 @@ class UvegTopbar extends HTMLElement {
     // Mensajes
     const msgBtn = e.target.closest("#tb-msg-btn");
     if (msgBtn) {
-      springScale(msgBtn, 0.85, 1);
       this.dispatchEvent(
         new CustomEvent("uveg:messages", {
           bubbles: true,

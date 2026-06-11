@@ -90,7 +90,8 @@ class UvegTabs extends HTMLElement {
 
     const outer = document.createElement("div");
     outer.className = "tabs-outer";
-    outer.style.cssText = "position:relative; width:fit-content;";
+    outer.style.cssText = "position:relative;";
+    outer.classList.add("tabs-outer-wrap");
 
     // Dot
     this._dot = document.createElement("div");

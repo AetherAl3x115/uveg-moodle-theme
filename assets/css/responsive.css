@@ -15,6 +15,12 @@
  * ─────────────────────────────────────────────────────────────
  */
 
+/* ── Animación overlay del sidebar ──────────────────────────── */
+@keyframes mbnOverlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 /* ── lg y menor: ocultar panel derecho ──────────────────────── */
 @media (max-width: 992px) {
   .rpanel {
@@ -49,10 +55,146 @@
   }
 }
 
+/* ── Bottom nav — solo móvil ────────────────────────────────── */
+.mobile-bottom-nav { display: none; }
+
+/* Hamburguesa del topbar — solo en móvil */
+.tb-hamburger { display: none; }
+
 /* ── sm y menor: móvil ──────────────────────────────────────── */
 @media (max-width: 576px) {
 
-  /* Shell pasa a flujo vertical como feed */
+  /* ── Topbar móvil: ocultar texto y iconos que van al bottom nav ── */
+  .tb-subtitle,
+  .tb-username,
+  .tb-theme-toggle,
+  .tb-bell-wrap,
+  #tb-search-btn,
+  #tb-msg-btn,
+  .tb-sep {
+    display: none;
+  }
+
+  /* Compactar topbar */
+  .topbar {
+    padding: 0 12px;
+  }
+
+  .tb-left {
+    gap: 0;
+  }
+
+  .tb-right {
+    gap: 8px;
+  }
+
+  /* ── Tabs: scroll horizontal táctil sin scrollbar ────────── */
+  .tabs {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap !important;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+    display: flex !important;
+    box-sizing: border-box;
+  }
+
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab {
+    white-space: nowrap;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+
+  /* uveg-tabs no debe romper el flujo horizontal */
+  uveg-tabs {
+    overflow: hidden;
+    display: block;
+    width: 100%;
+  }
+
+  /* Contenedor outer de tabs — ancho completo */
+  .tabs-outer-wrap {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  /* ── Bottom nav ──────────────────────────────────────────── */
+  uveg-bottom-nav {
+    display: block;
+  }
+
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 900;
+    background: var(--color-surface);
+    border-top: 0.5px solid var(--color-border);
+    padding: 6px 0 max(8px, env(safe-area-inset-bottom));
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .mbn-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 4px 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--color-text-faint);
+    font-size: 10px;
+    font-weight: 500;
+    transition: color 0.18s;
+    -webkit-tap-highlight-color: transparent;
+    text-decoration: none;
+  }
+
+  .mbn-item.active {
+    color: var(--color-accent-navy);
+  }
+
+  .mbn-item svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .mbn-badge {
+    position: absolute;
+    top: -2px;
+    right: -4px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    min-width: 15px;
+    height: 15px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3px;
+    border: 1.5px solid var(--color-surface);
+  }
+
+  .mbn-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Shell flujo vertical ────────────────────────────────── */
   .shell {
     flex-direction: column;
     height: auto;
@@ -60,28 +202,79 @@
     overflow: visible;
   }
 
-  /* Sidebar oculta en móvil — navegación vía topbar/hamburguer */
-  .sidebar {
-    display: none;
+  /* ── Sidebar: oculta por defecto, se abre vía hamburguesa ── */
+ .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    z-index: 1000;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, .18);
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform .25s cubic-bezier(.4, 0, .2, 1);
   }
 
+  /* uveg-sidebar — siempre en DOM, fuera de pantalla por defecto */
+  uveg-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: 280px !important;
+    z-index: 1000 !important;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, .18) !important;
+    overflow-y: auto !important;
+    transform: translateX(-100%) !important;
+    transition: transform .28s cubic-bezier(.4, 0, .2, 1) !important;
+   display: flex !important;
+    visibility: hidden;
+  }
+
+  /* El .sidebar interno necesita fondo, altura completa y ancho */
+  uveg-sidebar .sidebar {
+    background: var(--color-tint-bg) !important;
+    min-height: 100vh !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* Sidebar abierto — pisa todos los inline styles */
+ uveg-sidebar.mobile-open,
+  uveg-sidebar.mobile-open * {
+    visibility: visible !important;
+  }
+
+  uveg-sidebar.mobile-open {
+    transform: translateX(0) !important;
+  }
+
+  uveg-sidebar.mobile-open .sidebar {
+    display: flex !important;
+    transform: translateX(0) !important;
+  }
+
+  /* ── Espacio para bottom nav ─────────────────────────────── */
   .main {
+    padding-bottom: 64px;
     flex: 1;
   }
 
-  /* Content row vertical */
+  /* ── Content row vertical ────────────────────────────────── */
   .content-row {
     flex-direction: column;
     overflow: visible;
   }
 
-  /* Center sin overflow oculto — scroll nativo del body */
+  /* ── Center sin overflow oculto — scroll nativo del body ─── */
   .center {
     padding: 12px;
     overflow-y: visible;
   }
 
-  /* Header row apilado */
+  /* ── Header row ──────────────────────────────────────────── */
   .hrow {
     flex-direction: column;
     gap: 10px;
@@ -102,27 +295,7 @@
     justify-content: center;
   }
 
-  /* Tabs: scroll horizontal táctil sin scrollbar visible */
-  .tabs {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    flex-wrap: nowrap;
-    scrollbar-width: none;
-    scroll-snap-type: x mandatory;
-  }
-
-  .tabs::-webkit-scrollbar {
-    display: none;
-  }
-
-  .tab {
-    white-space: nowrap;
-    flex-shrink: 0;
-    scroll-snap-align: start;
-  }
-
-  /* Cards: 1 columna siempre, sub-acts también */
+  /* ── Cards: 1 columna siempre ────────────────────────────── */
   .cards-grid {
     grid-template-columns: 1fr !important;
   }
@@ -136,7 +309,7 @@
     grid-template-columns: 1fr !important;
   }
 
-  /* Banner apilado */
+  /* ── Banner apilado ──────────────────────────────────────── */
   .banner {
     flex-direction: column;
     gap: 10px;
@@ -151,30 +324,35 @@
     margin: 0 auto;
   }
 
-  /* Cards: mejor touch target */
-  .card {
-    touch-action: manipulation;
-  }
-
-  /* SCORM drawer ocupa casi toda la pantalla en móvil */
+  /* ── SCORM drawer ocupa casi toda la pantalla ────────────── */
   .scorm-drawer {
     height: 96vh;
     border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
   }
 
-  /* Presentación: 2 columnas en móvil */
+  /* ── Presentación: 2 columnas en móvil ───────────────────── */
   .pres-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  /* Tipografía ajustada */
+  /* ── Tipografía ajustada ─────────────────────────────────── */
   .mod-title {
     font-size: 18px;
   }
 
-  /* Right panel oculto en móvil */
+  /* ── Right panel oculto ──────────────────────────────────── */
   .rpanel {
     display: none;
+  }
+
+  /* Cards: mejor touch target */
+  .card {
+    touch-action: manipulation;
+  }
+
+  /* Ocultar botón colapsar — en móvil el sidebar se cierra con el overlay */
+  .sb-collapse {
+    display: none !important;
   }
 }
 
