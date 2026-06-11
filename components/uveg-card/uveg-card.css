@@ -88,11 +88,34 @@
   cursor: pointer;
   overflow: hidden;
   transition: border-color var(--transition-base);
-  will-change: transform;
+  will-change: auto;
   position: relative;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: auto;
+  text-rendering: auto;
+}
+
+[data-panel="unidad1"] .c-title,
+[data-panel="unidad2"] .c-title {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+[data-panel="unidad1"] .c-desc,
+[data-panel="unidad2"] .c-desc {
+  color: var(--color-text-muted);
+}
+
+[data-panel="unidad1"] .c-title { color: #3b0764; }
+[data-panel="unidad1"] .c-duration { color: #6d28d9; background: rgba(91,33,182,.1); border-radius: var(--radius-full); }
+
+[data-panel="unidad2"] .c-title { color: #701a75; }
+[data-panel="unidad2"] .c-duration { color: #a21caf; background: rgba(162,28,175,.1); border-radius: var(--radius-full); }
+
+[data-panel="unidad1"] .unit-block,
+[data-panel="unidad2"] .unit-block {
+  background: #f5f3ff;
+  padding: 12px;
 }
 
 .card:hover {
@@ -302,7 +325,7 @@
 }
 
 .c-desc {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   color: var(--color-text-muted);
   line-height: 1.5;
   margin-bottom: 5px;
@@ -368,10 +391,22 @@
   border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
 }
 
+[data-panel="unidad1"] .card:not(.card-reto) .blob-inner {
+  background: linear-gradient(to bottom, #ede9fe 0%, #ffffff 60%);
+}
+
+[data-panel="unidad2"] .card:not(.card-reto) .blob-inner {
+  background: linear-gradient(to bottom, #fdf2f8 0%, #ffffff 60%);
+}
+
 .b-div {
-  height: .5px;
-  background: var(--color-border-light);
+  height: 1px;
+  background: #c4b5fd;
   margin-bottom: 12px;
+}
+
+[data-panel="unidad2"] .b-div {
+  background: #f0abfc;
 }
 
 /* Simulate button */
@@ -762,6 +797,101 @@
 
 .sub-act-card.entrega .sub-act-row {
   align-items: center;
+}
+
+
+/* ── Colores por unidad ─────────────────────────────────────── */
+[data-panel="unidad1"] .card:not(.card-reto) {
+  background: #ede9fe;
+  border-color: #c4b5fd;
+}
+
+[data-panel="unidad1"] .card:not(.card-reto):hover {
+  border-color: #a78bfa;
+}
+
+[data-panel="unidad2"] .card:not(.card-reto) {
+  background: #fdf2f8;
+  border-color: #f0abfc;
+}
+
+[data-panel="unidad2"] .card:not(.card-reto):hover {
+  border-color: #e879f9;
+}
+
+/* Reto Unidad 1 — lavanda sólido */
+[data-panel="unidad1"] .card-reto {
+  background: #ede9fe;
+  border-color: #c4b5fd;
+}
+
+[data-panel="unidad1"] .reto-header {
+  background: #7c3aed;
+}
+
+/* Reto Unidad 2 — malva sólido */
+[data-panel="unidad2"] .card-reto {
+  background: #fdf2f8;
+  border-color: #f0abfc;
+}
+
+[data-panel="unidad2"] .reto-header {
+  background: #a21caf;
+}
+
+/* ── Unit outer header por unidad ──────────────────────────── */
+[data-panel="unidad1"] .unit-outer-header,
+[data-panel="unidad2"] .unit-outer-header {
+  background: linear-gradient(110deg, #2662eb 0%, #2662eb 45%, #6d3fd4 100%);
+  border-bottom-color: rgba(255,255,255,.15);
+}
+
+
+[data-panel="unidad1"] .unit-outer-chip,
+[data-panel="unidad2"] .unit-outer-chip {
+  background: #1445c4;
+  border-color: #1e3fad;
+  color: #ffffff;
+}
+
+[data-panel="unidad1"] .unit-outer-header .tv-btn,
+[data-panel="unidad2"] .unit-outer-header .tv-btn {
+  background: #1445c4;
+  border: 1px solid #1e3fad;
+  color: #ffffff;
+  border-radius: var(--radius-full);
+  opacity: 1;
+}
+
+[data-panel="unidad1"] .unit-outer-header .tv-btn.active,
+[data-panel="unidad2"] .unit-outer-header .tv-btn.active {
+  background: #0f3399;
+  border-color: #0a2580;
+  color: #ffffff;
+  box-shadow: none;
+}
+
+[data-panel="unidad1"] .unit-outer-card,
+[data-panel="unidad2"] .unit-outer-card {
+  border-color: #a5b4fc;
+}
+
+[data-panel="unidad1"] .unit-block-section,
+[data-panel="unidad2"] .unit-block-section {
+  background: var(--color-surface);
+  border-color: var(--color-border-light);
+}
+
+[data-panel="unidad1"] .unit-block-label,
+[data-panel="unidad2"] .unit-block-label {
+  color: var(--color-text-faint);
+}
+
+[data-panel="unidad1"] .tv-wrap,
+[data-panel="unidad2"] .tv-wrap {
+  background: rgba(255,255,255,.12);
+  border-radius: var(--radius-md);
+  padding: 3px;
 }
 
 [data-chevron] svg.hi { flex-shrink: 0; }

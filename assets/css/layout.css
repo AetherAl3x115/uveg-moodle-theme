@@ -412,24 +412,26 @@ uveg-card:has(.card-reto) {
   grid-column: 1 / -1;
 }
 
+
 .hrow {
-  background: var(--color-surface);
-  border: 0.5px solid var(--color-border-light);
+  background: linear-gradient(110deg, #2662eb 0%, #2662eb 45%, #6d3fd4 100%);
+  border: none;
   border-radius: var(--radius-2xl);
-  padding: 14px 18px;
+  padding: 20px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  margin-bottom: 12px;
+   margin-bottom: 24px;
 }
 
 .hrow-left { flex: 1; }
 
+
 .mod-name {
   font-size: 22px;
   font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  color: #ffffff;
   margin-bottom: 6px;
   line-height: 1.3;
 }
@@ -440,9 +442,9 @@ uveg-card:has(.card-reto) {
   gap: 4px;
   font-size: 11px;
   font-weight: var(--font-weight-semibold);
-  color: var(--color-semana-orange-text);
-  background: var(--color-semana-orange-bg);
-  border: .5px solid var(--color-semana-orange-border);
+  color: #ffffff;
+  background: #1445c4;
+  border: 1px solid #1e3fad;
   padding: 2px 8px;
   border-radius: var(--radius-full);
 }
@@ -480,7 +482,7 @@ uveg-card:has(.card-reto) {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .bc-item {
