@@ -431,7 +431,7 @@ class UvegCard extends HTMLElement {
         </div>
 
         <div class="c-footer">
-          <div class="c-desc" style="flex:1;margin:0;font-size:var(--font-size-sm)">${this._attr("desc", "Este Reto te permitirá aplicar los elementos de la fase inicial de una planeación estratégica. En este Reto elaborarás la contextualización, justificación, filosofía institucional (Misión, Visión, Valores), Objetivos estratégicos y realizarás un diagnóstico FODA y PESTEL de la organización en la cual colaboras, empleando ambas herramientas.")}</div>
+          <div class="c-desc" style="flex:1;margin:0;font-size:var(--font-size-base)">${this._attr("desc", "Este Reto te permitirá aplicar los elementos de la fase inicial de una planeación estratégica. En este Reto elaborarás la contextualización, justificación, filosofía institucional (Misión, Visión, Valores), Objetivos estratégicos y realizarás un diagnóstico FODA y PESTEL de la organización en la cual colaboras, empleando ambas herramientas.")}</div>
         </div>
 
         <div class="blob-wrap" data-bw>
