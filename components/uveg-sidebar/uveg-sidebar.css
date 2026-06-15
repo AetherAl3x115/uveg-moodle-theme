@@ -101,7 +101,7 @@
   user-select: none;
 }
 
-.sb-block-header:hover { background: var(--color-tint-hover); }
+.sb-block-header:hover { background: var(--color-sb-item-hover); }
 
 .sb-block-header i:first-child {
   font-size: var(--font-size-xl);
@@ -146,6 +146,27 @@
   justify-content: center;
   padding: 9px 0;
   gap: 0;
+}
+
+.sb-advisor-btn-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-tint-border);
+  background: var(--color-tint-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  align-self: center;
+  color: var(--color-accent);
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.sb-advisor-btn-icon:hover {
+  background: var(--color-tint-border);
+  transform: scale(1.1);
 }
 
 /* ── Bloque: Mi Progreso ────────────────────────────────────── */
@@ -518,6 +539,14 @@
   margin: 10px 10px 0;
   border-radius: var(--radius-lg);
   border: .5px solid var(--color-tint-border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sb-advisor-person-top {
+  flex: 1;
+  min-width: 0;
 }
 
 .sb-advisor-person:last-child { margin-bottom: 12px; }
@@ -557,7 +586,7 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 0;
 }
 
 .sb-advisor-meta { flex: 1; min-width: 0; }

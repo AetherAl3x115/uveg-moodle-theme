@@ -79,18 +79,18 @@ class UvegScormView extends HTMLElement {
     const btnDisabled = state === "pending" ? "disabled" : "";
     const typeLabel = TYPE_LABELS[type] || "ACTIVIDAD";
 
-    // Placeholder iframe cuando no hay src (demo)
-    const iframeContent = src
-      ? `<iframe src="${src}" frameborder="0" allowfullscreen
-           style="width:100%;height:100%;border:none;border-radius:var(--radius-lg)"></iframe>`
-      : `<div class="sv-iframe-placeholder">
-           <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="var(--color-text-faint)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-             <rect x="2" y="3" width="20" height="14" rx="2"/>
-             <path d="M8 21h8M12 17v4"/>
-           </svg>
-           <span>Contenido SCORM</span>
-           <span class="sv-iframe-sub">${title}</span>
-         </div>`;
+    // Fallback al Genially del módulo cuando no hay src definido
+    const GENIALLY_DEMO = "https://view.genially.com/69a750fc4e341d6b6532a978";
+    const iframeSrc = src || GENIALLY_DEMO;
+    const iframeContent = `<iframe
+      src="${iframeSrc}"
+      frameborder="0"
+      allowfullscreen
+      allowscriptaccess="always"
+      scrolling="yes"
+      allownetworking="all"
+      style="width:100%;height:100%;border:none;border-radius:var(--radius-lg)">
+    </iframe>`;
 
     this.innerHTML = `
       <div class="lv-root">

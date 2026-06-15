@@ -21,7 +21,7 @@ const STATE_CONFIG = {
     ringDash: "26.7 80.1",
     iconClass: "pending",
     iconKey: "clock",
-    avatarIcon: "clipboard-document",
+    avatarIcon: "book",
     barColor: "#cbd5e1",
     barWidth: "0%",
     barVal: "0%",
@@ -35,7 +35,7 @@ const STATE_CONFIG = {
     ringDash: "53.4 53.4",
     iconClass: "progress",
     iconKey: "play-circle",
-    avatarIcon: "pencil-square",
+    avatarIcon: "book",
     barColor: "#7c3aed",
     barWidth: "50%",
     barVal: "50%",
@@ -49,7 +49,7 @@ const STATE_CONFIG = {
     ringDash: "106.8 0",
     iconClass: "done",
     iconKey: "check",
-    avatarIcon: "clipboard-list",
+    avatarIcon: "book",
     barColor: "#22c55e",
     barWidth: "100%",
     barVal: "100%",
@@ -322,18 +322,10 @@ class UvegCard extends HTMLElement {
     }
 
     if (this._isReto()) {
-      const barVal = this.querySelector("[data-barval]");
+      const pillVal = this.querySelector("[data-reto-pill] [data-barval]");
       const barFill = this.querySelector("[data-barfill]");
       if (this._retoScore !== undefined) {
-        _applyRetoScore(this._retoScore, barVal, barFill);
-      } else {
-        if (barVal) {
-          barVal.textContent = "--";
-          barVal.style.color = "rgba(255,255,255,.5)";
-        }
-        if (barFill) {
-          barFill.style.width = "0%";
-        }
+        _applyRetoScore(this._retoScore, pillVal, barFill);
       }
     }
   }
@@ -431,7 +423,7 @@ class UvegCard extends HTMLElement {
         </div>
 
         <div class="c-footer">
-          <div class="c-desc" style="flex:1;margin:0;font-size:var(--font-size-sm)">${this._attr("desc", "Este Reto te permitirá aplicar los elementos de la fase inicial de una planeación estratégica. En este Reto elaborarás la contextualización, justificación, filosofía institucional (Misión, Visión, Valores), Objetivos estratégicos y realizarás un diagnóstico FODA y PESTEL de la organización en la cual colaboras, empleando ambas herramientas.")}</div>
+          <div class="c-desc" style="flex:1;margin:0;font-size:var(--font-size-base)">${this._attr("desc", "Este Reto te permitirá aplicar los elementos de la fase inicial de una planeación estratégica. En este Reto elaborarás la contextualización, justificación, filosofía institucional (Misión, Visión, Valores), Objetivos estratégicos y realizarás un diagnóstico FODA y PESTEL de la organización en la cual colaboras, empleando ambas herramientas.")}</div>
         </div>
 
         <div class="blob-wrap" data-bw>
@@ -445,9 +437,14 @@ class UvegCard extends HTMLElement {
                 <div class="sub-act-row">
                   <div class="sub-act-icon entrega"><img src="/assets/img/icons/pdf.png" width="28" height="28" style="object-fit:contain" alt="PDF"></div>
                  <div class="sub-act-name">Recurso en PDF</div>
-                  <div class="reto-score-pill" data-reto-pill>
-                   <span data-barval style="font-size:11px;font-weight:700;color:#94a3b8">--</span>
-                    <span style="font-size:9px;color:#cbd5e1;text-transform:uppercase;letter-spacing:.04em">pts</span>
+               <div class="reto-score-pill" data-reto-pill>
+                    <svg width="48" height="48" viewBox="0 0 48 48" aria-hidden="true" style="position:absolute;top:0;left:0">
+                      <circle cx="24" cy="24" r="19" fill="none" stroke="rgba(20,69,196,.15)" stroke-width="3"/>
+                      <circle cx="24" cy="24" r="19" fill="none" stroke="#22c55e" stroke-width="3"
+                        stroke-dasharray="0 119.4" stroke-dashoffset="29.85"
+                        stroke-linecap="round" data-score-ring/>
+                    </svg>
+                    <span data-barval style="position:relative;z-index:1;font-size:11px;font-weight:800;color:#1445c4;line-height:1;text-align:center">--<br><span style="font-size:8px;font-weight:600">pts</span></span>
                   </div>
                 </div>
               </div>
@@ -474,13 +471,17 @@ class UvegCard extends HTMLElement {
   }
 
   _svgByType(tipo) {
+    const color =
+      getComputedStyle(document.documentElement)
+        .getPropertyValue("--color-accent")
+        .trim() || "#2662eb";
     const svgs = {
-      video: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><rect x="24" y="50" width="156" height="156" rx="14" fill="#e50061" opacity=".18"/><rect x="24" y="50" width="156" height="156" rx="14" stroke="#e50061" stroke-width="14" fill="none"/><path d="M180 128L236 92v72z" fill="#e50061" opacity=".5"/><path d="M180 128L236 92v72z" stroke="#e50061" stroke-width="12" stroke-linejoin="round" fill="none"/></svg>`,
-      podcast: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><rect x="88" y="16" width="80" height="120" rx="40" fill="#7c3aed" opacity=".2"/><rect x="88" y="16" width="80" height="120" rx="40" stroke="#7c3aed" stroke-width="14" fill="none"/><path d="M48 128c0 44.2 35.8 80 80 80s80-35.8 80-80" stroke="#7c3aed" stroke-width="14" stroke-linecap="round" fill="none"/><line x1="128" y1="208" x2="128" y2="240" stroke="#7c3aed" stroke-width="14" stroke-linecap="round"/><line x1="96" y1="240" x2="160" y2="240" stroke="#7c3aed" stroke-width="14" stroke-linecap="round"/></svg>`,
-      infografia: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><rect x="32" y="140" width="48" height="76" rx="6" fill="#0891b2" opacity=".2"/><rect x="104" y="96" width="48" height="120" rx="6" fill="#0891b2" opacity=".35"/><rect x="176" y="48" width="48" height="168" rx="6" fill="#0891b2" opacity=".55"/><rect x="32" y="140" width="48" height="76" rx="6" stroke="#0891b2" stroke-width="12" fill="none"/><rect x="104" y="96" width="48" height="120" rx="6" stroke="#0891b2" stroke-width="12" fill="none"/><rect x="176" y="48" width="48" height="168" rx="6" stroke="#0891b2" stroke-width="12" fill="none"/></svg>`,
-      presentacion: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><rect x="16" y="40" width="224" height="152" rx="12" fill="#d97706" opacity=".15"/><rect x="16" y="40" width="224" height="152" rx="12" stroke="#d97706" stroke-width="14" fill="none"/><line x1="128" y1="192" x2="128" y2="224" stroke="#d97706" stroke-width="14" stroke-linecap="round"/><line x1="80" y1="224" x2="176" y2="224" stroke="#d97706" stroke-width="14" stroke-linecap="round"/><path d="M72 116 L108 80 L144 108 L184 68" stroke="#d97706" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
-      ejercicio: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3730a3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"/></svg>`,
-      lectura: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><path d="M128 208C128 208 24 160 24 80V48L128 16L232 48V80C232 160 128 208 128 208Z" fill="#16a34a" opacity=".15"/><path d="M128 208C128 208 24 160 24 80V48L128 16L232 48V80C232 160 128 208 128 208Z" stroke="#16a34a" stroke-width="14" stroke-linejoin="round" fill="none"/><path d="M88 128 L112 152 L168 96" stroke="#16a34a" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
+      video: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><rect x="24" y="50" width="156" height="156" rx="14" fill="${color}" opacity=".18"/><rect x="24" y="50" width="156" height="156" rx="14" stroke="${color}" stroke-width="14" fill="none"/><path d="M180 128L236 92v72z" fill="${color}" opacity=".5"/><path d="M180 128L236 92v72z" stroke="${color}" stroke-width="12" stroke-linejoin="round" fill="none"/></svg>`,
+      podcast: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><rect x="88" y="16" width="80" height="120" rx="40" fill="${color}" opacity=".2"/><rect x="88" y="16" width="80" height="120" rx="40" stroke="${color}" stroke-width="14" fill="none"/><path d="M48 128c0 44.2 35.8 80 80 80s80-35.8 80-80" stroke="${color}" stroke-width="14" stroke-linecap="round" fill="none"/><line x1="128" y1="208" x2="128" y2="240" stroke="${color}" stroke-width="14" stroke-linecap="round"/><line x1="96" y1="240" x2="160" y2="240" stroke="${color}" stroke-width="14" stroke-linecap="round"/></svg>`,
+      infografia: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><rect x="32" y="140" width="48" height="76" rx="6" fill="${color}" opacity=".2"/><rect x="104" y="96" width="48" height="120" rx="6" fill="${color}" opacity=".35"/><rect x="176" y="48" width="48" height="168" rx="6" fill="${color}" opacity=".55"/><rect x="32" y="140" width="48" height="76" rx="6" stroke="${color}" stroke-width="12" fill="none"/><rect x="104" y="96" width="48" height="120" rx="6" stroke="${color}" stroke-width="12" fill="none"/><rect x="176" y="48" width="48" height="168" rx="6" stroke="${color}" stroke-width="12" fill="none"/></svg>`,
+      presentacion: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><rect x="16" y="40" width="224" height="152" rx="12" fill="${color}" opacity=".15"/><rect x="16" y="40" width="224" height="152" rx="12" stroke="${color}" stroke-width="14" fill="none"/><line x1="128" y1="192" x2="128" y2="224" stroke="${color}" stroke-width="14" stroke-linecap="round"/><line x1="80" y1="224" x2="176" y2="224" stroke="${color}" stroke-width="14" stroke-linecap="round"/><path d="M72 116 L108 80 L144 108 L184 68" stroke="${color}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
+      ejercicio: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"/></svg>`,
+      lectura: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><path d="M128 208C128 208 24 160 24 80V48L128 16L232 48V80C232 160 128 208 128 208Z" fill="${color}" opacity=".15"/><path d="M128 208C128 208 24 160 24 80V48L128 16L232 48V80C232 160 128 208 128 208Z" stroke="${color}" stroke-width="14" stroke-linejoin="round" fill="none"/><path d="M88 128 L112 152 L168 96" stroke="${color}" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
     };
     return svgs[tipo] || svgs.lectura;
   }
@@ -577,7 +578,8 @@ class UvegCard extends HTMLElement {
             cardId: this._attr("card-id"),
             actId: `reto-${this._attr("unit-idx", "0")}`,
             type: "reto",
-            viewType: "reto", // → uveg-reto-view
+            viewType: "reto",
+            materia: this._attr("materia", ""),
           },
         }),
       );
@@ -684,6 +686,21 @@ class UvegCard extends HTMLElement {
 function _applyRetoScore(pts, barVal, barFill) {
   if (!barVal) return;
   const pct = pts + "%";
+  // Animar ring del donut
+  const pill = barVal.closest("[data-reto-pill]");
+  const ring = pill?.querySelector("[data-score-ring]");
+  if (ring) {
+    const circ = 2 * Math.PI * 19; // r=19 → ~119.4
+    const dash = (pts / 100) * circ;
+    ring.setAttribute(
+      "stroke-dasharray",
+      `${dash.toFixed(1)} ${circ.toFixed(1)}`,
+    );
+    ring.setAttribute(
+      "stroke",
+      pts >= 70 ? "#22c55e" : pts >= 50 ? "#f59e0b" : "#ef4444",
+    );
+  }
   const face =
     pts >= 70
       ? `<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>`
@@ -692,7 +709,7 @@ function _applyRetoScore(pts, barVal, barFill) {
         : `<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>`;
   const color = pts >= 70 ? "#166534" : pts >= 50 ? "#92400e" : "#991b1b";
   const bg = pts >= 70 ? "#22c55e" : pts >= 50 ? "#f59e0b" : "#ef4444";
-  barVal.innerHTML = `${face} ${pts}`;
+  barVal.innerHTML = `${pts}<br><span style="font-size:8px;font-weight:600;opacity:.8">pts</span>`;
   barVal.style.color = color;
   if (barFill) {
     barFill.style.width = pct;

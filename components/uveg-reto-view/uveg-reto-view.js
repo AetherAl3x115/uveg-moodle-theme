@@ -166,6 +166,58 @@ class UvegRetoView extends HTMLElement {
           ${this._renderTabs()}
         </div>
 
+     <uveg-instrucciones
+          materia="${d.materia || ""}"
+          reto="${d.retoNum || "1"}"
+          subtitle="${title}"
+          puntos="${d.puntos || "25"}"
+          title="Instrucciones"
+          steps='${
+            d.steps ||
+            JSON.stringify([
+              {
+                text: "Pulsa para descargar la asignación del caso a trabajar con base en tu matrícula.",
+                enlace: {
+                  label: "Asignación de caso de estudio",
+                  url: "#",
+                  type: "pdf",
+                },
+              },
+              {
+                text: "Pulsa para descargar el formato y consultar las especificaciones del Reto:",
+                enlace: {
+                  label: "Especificaciones del entregable",
+                  url: "#",
+                  type: "pdf",
+                },
+              },
+              {
+                text: "Abre el documento para conocer cómo se evaluará tu Reto.",
+                enlace: {
+                  label: "Criterios de evaluación",
+                  url: "#",
+                  type: "pdf",
+                },
+              },
+              {
+                text: "Si necesitas citar o referenciar la información utilizada, revisa el siguiente documento.",
+                enlace: {
+                  label: "Guía para realizar citas y referencias",
+                  url: "#",
+                  type: "guia",
+                },
+              },
+              {
+                text: "Pulsa para saber cómo nombrar tu formato de Reto.",
+                plus: true,
+              },
+              {
+                text: "Una vez terminado tu Reto, envíalo a tu Asesor o Asesora.",
+              },
+            ])
+          }'>
+        </uveg-instrucciones>
+
         <div class="lv-hist-compact">
           <div class="lv-hist-compact-head">
             <svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>

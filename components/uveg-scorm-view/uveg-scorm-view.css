@@ -18,7 +18,7 @@
 /* ── Área del iframe ────────────────────────────────────────── */
 .sv-iframe-wrap {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 420px;
   background: var(--color-bg);
   position: relative;
   overflow: hidden;

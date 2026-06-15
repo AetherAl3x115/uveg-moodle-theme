@@ -86,15 +86,18 @@ class UvegTopbar extends HTMLElement {
             ${hi("sun", 18, "tb-icon icon-sun")}
           </button>
 
-          <!-- Búsqueda -->
-          <button
-            class="tb-icon"
-            id="tb-search-btn"
-            aria-label="Buscar"
-            title="Buscar"
-            style="background:none;border:none;cursor:pointer;padding:0;line-height:1">
-            ${hi("magnifying-glass", 18)}
-          </button>
+          <!-- Correo institucional -->
+          <div class="tb-mail-wrap" style="position:relative">
+            <button
+              class="tb-icon"
+              id="tb-mail-btn"
+              aria-label="Correo institucional"
+              title="Correo institucional"
+              style="background:none;border:none;cursor:pointer;padding:0;line-height:1">
+              ${hi("mail", 18)}
+            </button>
+           <span class="tb-mail-badge" id="mail-badge" aria-label="Correos no leídos" hidden></span>
+          </div>
 
           <!-- Notificaciones -->
           <div class="tb-bell-wrap">
@@ -152,11 +155,11 @@ class UvegTopbar extends HTMLElement {
       return;
     }
 
-    // Búsqueda
-    const searchBtn = e.target.closest("#tb-search-btn");
-    if (searchBtn) {
+    // Correo institucional
+    const mailBtn = e.target.closest("#tb-mail-btn");
+    if (mailBtn) {
       this.dispatchEvent(
-        new CustomEvent("uveg:search", {
+        new CustomEvent("uveg:mail", {
           bubbles: true,
           composed: true,
         }),

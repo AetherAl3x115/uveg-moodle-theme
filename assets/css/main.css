@@ -24,6 +24,10 @@
 /* ── 2b. Content ────────────────────────────────────────────── */
 @import './content.css';
 
+@import "../../components/uveg-notes/uveg-notes.css";
+
+@import "../../components//uveg-mail/uveg-mail.css";
+
 /* ── 3. Components ──────────────────────────────────────────── */
 
 /* ── 3. Components ──────────────────────────────────────────── */

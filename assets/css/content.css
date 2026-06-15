@@ -61,8 +61,8 @@
 
 /* ── Progress box ───────────────────────────────────────────── */
 .pbox {
-  background: #1445c4;
-  border: 1px solid #1e3fad;
+  background: var(--color-white);
+  border: 1px solid var(--color-accent-navy);
   border-radius: var(--radius-xl);
   padding: var(--space-3) var(--space-4);
   display: flex;
@@ -96,7 +96,7 @@
 
 .plabel {
   font-size: var(--font-size-sm);
-  color: #93c5fd;
+  color: var(--color-text-faint);
   font-weight: var(--font-weight-semibold);
   letter-spacing: .5px;
   text-transform: uppercase;
@@ -143,12 +143,12 @@
 .cnum {
   font-size: 28px;
   font-weight: var(--font-weight-bold);
-  color: #ffffff;
+  color: var(--color-accent);
   line-height: 1;
 }
 .cden {
   font-size: var(--font-size-md);
-  color: #93c5fd;
+  color: var(--color-text-faint);
 }
 
 /* ── Banner objetivo ────────────────────────────────────────── */
@@ -662,6 +662,8 @@ background: linear-gradient(to bottom, color-mix(in srgb, var(--pres-bg, var(--c
   display: flex;
   align-items: center;
   gap: 8px;
+  background-color: rgba(248, 245, 255, 0.396);
+  border-radius: 10px;
 }
 
 .unit-outer-divider {
@@ -710,6 +712,71 @@ background: linear-gradient(to bottom, color-mix(in srgb, var(--pres-bg, var(--c
   text-transform: uppercase;
   letter-spacing: .5px;
   margin-bottom: 10px;
+}
+
+/* ── FAB Chatbot ─────────────────────────────────────────────── */
+.fab-chatbot {
+  position: fixed;
+  bottom: 28px;
+  right: 24px;
+  z-index: var(--z-dropdown);
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #2662eb 0%, #6d3fd4 100%);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(38, 98, 235, .45), 0 1px 4px rgba(0,0,0,.15);
+  transition: transform var(--transition-spring), box-shadow var(--transition-spring);
+  padding: 0;
+}
+
+.fab-chatbot img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  /*filter: brightness(0) invert(1);*/
+  transition: transform var(--transition-spring);
+}
+
+.fab-chatbot:hover {
+  transform: scale(1.12) translateY(-2px);
+  box-shadow: 0 8px 24px rgba(38, 98, 235, .55), 0 2px 8px rgba(0,0,0,.18);
+}
+
+.fab-chatbot:hover img {
+  transform: rotate(-8deg) scale(1.1);
+}
+
+.fab-chatbot:active {
+  transform: scale(0.95);
+  transition: transform .1s;
+}
+
+/* Pulse ring animado */
+.fab-chatbot::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: var(--radius-full);
+  border: 2px solid rgba(38, 98, 235, .4);
+  animation: fabPulse 2.4s cubic-bezier(.4,0,.6,1) infinite;
+}
+
+@keyframes fabPulse {
+  0%, 100% { opacity: .6; transform: scale(1); }
+  50%       { opacity: 0;  transform: scale(1.25); }
+}
+
+/* Móvil — subir sobre el bottom nav */
+@media (max-width: 576px) {
+  .fab-chatbot {
+    bottom: calc(64px + max(12px, env(safe-area-inset-bottom)));
+    right: 16px;
+  }
 }
 
 /* ── Dark mode ──────────────────────────────────────────────── */

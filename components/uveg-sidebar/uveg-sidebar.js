@@ -87,33 +87,6 @@ const PROGRESO_DEFAULT = {
   estado: "bien",
 };
 
-const PROGRESO_CONFIG = {
-  bien: {
-    stroke: "#22c55e",
-    badgeBg: "#f0fdf4",
-    badgeColor: "#166534",
-    badgeIcon: "mood-happy",
-    badgeText: "Al día",
-    msg: "Avanzando muy bien",
-  },
-  regular: {
-    stroke: "#f59e0b",
-    badgeBg: "#fffbeb",
-    badgeColor: "#92400e",
-    badgeIcon: "mood-neutral",
-    badgeText: "Regular",
-    msg: "Vas un poco atrasado",
-  },
-  atrasado: {
-    stroke: "#ef4444",
-    badgeBg: "#fef2f2",
-    badgeColor: "#991b1b",
-    badgeIcon: "mood-sad",
-    badgeText: "Atrasado",
-    msg: "Necesitas ponerte al día",
-  },
-};
-
 function _progresoDash(pct) {
   const c = 2 * Math.PI * 26;
   const fill = (pct / 100) * c;
@@ -188,7 +161,6 @@ class UvegSidebar extends HTMLElement {
           ${NAV_ITEMS_BOTTOM.map((item) => this._renderNavItem(item, activeItem)).join("")}
           <div class="sb-sep" role="separator"></div>
           <div class="sb-section-label" aria-hidden="true">Bloques</div>
-          ${this._renderBlock("progreso", "chart-pie", "Mi Progreso", this._renderBlockProgreso())}
           ${this._renderBlock("menu", "bars-3", "Mi Menú", this._renderBlockMenu())}
           ${this._renderBlock("actividades", "calendar-days", "Próximas actividades", this._renderBlockActividades())}
         </nav>
@@ -253,7 +225,6 @@ class UvegSidebar extends HTMLElement {
 
   _renderBlockProgreso() {
     const { pct, completadas, recomendadas, estado } = this._progreso;
-    const cfg = PROGRESO_CONFIG[estado] || PROGRESO_CONFIG.bien;
     const dash = _progresoDash(pct);
 
     return `
@@ -300,7 +271,6 @@ class UvegSidebar extends HTMLElement {
 
   _updateProgresoDOM(prev) {
     const { pct, completadas, recomendadas, estado } = this._progreso;
-    const cfg = PROGRESO_CONFIG[estado] || PROGRESO_CONFIG.bien;
     const card = this.querySelector("#sb-prog-card");
     if (!card) return;
 
@@ -514,14 +484,11 @@ class UvegSidebar extends HTMLElement {
             }
           </div>
         </div>
-        <div class="sb-advisor-actions">
-          <button class="sb-advisor-btn sb-advisor-btn--msg"
-                  aria-label="Enviar mensaje a ${p.name}"
-                  onclick="window.location.href='mailto:${p.email}'">
-            ${hi("message", 14)}
-            Mensaje
-          </button>
-        </div>
+        <button class="sb-advisor-btn-icon"
+                aria-label="Enviar mensaje a ${p.name}"
+                onclick="window.location.href='mailto:${p.email}'">
+          ${hi("message", 16)}
+        </button>
       </div>
     `,
     ).join("");

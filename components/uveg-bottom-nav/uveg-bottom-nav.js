@@ -40,10 +40,13 @@ class UvegBottomNav extends HTMLElement {
           <span>Tema</span>
         </button>
 
-        <!-- Búsqueda -->
-        <button class="mbn-item" id="mbn-search-btn" aria-label="Buscar">
-          <span class="mbn-icon">${hi("magnifying-glass", 22)}</span>
-          <span>Buscar</span>
+       <!-- Correo institucional -->
+        <button class="mbn-item" id="mbn-mail-btn" aria-label="Correo institucional">
+          <span class="mbn-icon mbn-icon--mail">
+            ${hi("mail", 22)}
+            <span class="mbn-badge" id="mbn-mail-badge" style="display:none"></span>
+          </span>
+          <span>Correo</span>
         </button>
 
         <!-- Notificaciones -->
@@ -95,13 +98,9 @@ class UvegBottomNav extends HTMLElement {
         return;
       }
 
-      // Búsqueda
-      if (e.target.closest("#mbn-search-btn")) {
-        document
-          .querySelector("uveg-topbar")
-          ?.dispatchEvent(
-            new CustomEvent("uveg:search", { bubbles: true, composed: true }),
-          );
+      // Correo institucional
+      if (e.target.closest("#mbn-mail-btn")) {
+        document.dispatchEvent(new CustomEvent("uveg:mail", { bubbles: true }));
         return;
       }
 

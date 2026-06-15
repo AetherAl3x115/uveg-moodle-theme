@@ -65,12 +65,13 @@
 @media (max-width: 576px) {
 
   /* ── Topbar móvil: ocultar texto y iconos que van al bottom nav ── */
-  .tb-subtitle,
+ .tb-subtitle,
   .tb-username,
   .tb-theme-toggle,
   .tb-bell-wrap,
   #tb-search-btn,
   #tb-msg-btn,
+  .tb-mail-wrap,
   .tb-sep {
     display: none;
   }
@@ -233,8 +234,7 @@
   }
 
   /* El .sidebar interno necesita fondo, altura completa y ancho */
-  uveg-sidebar .sidebar {
-    background: var(--color-tint-bg) !important;
+ uveg-sidebar .sidebar {
     min-height: 100vh !important;
     width: 100% !important;
     display: flex !important;
@@ -353,6 +353,13 @@
   /* Ocultar botón colapsar — en móvil el sidebar se cierra con el overlay */
   .sb-collapse {
     display: none !important;
+  }
+
+  /* Sesiones — espacio para no quedar tapado por el bottom nav */
+  .sb-sessions-btn,
+  [data-action="sesiones"],
+  .btn-sesiones {
+    margin-bottom: calc(64px + max(8px, env(safe-area-inset-bottom)));
   }
 }
 

@@ -272,6 +272,7 @@ function _bindRetoViewEvents(center, rv) {
       type: "reto",
       state: "progress",
       attempts: 3,
+      materia: e.detail.materia || "",
     });
     setTimeout(() => {
       center.scrollTop = 0;
