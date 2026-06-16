@@ -58,30 +58,38 @@ function _getProgState(pct) {
 
 const DEFAULT_DATA = {
   startDate: "2025-06-02",
-  totalDays: 30,
+  totalDays: 60,
   units: [
     {
       title: "Unidad 1",
       reto: "Reto 1. Planeación estratégica institucional",
       activities: [
-        { id: "l1-video", label: "L1. Video", type: "video" },
-        { id: "l1-lect", label: "L1. Lectura", type: "lectura" },
-        { id: "l2-pod", label: "L2. Podcast", type: "podcast" },
+        { id: "l1-pres", label: "L1. Presentación", type: "presentacion" },
+        { id: "l1-ej", label: "L1. Ejercicio", type: "ejercicio" },
         { id: "l2-pres", label: "L2. Presentación", type: "presentacion" },
-        { id: "l3-info", label: "L3. Infografía", type: "infografia" },
-        { id: "l3-lect", label: "L3. Lectura", type: "lectura" },
+        { id: "l2-ej", label: "L2. Ejercicio", type: "ejercicio" },
+        { id: "l3-pres", label: "L3. Presentación", type: "presentacion" },
+        { id: "l3-ej", label: "L3. Ejercicio", type: "ejercicio" },
         { id: "l4-pres", label: "L4. Presentación", type: "presentacion" },
-        { id: "l4-video", label: "L4. Video", type: "video" },
+        { id: "l4-ej", label: "L4. Ejercicio", type: "ejercicio" },
+        { id: "l5-pres", label: "L5. Presentación", type: "presentacion" },
+        { id: "l5-ej", label: "L5. Ejercicio", type: "ejercicio" },
+        { id: "l6-pres", label: "L6. Presentación", type: "presentacion" },
+        { id: "l6-ej", label: "L6. Ejercicio", type: "ejercicio" },
       ],
     },
     {
       title: "Unidad 2",
       reto: "Reto 2. Implementación y evaluación tecnológica",
       activities: [
-        { id: "l5-pod", label: "L5. Podcast", type: "podcast" },
-        { id: "l5-info", label: "L5. Infografía", type: "infografia" },
-        { id: "l6-lect", label: "L6. Lectura", type: "lectura" },
-        { id: "l6-pres", label: "L6. Presentación", type: "presentacion" },
+        { id: "l7-pres", label: "L7. Presentación", type: "presentacion" },
+        { id: "l7-ej", label: "L7. Ejercicio", type: "ejercicio" },
+        { id: "l8-pres", label: "L8. Presentación", type: "presentacion" },
+        { id: "l8-ej", label: "L8. Ejercicio", type: "ejercicio" },
+        { id: "l9-pres", label: "L9. Presentación", type: "presentacion" },
+        { id: "l9-ej", label: "L9. Ejercicio", type: "ejercicio" },
+        { id: "l10-pres", label: "L10. Presentación", type: "presentacion" },
+        { id: "l10-ej", label: "L10. Ejercicio", type: "ejercicio" },
       ],
     },
   ],
@@ -204,8 +212,8 @@ class UvegPresCronograma extends HTMLElement {
     // Si hay simulación activa, devuelve el pct simulado
     if (this._simPct !== null) {
       return {
-        total: 14,
-        done: Math.round((14 * this._simPct) / 100),
+        total: 24,
+        done: Math.round((24 * this._simPct) / 100),
         pct: this._simPct,
       };
     }

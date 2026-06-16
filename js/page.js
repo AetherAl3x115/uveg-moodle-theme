@@ -48,7 +48,7 @@ function initProgressBar() {
     try {
       const raw = localStorage.getItem("uveg-cronograma-state");
       const state = raw ? JSON.parse(raw) : { completed: {} };
-      const total = 14;
+      const total = 24;
       const done = Object.values(state.completed).filter(Boolean).length;
       return total ? Math.round((done / total) * 100) : 0;
     } catch {
@@ -90,6 +90,15 @@ function initProgressBar() {
   document.addEventListener("uveg:cronoprogress", (e) =>
     updateBar(e.detail.pct),
   );
+
+  // Montar el componente en background para que connectedCallback
+  // inicialice _state desde localStorage antes de que el usuario lo abra
+  if (!document.querySelector("uveg-pres-cronograma")) {
+    const _cronoHidden = document.createElement("uveg-pres-cronograma");
+    _cronoHidden.style.display = "none";
+    _cronoHidden.dataset.cronoHidden = "true";
+    document.body.appendChild(_cronoHidden);
+  }
 }
 
 function initPresentacionCards() {
@@ -131,8 +140,6 @@ function _activatePres(card) {
 
   Object.values(_presCache).forEach((el) => (el.style.display = "none"));
 
-  if (key === "cronograma") _flushCronoPending();
-
   if (!_presCache[key]) {
     const header = document.createElement("div");
     header.className = "pres-content-header";
@@ -143,7 +150,7 @@ function _activatePres(card) {
         ${label}
       </span>`;
 
-    const comp = document.createElement(componentTag);
+    let comp = document.createElement(componentTag);
     if (key === "esquema") {
       comp.setAttribute("src", "./assets/img/esquema.jpg");
       comp.setAttribute("alt", "Ciclo de Planeación Estratégica Educativa");
@@ -156,8 +163,11 @@ function _activatePres(card) {
 
     pc.appendChild(wrapper);
     _presCache[key] = wrapper;
+
+    if (key === "cronograma") _flushCronoPending();
   } else {
     _presCache[key].style.display = "";
+    if (key === "cronograma") _flushCronoPending();
   }
 }
 
@@ -334,19 +344,46 @@ function _bindScormViewEvents(center, sv) {
 const _cronoPending = new Set();
 
 function _markCronoAct(actId) {
-  const crono = document.querySelector("uveg-pres-cronograma");
-  if (crono && typeof crono.markCompleted === "function") {
-    crono.markCompleted(actId);
-  } else {
-    _cronoPending.add(actId);
-  }
+  if (!actId) return;
+
+  // 1. Escribir directo a localStorage — no depende de que el componente exista
+  try {
+    const raw = localStorage.getItem("uveg-cronograma-state");
+    const s = raw ? JSON.parse(raw) : { completed: {}, positions: {} };
+    s.completed[actId] = true;
+    localStorage.setItem("uveg-cronograma-state", JSON.stringify(s));
+  } catch {}
+
+  // 2. Actualizar barra de progreso ahora mismo
+  const total = 24;
+  try {
+    const raw = localStorage.getItem("uveg-cronograma-state");
+    const s = raw ? JSON.parse(raw) : { completed: {} };
+    const done = Object.values(s.completed).filter(Boolean).length;
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    document.dispatchEvent(
+      new CustomEvent("uveg:cronoprogress", { detail: { pct } }),
+    );
+  } catch {}
+
+  // 3. Sincronizar todos los componentes cronograma montados
+  document.querySelectorAll("uveg-pres-cronograma").forEach((crono) => {
+    if (typeof crono.markCompleted === "function") {
+      crono.markCompleted(actId);
+    }
+  });
 }
 
 function _flushCronoPending() {
-  const crono = document.querySelector("uveg-pres-cronograma");
-  if (!crono || typeof crono.markCompleted !== "function") return;
-  _cronoPending.forEach((id) => crono.markCompleted(id));
-  _cronoPending.clear();
+  // El componente visible es el último uveg-pres-cronograma en el DOM
+  // (el oculto está en body, el visible dentro de pres-content)
+  const cronos = document.querySelectorAll("uveg-pres-cronograma");
+  const crono = cronos[cronos.length - 1];
+  if (!crono || typeof crono._loadState !== "function") return;
+  crono._state = crono._loadState();
+  crono._schedule = crono._buildSchedule();
+  crono._render();
+  crono._bindEvents();
 }
 
 /* ── Activity Complete — conecta con cronograma y card ──────── */
