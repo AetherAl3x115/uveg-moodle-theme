@@ -1,24 +1,11 @@
 // =============================================================================
 // uveg-mail.js — Web Component: Panel de correo institucional
-// Autenticación: Google OAuth2 (Gmail API) — browser directo, sin backend
-//
-// INTEGRACIÓN MOODLE (producción):
-//   Reemplazar el flujo OAuth por una llamada al plugin PHP:
-//   fetch('/local/uveg_mail/api.php?action=inbox')
-//   El plugin maneja OAuth server-side con el token del usuario logueado.
-//
-// DEMO LOCAL / NETLIFY:
-//   Usa Google Identity Services (GSI) — popup OAuth una vez por sesión.
-//   El token se guarda en sessionStorage (se limpia al cerrar el tab).
 // =============================================================================
 
 import { hi } from "../../js/utils/icons.js";
 
-// ─── ÚNICO PARÁMETRO A CAMBIAR ────────────────────────────────────────────────
-// Client ID de Google Cloud Console → APIs y servicios → Credenciales
 const GOOGLE_CLIENT_ID =
   "1020124270325-k6rbvt9j6d4p8crm4h3m3emcn2g07uhg.apps.googleusercontent.com";
-// ─────────────────────────────────────────────────────────────────────────────
 
 const GMAIL_BASE = "https://gmail.googleapis.com/gmail/v1/users/me";
 const SCOPES =
@@ -36,7 +23,6 @@ function clearToken() {
   sessionStorage.removeItem(TOKEN_KEY);
 }
 
-// ─── Google Identity Services — carga dinámica ────────────────────────────────
 function loadGSI() {
   return new Promise((resolve) => {
     if (window.google?.accounts?.oauth2) {
@@ -50,7 +36,6 @@ function loadGSI() {
   });
 }
 
-// Solicitar token con popup
 function requestToken() {
   return new Promise((resolve, reject) => {
     loadGSI().then(() => {
@@ -66,15 +51,14 @@ function requestToken() {
           resolve(resp.access_token);
         },
       });
-      client.requestAccessToken({ prompt: "consent" });
+      // prompt:"" → no fuerza consentimiento en cada login; solo pide si no hay sesión activa
+      client.requestAccessToken({ prompt: "" });
     });
   });
 }
 
-// GET/POST autenticado a Gmail API
 async function gmailFetch(path, options = {}, _retry = 0) {
   let token = getToken();
-
   if (!token) token = await requestToken();
 
   const res = await fetch(`${GMAIL_BASE}${path}`, {
@@ -86,16 +70,14 @@ async function gmailFetch(path, options = {}, _retry = 0) {
     },
   });
 
-  // Token expirado → pedir uno nuevo y reintentar
   if (res.status === 401) {
     clearToken();
     token = await requestToken();
     return gmailFetch(path, options, _retry);
   }
 
-  // Rate limit → esperar y reintentar hasta 3 veces
   if (res.status === 429 && _retry < 3) {
-    const wait = 2 ** _retry * 500; // 500ms, 1s, 2s
+    const wait = 2 ** _retry * 500;
     await new Promise((r) => setTimeout(r, wait));
     return gmailFetch(path, options, _retry + 1);
   }
@@ -104,9 +86,16 @@ async function gmailFetch(path, options = {}, _retry = 0) {
   return res.json();
 }
 
-// ─── Helpers de parseo de mensajes Gmail ─────────────────────────────────────
+// ─── XSS helper ──────────────────────────────────────────────────────────────
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
 
-// Decodificar base64url a texto
+// ─── Helpers de parseo ────────────────────────────────────────────────────────
 function b64Decode(str) {
   try {
     return decodeURIComponent(
@@ -120,7 +109,6 @@ function b64Decode(str) {
   }
 }
 
-// Extraer header de un mensaje
 function getHeader(headers, name) {
   return (
     headers?.find((h) => h.name.toLowerCase() === name.toLowerCase())?.value ||
@@ -128,35 +116,27 @@ function getHeader(headers, name) {
   );
 }
 
-// Extraer cuerpo del mensaje (text/plain preferido)
 function extractBody(payload) {
   if (!payload) return "";
-
-  // Parte directa text/plain
   if (payload.mimeType === "text/plain" && payload.body?.data) {
     return b64Decode(payload.body.data);
   }
-
-  // Buscar en partes
   if (payload.parts) {
     const plain = payload.parts.find((p) => p.mimeType === "text/plain");
     if (plain?.body?.data) return b64Decode(plain.body.data);
-
-    // Buscar recursivo en multipart
     for (const part of payload.parts) {
       const body = extractBody(part);
       if (body) return body;
     }
   }
-
   return "";
 }
 
-// Parsear mensaje completo de Gmail a objeto simple
 function parseMessage(msg) {
   const headers = msg.payload?.headers || [];
   return {
     id: msg.id,
+    threadId: msg.threadId, // ← FIX: threadId preservado
     from: getHeader(headers, "From"),
     to: getHeader(headers, "To"),
     subject: getHeader(headers, "Subject") || "(sin asunto)",
@@ -167,19 +147,24 @@ function parseMessage(msg) {
   };
 }
 
-// Crear email en formato RFC 2822 codificado en base64url
-function makeEmail({ to, subject, body, replyToMsgId, threadId }) {
+// Codificación UTF-8 sin unescape() (obsoleto)
+function makeEmail({ to, subject, body, threadId }) {
   const lines = [
     `To: ${to}`,
     `Subject: ${subject}`,
     "Content-Type: text/plain; charset=utf-8",
     "",
     body,
-  ];
-  const raw = btoa(unescape(encodeURIComponent(lines.join("\r\n"))))
+  ].join("\r\n");
+
+  const bytes = new TextEncoder().encode(lines);
+  let binary = "";
+  bytes.forEach((b) => (binary += String.fromCharCode(b)));
+  const raw = btoa(binary)
     .replace(/\+/g, "-")
     .replace(/\//g, "_")
     .replace(/=+$/, "");
+
   return { raw, ...(threadId ? { threadId } : {}) };
 }
 
@@ -218,7 +203,6 @@ function extractName(from = "") {
   return m ? m[1].trim() : from.replace(/<.*>/, "").trim() || from;
 }
 
-// Dominios conocidos que no tienen favicon accesible → forzar dominio principal
 const DOMAIN_MAP = {
   "santander.com.mx": "santander.com",
   "banorte.com": "banorte.com",
@@ -236,7 +220,6 @@ function extractDomain(from = "") {
   const m = from.match(/<[^@]+@([^>]+)>/);
   if (!m) return null;
   const raw = m[1].toLowerCase();
-  // Buscar coincidencia exacta o por sufijo
   for (const [key, val] of Object.entries(DOMAIN_MAP)) {
     if (raw === key || raw.endsWith("." + key)) return val;
   }
@@ -262,16 +245,16 @@ function avatarColor(name = "") {
 function renderAvatar(from = "") {
   const name = extractName(from);
   const domain = extractDomain(from);
-  const initial = (name.charAt(0) || "?").toUpperCase();
+  const initial = escapeHtml((name.charAt(0) || "?").toUpperCase());
   const [bg, color] = avatarColor(name);
 
   if (domain) {
-    const favicon = `https://www.google.com/s2/favicons?domain=${DOMAIN_MAP[domain] || domain}&sz=64`;
+    const favicon = `https://www.google.com/s2/favicons?domain=${escapeHtml(DOMAIN_MAP[domain] || domain)}&sz=64`;
     return `
       <div class="um-inbox-avatar" style="background:${bg};color:${color}"
            data-initial="${initial}">
         <img src="${favicon}" alt="${initial}"
-           width="22" height="22"
+             width="22" height="22"
              onerror="this.style.display='none';this.parentElement.textContent='${initial}'">
       </div>`;
   }
@@ -299,14 +282,22 @@ class UvegMail extends HTMLElement {
     this._current = null;
     this._composeMode = "new";
     this._replyTo = null;
+    this._loadingInbox = false;
+    this._boundKeyDown = this._onKeyDown.bind(this);
     this._render();
   }
 
   connectedCallback() {
     this._bindEvents();
+    document.addEventListener("keydown", this._boundKeyDown);
   }
+
   disconnectedCallback() {
-    document.removeEventListener("keydown", this._onKeyDown);
+    document.removeEventListener("keydown", this._boundKeyDown);
+  }
+
+  _onKeyDown(e) {
+    if (e.key === "Escape" && this._open) this.close();
   }
 
   // ─── Render ───────────────────────────────────────────────────────────────
@@ -357,10 +348,6 @@ class UvegMail extends HTMLElement {
       this._replyTo = null;
       this._showCompose();
     });
-    this._onKeyDown = (e) => {
-      if (e.key === "Escape" && this._open) this.close();
-    };
-    document.addEventListener("keydown", this._onKeyDown);
   }
 
   // ─── API pública ──────────────────────────────────────────────────────────
@@ -385,9 +372,10 @@ class UvegMail extends HTMLElement {
 
   // ─── Inbox ────────────────────────────────────────────────────────────────
   async _loadInbox() {
+    if (this._loadingInbox) return;
+    this._loadingInbox = true;
     this._setLoading();
     try {
-      // Obtener IDs de los últimos 15 mensajes del inbox
       const list = await gmailFetch("/messages?labelIds=INBOX&maxResults=30");
       const ids = (list.messages || []).map((m) => m.id);
 
@@ -397,7 +385,6 @@ class UvegMail extends HTMLElement {
         return;
       }
 
-      // Cargar metadata en lotes de 5 para respetar rate limit de Gmail API
       const msgs = [];
       const BATCH = 5;
       for (let i = 0; i < ids.length; i += BATCH) {
@@ -410,7 +397,6 @@ class UvegMail extends HTMLElement {
           ),
         );
         msgs.push(...results);
-        // Pequeña pausa entre lotes
         if (i + BATCH < ids.length)
           await new Promise((r) => setTimeout(r, 200));
       }
@@ -419,13 +405,14 @@ class UvegMail extends HTMLElement {
       this._showInbox();
       this._updateBadge();
     } catch (err) {
-      // Si el usuario canceló el popup de OAuth, no mostrar error de red
       if (err.message?.includes("popup")) {
         this._setEmpty("Autenticación cancelada");
       } else {
         this._showToast("Error al cargar inbox: " + err.message, "error");
         this._setEmpty("No se pudo cargar el inbox");
       }
+    } finally {
+      this._loadingInbox = false;
     }
   }
 
@@ -444,14 +431,14 @@ class UvegMail extends HTMLElement {
           .map(
             (m) => `
           <li class="um-inbox-item ${m.unread ? "um-inbox-item--unread" : ""}"
-              data-id="${m.id}" role="button" tabindex="0">
-           ${renderAvatar(m.from)}
+              data-id="${escapeHtml(m.id)}" role="button" tabindex="0">
+            ${renderAvatar(m.from)}
             <div class="um-inbox-meta">
-              <div class="um-inbox-from">${extractName(m.from)}</div>
-              <div class="um-inbox-subject">${m.subject}</div>
-              <div class="um-inbox-snippet">${m.snippet}</div>
+              <div class="um-inbox-from">${escapeHtml(extractName(m.from))}</div>
+              <div class="um-inbox-subject">${escapeHtml(m.subject)}</div>
+              <div class="um-inbox-snippet">${escapeHtml(m.snippet)}</div>
             </div>
-            <div class="um-inbox-date">${formatDate(m.date)}</div>
+            <div class="um-inbox-date">${escapeHtml(formatDate(m.date))}</div>
             ${m.unread ? '<span class="um-unread-dot"></span>' : ""}
           </li>`,
           )
@@ -474,7 +461,6 @@ class UvegMail extends HTMLElement {
       const msg = await gmailFetch(`/messages/${id}?format=full`);
       this._current = parseMessage(msg);
 
-      // Marcar como leído si estaba sin leer
       if (this._current.unread) {
         await gmailFetch(`/messages/${id}/modify`, {
           method: "POST",
@@ -503,12 +489,12 @@ class UvegMail extends HTMLElement {
           ${hi("chevron-left", 14)} Volver
         </button>
         <div class="um-read-header">
-          <div class="um-read-subject">${m.subject}</div>
+          <div class="um-read-subject">${escapeHtml(m.subject)}</div>
           <div class="um-read-meta">
-            <span class="um-read-from">${m.from}</span>
-            <span class="um-read-date">${formatDateFull(m.date)}</span>
+            <span class="um-read-from">${escapeHtml(m.from)}</span>
+            <span class="um-read-date">${escapeHtml(formatDateFull(m.date))}</span>
           </div>
-          <div class="um-read-to">Para: ${m.to}</div>
+          <div class="um-read-to">Para: ${escapeHtml(m.to)}</div>
         </div>
         <div class="um-read-body">${sanitize(m.body || m.snippet)}</div>
         <div class="um-read-actions">
@@ -525,9 +511,9 @@ class UvegMail extends HTMLElement {
       this._composeMode = "reply";
       this._replyTo = {
         id: m.id,
+        threadId: m.threadId, // ← garantizado por parseMessage
         subject: m.subject,
         from: m.from,
-        threadId: m.threadId,
       };
       this._showCompose();
     });
@@ -547,7 +533,7 @@ class UvegMail extends HTMLElement {
         <div class="um-compose-title">
           ${
             isReply
-              ? `Responder a <em>${extractName(this._replyTo?.from)}</em>`
+              ? `Responder a <em>${escapeHtml(extractName(this._replyTo?.from))}</em>`
               : "Nuevo correo"
           }
         </div>
@@ -566,7 +552,7 @@ class UvegMail extends HTMLElement {
         `
             : `
           <div class="um-reply-info">
-            <strong>Asunto:</strong> Re: ${this._replyTo?.subject || ""}
+            <strong>Asunto:</strong> Re: ${escapeHtml(this._replyTo?.subject || "")}
           </div>
         `
         }
@@ -659,7 +645,7 @@ class UvegMail extends HTMLElement {
 
   _setEmpty(msg = "Sin correos") {
     this.querySelector("#um-body").innerHTML = `
-      <div class="um-empty">${hi("mail", 36)}<p>${msg}</p></div>`;
+      <div class="um-empty">${hi("mail", 36)}<p>${escapeHtml(msg)}</p></div>`;
   }
 
   _setSendLoading(state) {
@@ -685,14 +671,12 @@ class UvegMail extends HTMLElement {
     const unread = this._inbox.filter((m) => m.unread).length;
     const count = unread > 9 ? "9+" : String(unread);
 
-    // Badge topbar
     const badge = document.getElementById("mail-badge");
     if (badge) {
       badge.hidden = unread === 0;
       badge.textContent = count;
     }
 
-    // Badge bottom nav
     const mbnBadge = document.getElementById("mbn-mail-badge");
     if (mbnBadge) {
       mbnBadge.style.display = unread === 0 ? "none" : "flex";

@@ -196,3 +196,34 @@
 .tab--glossary.active {
   border-color: transparent;
 }
+
+/* ── Tab Seguir Aprendiendo ─────────────────────────────────── */
+.tab--aprendizaje {
+  --tab-aprendizaje-color: var(--color-accent-navy);
+  border: 1.5px solid color-mix(in srgb, var(--tab-aprendizaje-color) 35%, transparent);
+  color: var(--tab-aprendizaje-color);
+}
+
+.tab--aprendizaje::before {
+  background: var(--tab-aprendizaje-color);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--tab-aprendizaje-color) 35%, transparent);
+}
+
+.tab--aprendizaje:not(.active):hover .tab-hover-bg {
+  background: color-mix(in srgb, var(--tab-aprendizaje-color) 12%, transparent);
+  opacity: 1;
+  transform: scale(1);
+}
+
+.tab--aprendizaje.drain-to-left,
+.tab--aprendizaje.drain-to-right {
+  color: var(--color-white);
+}
+
+.tab--aprendizaje.active {
+  border-color: transparent;
+}
+
+.tab--aprendizaje {
+  padding: 6px 10px;
+}

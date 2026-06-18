@@ -48,11 +48,14 @@ import "../../components/uveg-reto-view/uveg-reto-view.js";
 import "../../components/uveg-scorm-view/uveg-scorm-view.js";
 import "../../components/uveg-sesiones-view/uveg-sesiones-view.js";
 import "../components/uveg-glosario/uveg-glosario.js";
+import "../components/uveg-aprendizaje/uveg-aprendizaje.js";
 import "../components/uveg-bottom-nav/uveg-bottom-nav.js";
 import "../components/uveg-reto-view/uveg-aviso.js";
 import "../components/uveg-reto-view/uveg-instrucciones.js";
+import "../../components/uveg-fab/uveg-fab.js";
 import "../components/uveg-notes/uveg-notes.js";
 import "../components/uveg-mail/uveg-mail.js";
+import "../components/uveg-drive/uveg-drive.js";
 
 /* ── Componentes de Presentación ────────────────────────────── */
 import "../../components/uveg-presentacion/uveg-pres-alcances.js";

@@ -40,13 +40,14 @@ class UvegBottomNav extends HTMLElement {
           <span>Tema</span>
         </button>
 
-       <!-- Correo institucional -->
-        <button class="mbn-item" id="mbn-mail-btn" aria-label="Correo institucional">
-          <span class="mbn-icon mbn-icon--mail">
-            ${hi("mail", 22)}
+      <!-- Herramientas Google -->
+        <button class="mbn-item" id="mbn-gtools-btn" aria-label="Herramientas Google">
+          <span class="mbn-icon mbn-icon--gtools">
+            <img src="./assets/img/gmail.webp" class="mbn-gtools-icon" alt="Gmail">
+            <img src="./assets/img/drive.jpg"  class="mbn-gtools-icon mbn-gtools-icon--drive" alt="Drive">
             <span class="mbn-badge" id="mbn-mail-badge" style="display:none"></span>
           </span>
-          <span>Correo</span>
+          <span>Google</span>
         </button>
 
         <!-- Notificaciones -->
@@ -64,7 +65,27 @@ class UvegBottomNav extends HTMLElement {
           <span>Mensajes</span>
         </button>
 
-      </nav>
+     </nav>
+
+      <!-- Mini-card Herramientas Google — móvil -->
+      <div class="mbn-gtools-card" id="mbn-gtools-card" aria-hidden="true">
+        <div class="mbn-gtools-card-title">Herramientas Google disponibles</div>
+        <div class="mbn-gtools-card-items">
+          <button class="mbn-gtool-item" id="mbn-gtool-mail">
+            <span class="mbn-gtool-item-icon">
+              <img src="./assets/img/gmail.webp" alt="Gmail">
+            </span>
+            <span class="mbn-gtool-item-label">UVEG Mail</span>
+            <span class="mbn-badge mbn-gtool-badge" id="mbn-mail-badge2" style="display:none"></span>
+          </button>
+          <button class="mbn-gtool-item" id="mbn-gtool-drive">
+            <span class="mbn-gtool-item-icon">
+              <img src="./assets/img/drive.jpg" alt="Drive">
+            </span>
+            <span class="mbn-gtool-item-label">Mi Drive</span>
+          </button>
+        </div>
+      </div>
     `;
 
     // Sincronizar badge de notificaciones desde el topbar
@@ -98,9 +119,39 @@ class UvegBottomNav extends HTMLElement {
         return;
       }
 
-      // Correo institucional
-      if (e.target.closest("#mbn-mail-btn")) {
-        document.dispatchEvent(new CustomEvent("uveg:mail", { bubbles: true }));
+      // Herramientas Google — mini-card propia del bottom nav
+      if (e.target.closest("#mbn-gtools-btn")) {
+        const card = this.querySelector("#mbn-gtools-card");
+        const open = card.getAttribute("aria-hidden") === "false";
+        card.setAttribute("aria-hidden", String(open));
+        card.classList.toggle("mbn-gtools-card--open", !open);
+        return;
+      }
+
+      // Items dentro de la mini-card
+      if (e.target.closest("#mbn-gtool-mail")) {
+        this.querySelector("#mbn-gtools-card")?.setAttribute(
+          "aria-hidden",
+          "true",
+        );
+        this.querySelector("#mbn-gtools-card")?.classList.remove(
+          "mbn-gtools-card--open",
+        );
+        document.getElementById("uveg-drive")?.close();
+        document.getElementById("uveg-mail")?.toggle();
+        return;
+      }
+
+      if (e.target.closest("#mbn-gtool-drive")) {
+        this.querySelector("#mbn-gtools-card")?.setAttribute(
+          "aria-hidden",
+          "true",
+        );
+        this.querySelector("#mbn-gtools-card")?.classList.remove(
+          "mbn-gtools-card--open",
+        );
+        document.getElementById("uveg-mail")?.close();
+        document.getElementById("uveg-drive")?.toggle();
         return;
       }
 

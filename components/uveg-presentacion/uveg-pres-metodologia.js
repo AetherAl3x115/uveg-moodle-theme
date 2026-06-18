@@ -60,6 +60,19 @@ const DEFAULT_DATA = [
       "Si llegas a utilizar citas o recursos audiovisuales sin derechos reservados para la realización de tus Retos deberás incluir las citas y referencias de las fuentes bibliográficas que hayas utilizado, las cuales deben estar redactadas de acuerdo con el <strong>Formato APA</strong>, última edición.",
     ],
   },
+  {
+    icon: "book",
+    title: "Bibliografías",
+    warning: false,
+    biblio: true,
+    content: [
+      "<strong>Chiavenato, I.</strong> (2017). <em>Planeación estratégica: fundamentos y aplicaciones</em> (3.ª ed.). McGraw-Hill.",
+      "<strong>Münch, L.</strong> (2018). <em>Planeación estratégica: el rumbo hacia el éxito</em> (2.ª ed.). Trillas.",
+      "<strong>Kaplan, R. S., & Norton, D. P.</strong> (2004). <em>Mapas estratégicos: convirtiendo activos intangibles en resultados tangibles</em>. Gestión 2000.",
+      "<strong>Antúnez, S.</strong> (2016). <em>Claves para la organización de centros escolares</em> (9.ª ed.). ICE / Horsori.",
+      "<strong>Organización para la Cooperación y el Desarrollo Económicos.</strong> (2020). <em>Panorama de la educación 2020: indicadores de la OCDE</em>. OCDE Publishing. <strong><a href='https://doi.org/10.1787/69096873-en' target='_blank'>https://doi.org/10.1787/69096873-en</a></strong>",
+    ],
+  },
 ];
 
 class UvegPresMetodologia extends HTMLElement {
@@ -81,11 +94,25 @@ class UvegPresMetodologia extends HTMLElement {
     }
   }
 
-  _renderSection({ icon, title, warning, content }) {
+  _renderSection({ icon, title, warning, biblio, content }) {
     const warningClass = warning ? " is-warning" : "";
     const paragraphs = content
       .map((p) => `<p class="pres-met-p">${p}</p>`)
       .join("");
+
+    if (biblio) {
+      return `
+        <div class="pres-met-section pres-met-section--biblio">
+          <div class="pres-met-biblio-header">
+            ${hi(icon, 14)}
+            ${title}
+          </div>
+          <div class="pres-met-body">
+            ${paragraphs}
+          </div>
+        </div>
+      `;
+    }
 
     return `
       <div class="pres-met-section">

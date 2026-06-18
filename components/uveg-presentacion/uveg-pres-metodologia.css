@@ -86,3 +86,28 @@
 .pres-met-title.is-warning .hi {
   color: var(--color-warning);
 }
+
+/* ── Bibliografías — header estilo unidad ───────────────────── */
+.pres-met-section--biblio {
+  padding-top: 24px;
+}
+
+.pres-met-biblio-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--pres-color, var(--color-accent));
+  color: var(--color-white);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+}
+
+.pres-met-biblio-header .hi {
+  color: var(--color-white);
+  flex-shrink: 0;
+}

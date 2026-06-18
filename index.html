@@ -169,7 +169,8 @@
           <uveg-tab key="presentacion" icon="ti-bookmark" label="Presentación"></uveg-tab>
           <uveg-tab key="unidad1"      icon="ti-book"     label="Unidad 1"></uveg-tab>
           <uveg-tab key="unidad2"      icon="ti-book"     label="Unidad 2"></uveg-tab>
-          <uveg-tab key="glosario"     icon="ti-language" label="Glosario" variant="glossary"></uveg-tab>
+          <uveg-tab key="glosario"     icon="ti-language"     label="Glosario"            variant="glossary"></uveg-tab>
+             <uveg-tab key="aprendizaje"  icon="ti-aprendizaje"  label=""></uveg-tab>
         </uveg-tabs>
 
         <!-- ── Panel: Avisos ────────────────────────────────────
@@ -596,6 +597,16 @@
 ]'></uveg-glosario>
         </section>
 
+<section data-panel="aprendizaje" aria-labelledby="tab-aprendizaje">
+  <uveg-aprendizaje data='[
+    {"type":"biblioteca","label":"Biblioteca Digital UVEG","url":"#","desc":"Acceso al acervo bibliográfico institucional"},
+    {"type":"web","label":"Recurso web autorizado 1","url":"#","desc":"Página autorizada por UVEG"},
+    {"type":"web","label":"Recurso web autorizado 2","url":"#","desc":"Página autorizada por UVEG"},
+    {"type":"video","label":"Video de retroalimentación 1","url":"#","desc":"Retroalimentación de la Unidad 1"},
+    {"type":"video","label":"Video de retroalimentación 2","url":"#","desc":"Retroalimentación de la Unidad 2"}
+  ]'></uveg-aprendizaje>
+</section>
+
   <uveg-lesson-view></uveg-lesson-view>
    <uveg-reto-view>
   <uveg-instrucciones
@@ -617,6 +628,7 @@
     <uveg-sesiones-view></uveg-sesiones-view>
     <uveg-notes></uveg-notes>
     <uveg-mail id="uveg-mail"></uveg-mail>
+    <uveg-drive id="uveg-drive"></uveg-drive>
       </main><!-- /center -->
     </div><!-- /content-row -->
   </div><!-- /main -->
@@ -639,9 +651,14 @@
 <script type="module" src="js/main.js"></script>
 <script>
   // ── Correo institucional ──────────────────────────────────────
-  // Conecta el evento del topbar con el componente uveg-mail
   document.addEventListener('uveg:mail', () => {
+    document.getElementById('uveg-drive')?.close();
     document.getElementById('uveg-mail')?.toggle();
+  });
+
+  document.addEventListener('uveg:drive', () => {
+    document.getElementById('uveg-mail')?.close();
+    document.getElementById('uveg-drive')?.toggle();
   });
 </script>
 
@@ -651,16 +668,7 @@
 <script type="module" src="js/page.js"></script>
 <uveg-bottom-nav active-item="dashboard"></uveg-bottom-nav>
 
-<button class="fab-notes" aria-label="Mis notas" title="Mis notas" onclick="document.dispatchEvent(new CustomEvent('uveg:togglenotes'))">
-  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"/>
-    <path stroke-linecap="round" stroke-linejoin="round" d="M9 9h.01M9 12h.01M9 15h.01"/>
-  </svg>
-</button>
-
-<button class="fab-chatbot" aria-label="Asistente virtual" title="Asistente UVEG">
-  <img src="assets/img/icons/robot.png" alt="">
-</button>
+<uveg-fab></uveg-fab>
 
 </body>
 </html>

@@ -85,21 +85,7 @@ class UvegTopbar extends HTMLElement {
             ${hi("moon", 18, "tb-icon icon-moon")}
             ${hi("sun", 18, "tb-icon icon-sun")}
           </button>
-
-          <!-- Correo institucional -->
-          <div class="tb-mail-wrap" style="position:relative">
-            <button
-              class="tb-icon"
-              id="tb-mail-btn"
-              aria-label="Correo institucional"
-              title="Correo institucional"
-              style="background:none;border:none;cursor:pointer;padding:0;line-height:1">
-              ${hi("mail", 18)}
-            </button>
-           <span class="tb-mail-badge" id="mail-badge" aria-label="Correos no leídos" hidden></span>
-          </div>
-
-          <!-- Notificaciones -->
+<!-- Notificaciones -->
           <div class="tb-bell-wrap">
             <button
               class="tb-icon"
@@ -122,7 +108,39 @@ class UvegTopbar extends HTMLElement {
             ${hi("message", 18)}
           </button>
 
-          <span class="tb-sep" aria-hidden="true"></span>
+          <!-- Herramientas Google -->
+          <div class="tb-gtools-wrap" style="position:relative">
+            <button
+              class="tb-gtools-btn"
+              id="tb-gtools-btn"
+              aria-label="Herramientas Google"
+              title="Herramientas Google">
+              <img src="./assets/img/gmail.webp" class="tb-gtools-icon" alt="Gmail">
+              <img src="./assets/img/drive.jpg"  class="tb-gtools-icon" alt="Drive">
+              <span class="tb-mail-badge" id="mail-badge" aria-label="Correos no leídos" hidden></span>
+            </button>
+            <!-- Mini-card herramientas -->
+            <div class="tb-gtools-card" id="tb-gtools-card" aria-hidden="true">
+              <div class="tb-gtools-card-title">Herramientas Google disponibles</div>
+              <div class="tb-gtools-card-items">
+                <button class="tb-gtool-item" id="tb-mail-btn">
+                  <span class="tb-gtool-item-icon">
+                    <img src="./assets/img/gmail.webp" alt="Gmail">
+                  </span>
+                  <span class="tb-gtool-item-label">UVEG Mail</span>
+                  <span class="tb-mail-badge tb-gtool-badge" id="mail-badge-card" aria-label="Correos no leídos" hidden></span>
+                </button>
+                <button class="tb-gtool-item" id="tb-drive-btn">
+                  <span class="tb-gtool-item-icon">
+                    <img src="./assets/img/drive.jpg" alt="Drive">
+                  </span>
+                  <span class="tb-gtool-item-label">Mi Drive</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+      <span class="tb-sep" aria-hidden="true"></span>
 
           <!-- Usuario — tb-username oculto en móvil vía responsive.css -->
           ${roleBadge}
@@ -155,14 +173,33 @@ class UvegTopbar extends HTMLElement {
       return;
     }
 
-    // Correo institucional
+    // Herramientas Google — toggle mini-card
+    const gtoolsBtn = e.target.closest("#tb-gtools-btn");
+    if (gtoolsBtn) {
+      const card = this.querySelector("#tb-gtools-card");
+      const open = card.getAttribute("aria-hidden") === "false";
+      card.setAttribute("aria-hidden", String(open));
+      card.classList.toggle("tb-gtools-card--open", !open);
+      return;
+    }
+
+    // Cerrar mini-card al hacer click fuera
+    if (!e.target.closest(".tb-gtools-wrap")) {
+      const card = this.querySelector("#tb-gtools-card");
+      if (card) {
+        card.setAttribute("aria-hidden", "true");
+        card.classList.remove("tb-gtools-card--open");
+      }
+    }
+
+    // Gmail
     const mailBtn = e.target.closest("#tb-mail-btn");
     if (mailBtn) {
+      const card = this.querySelector("#tb-gtools-card");
+      card?.setAttribute("aria-hidden", "true");
+      card?.classList.remove("tb-gtools-card--open");
       this.dispatchEvent(
-        new CustomEvent("uveg:mail", {
-          bubbles: true,
-          composed: true,
-        }),
+        new CustomEvent("uveg:mail", { bubbles: true, composed: true }),
       );
       return;
     }
@@ -175,6 +212,18 @@ class UvegTopbar extends HTMLElement {
           bubbles: true,
           composed: true,
         }),
+      );
+      return;
+    }
+
+    // Mi Drive
+    const driveBtn = e.target.closest("#tb-drive-btn");
+    if (driveBtn) {
+      const card = this.querySelector("#tb-gtools-card");
+      card?.setAttribute("aria-hidden", "true");
+      card?.classList.remove("tb-gtools-card--open");
+      this.dispatchEvent(
+        new CustomEvent("uveg:drive", { bubbles: true, composed: true }),
       );
       return;
     }

@@ -176,6 +176,17 @@
 --color-tb-inst-badge-text:   var(--color-accent-dark);
 --color-tb-inst-badge-border: var(--color-tint-border);
 
+/* Nivel 3 — uveg-fab.css */
+--color-fab-a11y-bg:          #ffffff;
+--color-fab-a11y-border:      var(--color-border);
+--color-fab-a11y-icon:        var(--color-accent);
+--color-fab-a11y-shadow:      0 4px 16px rgba(0,0,0,.12), 0 1px 4px rgba(0,0,0,.08);
+--color-fab-a11y-shadow-drag: 0 8px 28px rgba(0,0,0,.18), 0 2px 8px rgba(0,0,0,.10);
+--color-fab-child-notes-from: var(--color-accent);
+--color-fab-child-notes-to:   var(--color-fab-to);
+--color-fab-child-chat-from:  var(--color-fab-to);
+--color-fab-child-chat-to:    #9333ea;
+
   /* ── Advisor cards ────────────────────────────────────────── */
   --color-advisor-asesor-bg:  #dce6fd;
   --color-advisor-asesor-dot: var(--color-accent);

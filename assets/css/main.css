@@ -32,9 +32,12 @@
 @import '../../components/uveg-tabs/uveg-tabs.css';
 @import '../../components/uveg-progress/uveg-progress.css';
 @import '../../components/uveg-card/uveg-card.css';
+@import '../../components/uveg-fab/uveg-fab.css';
 @import '../../components/uveg-notes/uveg-notes.css';
 @import '../../components/uveg-mail/uveg-mail.css';
+@import '../../components/uveg-drive/uveg-drive.css';  
 @import '../../components/uveg-glosario/uveg-glosario.css';
+@import "../../components//uveg-aprendizaje/uveg-aprendizaje.css";
 @import '../../components/uveg-scorm-drawer/uveg-scorm-drawer.css';
 @import '../../components/uveg-scorm-view/uveg-scorm-view.css';
 @import '../../components/uveg-lesson-view/uveg-lesson-view.css';

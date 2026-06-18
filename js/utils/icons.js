@@ -114,6 +114,19 @@ const PATHS = {
   refresh: `<path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/>`,
   reply: `<path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"/>`,
   send: `<path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5"/>`,
+
+  // ── Drive ─────────────────────────────────────────────────────
+  drive: `<path stroke-linecap="round" stroke-linejoin="round" d="M12 10.5v6m3-3H9m4.06-7.19-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />`,
+
+  // ── Nuevos iconos para Drive ─────────────────────────────────
+  "arrow-left": `<path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/>`,
+  "arrow-up-tray": `<path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"/>`,
+  "folder-plus": `<path stroke-linecap="round" stroke-linejoin="round" d="M12 10.5v6m3-3h-6m8.25-7.5h-3.75A3.75 3.75 0 0 1 9.75 3.75H6.75A3.75 3.75 0 0 0 3 7.5v9.75A3.75 3.75 0 0 0 6.75 21h10.5A3.75 3.75 0 0 0 21 17.25V7.5a3.75 3.75 0 0 0-3.75-3.75Z"/>`,
+  "arrow-path": `<path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/>`,
+  "x-mark": `<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>`,
+
+  // boton de accesibilidad  }
+  accessibility: `<circle cx="12" cy="7" r="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 9v4m-4 8 1.5-4.5M16 21l-1.5-4.5"/>`,
 };
 
 /**

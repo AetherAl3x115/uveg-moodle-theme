@@ -1,0 +1,199 @@
+/**
+ * components/uveg-fab/uveg-fab.css
+ * ─────────────────────────────────────────────────────────────
+ * FAB de accesibilidad con hijos expandibles (Notas + Chatbot).
+ * Todos los colores vía tokens de variables.css.
+ * ─────────────────────────────────────────────────────────────
+ */
+
+/* ── Host ────────────────────────────────────────────────────── */
+uveg-fab {
+  position: fixed;
+  bottom: 28px;
+  right: 24px;
+  z-index: 950;
+  /* Permite que left/top dinámicos del drag sobreescriban */
+  will-change: transform;
+  user-select: none;
+}
+
+/* ── Wrap (contenedor hijos + principal) ─────────────────────── */
+.ufab-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Hijos ───────────────────────────────────────────────────── */
+.ufab-children {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  /* Estado colapsado */
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px) scale(.92);
+  transition:
+    opacity var(--transition-spring),
+    transform var(--transition-spring);
+}
+
+.ufab-wrap--expanded .ufab-children {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0) scale(1);
+}
+
+/* ── Hijo individual ─────────────────────────────────────────── */
+.ufab-child {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  transition:
+    transform var(--transition-spring),
+    box-shadow var(--transition-spring);
+  padding: 0;
+}
+
+.ufab-child:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-lg);
+}
+
+.ufab-child:active {
+  transform: scale(.93);
+  transition: transform .1s;
+}
+
+.ufab-child--notes {
+  background: linear-gradient(135deg, var(--color-fab-child-notes-from) 0%, var(--color-fab-child-notes-to) 100%);
+  color: var(--color-white);
+}
+
+.ufab-child--notes .hi { color: var(--color-white); }
+
+.ufab-child--chat {
+  background: linear-gradient(135deg, var(--color-fab-child-chat-from) 0%, var(--color-fab-child-chat-to) 100%);
+}
+
+.ufab-child--chat img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+/* ── Botón principal ─────────────────────────────────────────── */
+.ufab-main {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-full);
+  background: var(--color-accent-dark);
+  border: 1.5px solid var(--color-fab-a11y-border);
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--color-fab-a11y-shadow);
+  transition:
+    transform var(--transition-spring),
+    box-shadow var(--transition-spring),
+    border-color var(--transition-fast);
+  padding: 0;
+  position: relative;
+}
+
+.ufab-main:hover {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-fab);
+}
+
+.ufab-main:active {
+  cursor: grabbing;
+}
+
+/* Ícono default / close con crossfade */
+.ufab-main-icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+.ufab-main-icon--default {
+  opacity: 1;
+  transform: rotate(0deg);
+  color: var(--color-white);
+}
+
+.ufab-main-icon--close {
+  opacity: 0;
+  transform: rotate(-90deg);
+  color: var(--color-text-muted);
+}
+
+.ufab-main--open .ufab-main-icon--default {
+  opacity: 0;
+  transform: rotate(90deg);
+}
+
+.ufab-main--open .ufab-main-icon--close {
+  opacity: 1;
+  transform: rotate(0deg);
+}
+
+/* ── Estado dragging ─────────────────────────────────────────── */
+uveg-fab.ufab--dragging {
+  cursor: grabbing;
+}
+
+uveg-fab.ufab--dragging .ufab-main {
+  cursor: grabbing;
+  box-shadow: var(--color-fab-a11y-shadow-drag);
+  transform: scale(1.05);
+}
+
+/* ── Ring animado (accesibilidad) ────────────────────────────── */
+.ufab-main::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-np-fab-ring);
+  animation: ufabPulse 2.8s cubic-bezier(.4,0,.6,1) infinite;
+  pointer-events: none;
+}
+
+.ufab-main--open::before {
+  animation: none;
+  border-color: var(--color-accent);
+  opacity: .5;
+}
+
+@keyframes ufabPulse {
+  0%, 100% { opacity: .6; transform: scale(1); }
+  50%       { opacity: 0;  transform: scale(1.35); }
+}
+
+@media (max-width: 576px) {
+  uveg-fab {
+    bottom: calc(64px + max(8px, env(safe-area-inset-bottom)) + 10px);
+    right: 16px;
+    z-index: 950;
+  }
+}
+
+/* ── Dark mode ───────────────────────────────────────────────── */
+[data-bs-theme="dark"] .ufab-main {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}

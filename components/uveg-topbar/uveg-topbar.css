@@ -127,3 +127,145 @@
 [data-bs-theme="dark"] .tb-notif-dot {
   border-color: var(--color-surface);
 }
+
+/* ── Herramientas Google ─────────────────────────────────────── */
+.tb-gtools-wrap {
+  position: relative;
+}
+
+.tb-gtools-btn {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: var(--radius-md);
+  position: relative;
+  transition: background 0.15s;
+}
+
+.tb-gtools-btn:hover {
+  background: var(--color-tint-bg);
+}
+
+.tb-gtools-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid var(--color-border);
+}
+
+.tb-gtools-icon:last-of-type {
+  margin-left: -6px;
+}
+
+/* Mini-card */
+.tb-gtools-card {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 220px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px) scale(0.97);
+  transform-origin: top right;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 1100;
+}
+
+.tb-gtools-card--open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.tb-gtools-card-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0 4px 8px;
+  border-bottom: 1px solid var(--color-border-light);
+  margin-bottom: 6px;
+}
+
+.tb-gtools-card-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tb-gtool-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 8px;
+  border: none;
+  background: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: background 0.15s;
+  position: relative;
+}
+
+.tb-gtool-item:hover {
+  background: var(--color-tint-bg);
+}
+
+.tb-gtool-item-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1.5px solid var(--color-border);
+}
+
+.tb-gtool-item-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tb-gtool-item-label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  flex: 1;
+}
+
+.tb-gtool-badge {
+  position: static;
+  margin-left: auto;
+}
+
+/* Bottom nav — íconos Google apilados */
+.mbn-icon--gtools {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mbn-gtools-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid var(--color-border);
+}
+
+.mbn-gtools-icon--drive {
+  margin-left: -6px;
+}

@@ -16,6 +16,7 @@ const TAB_ICON_MAP = {
   "ti-book": "book",
   "ti-circle": "info-circle",
   "ti-language": "language",
+  "ti-aprendizaje": "pencil-square",
 };
 
 function tabIcon(iconAttr) {
@@ -79,7 +80,7 @@ class UvegTabs extends HTMLElement {
     return Array.from(this.querySelectorAll("uveg-tab")).map((el) => ({
       key: el.getAttribute("key"),
       icon: el.getAttribute("icon") || "ti-circle",
-      label: el.getAttribute("label") || el.getAttribute("key"),
+      label: el.getAttribute("label") || "",
     }));
   }
 
@@ -111,6 +112,7 @@ class UvegTabs extends HTMLElement {
       const btn = document.createElement("button");
       btn.className = `tab${isActive ? " active fill-from-left" : ""}`;
       if (tab.key === "glosario") btn.classList.add("tab--glossary");
+      if (tab.key === "aprendizaje") btn.classList.add("tab--aprendizaje");
       btn.dataset.tab = tab.key;
       btn.dataset.idx = idx;
       btn.setAttribute("role", "tab");
@@ -123,7 +125,9 @@ class UvegTabs extends HTMLElement {
       hoverBg.setAttribute("aria-hidden", "true");
 
       // Heroicon en lugar de <i class="ti ...">
-      btn.innerHTML = `${tabIcon(tab.icon)} ${tab.label}`;
+      btn.innerHTML = tab.label
+        ? `${tabIcon(tab.icon)} ${tab.label}`
+        : tabIcon(tab.icon);
       btn.insertBefore(hoverBg, btn.firstChild);
       bar.appendChild(btn);
     });
