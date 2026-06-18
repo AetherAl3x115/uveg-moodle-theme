@@ -42,7 +42,7 @@ uveg-mail .um-header {
   justify-content: space-between;
   padding: 12px 14px;
   background: var(--color-accent-navy);
-  color: #fff;
+  color: var(--color-white);
   flex-shrink: 0;
 }
 
@@ -61,7 +61,7 @@ uveg-mail .um-header-icon {
 uveg-mail .um-header-icon svg {
   width: 18px;
   height: 18px;
-  stroke: #fff;
+  stroke: var(--color-white);
 }
 
 uveg-mail .um-header-title {
@@ -82,7 +82,7 @@ uveg-mail .um-btn-icon {
   border-radius: var(--radius-md);
   border: none;
   background: rgba(255, 255, 255, 0.12);
-  color: #fff;
+  color: var(--color-white);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -97,7 +97,7 @@ uveg-mail .um-btn-icon:hover {
 uveg-mail .um-btn-icon svg {
   width: 15px;
   height: 15px;
-  stroke: #fff;
+  stroke: var(--color-white);
 }
 
 /* ─── Body ───────────────────────────────────────────────────────────────────── */
@@ -179,7 +179,7 @@ uveg-mail .um-inbox-avatar {
   height: 36px;
   border-radius: 50%;
   background: var(--color-accent-navy);
-  color: #fff;
+  color: var(--color-white);
   font-size: 0.875rem;
   font-weight: 700;
   display: flex;
@@ -344,7 +344,7 @@ uveg-mail .um-btn-reply {
 
 uveg-mail .um-btn-reply:hover {
   background: var(--color-accent-navy);
-  color: #fff;
+  color: var(--color-white);
 }
 
 uveg-mail .um-btn-reply svg {
@@ -450,7 +450,7 @@ uveg-mail .um-btn-send {
   border-radius: var(--radius-md);
   border: none;
   background: var(--color-accent-navy);
-  color: #fff;
+  color: var(--color-white);
   font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
@@ -469,7 +469,7 @@ uveg-mail .um-btn-send:disabled {
 uveg-mail .um-btn-send svg {
   width: 14px;
   height: 14px;
-  stroke: #fff;
+ stroke: var(--color-white);
 }
 
 /* ─── Toast ───────────────────────────────────────────────────────────────────── */
@@ -499,8 +499,8 @@ uveg-mail .um-toast--visible {
 }
 
 uveg-mail .um-toast--success {
-  border-color: #16a34a;
-  color: #16a34a;
+  border-color: var(--color-success);
+  color: var(--color-success);
 }
 
 uveg-mail .um-toast--error {
@@ -529,11 +529,11 @@ uveg-mail .um-toast--error {
 }
 
 /* ─── Dark mode ──────────────────────────────────────────────────────────────── */
-[data-theme="dark"] uveg-mail .um-panel {
+[data-bs-theme="dark"] uveg-mail .um-panel {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
 }
 
-[data-theme="dark"] uveg-mail .um-inbox-item--unread {
+[data-bs-theme="dark"] uveg-mail .um-inbox-item--unread {
   background: color-mix(in srgb, var(--color-accent-navy) 12%, var(--color-bg));
 }
 

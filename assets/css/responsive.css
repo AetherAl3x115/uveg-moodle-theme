@@ -174,8 +174,8 @@
     position: absolute;
     top: -2px;
     right: -4px;
-    background: #ef4444;
-    color: #fff;
+    background: var(--color-sb-badge-bg);
+    color: var(--color-white);
     font-size: 9px;
     font-weight: 700;
     min-width: 15px;

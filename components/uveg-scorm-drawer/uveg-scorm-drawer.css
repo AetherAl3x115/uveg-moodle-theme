@@ -81,7 +81,7 @@
 
 /* ── Topbar del drawer ──────────────────────────────────────── */
 .scorm-topbar {
-  background: var(--uveg-gradient);
+  background: linear-gradient(135deg, var(--color-fab-from), var(--color-fab-to));
   padding: 14px 20px;
   display: flex;
   align-items: center;

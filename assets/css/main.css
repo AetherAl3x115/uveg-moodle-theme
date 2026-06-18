@@ -4,14 +4,16 @@
  * Punto de entrada único de estilos.
  * Solo contiene @imports — cero reglas CSS aquí.
  *
- * Orden de carga (importa respetar la cascada):
- *   1. variables     → tokens de diseño UVEG (debe ir primero)
- *   2. layout        → estructura shell/sidebar/topbar
- *   3. components    → cada Web Component su propio CSS
- *   4. dark-mode     → overrides oscuros (debe ir al final)
- *   5. responsive    → media queries (siempre al último)
+ * Orden de carga (respetar la cascada):
+ *   1. variables     → tokens de diseño UVEG (primero siempre)
+ *   2. layout        → shell, sidebar, topbar
+ *   3. content       → área principal de contenido
+ *   4. components    → cada Web Component con su propio CSS
+ *   5. dark-mode     → overrides oscuros (antes de responsive)
+ *   6. responsive    → media queries (siempre al último)
  *
- * Bootstrap se carga en index.html vía CDN ANTES de este archivo.
+ * Bootstrap se carga en index.html vía CDN antes de este archivo.
+ * Todas las rutas son relativas a /assets/css/
  * ─────────────────────────────────────────────────────────────
  */
 
@@ -21,35 +23,32 @@
 /* ── 2. Layout ──────────────────────────────────────────────── */
 @import './layout.css';
 
-/* ── 2b. Content ────────────────────────────────────────────── */
+/* ── 3. Content ─────────────────────────────────────────────── */
 @import './content.css';
 
-@import "../../components/uveg-notes/uveg-notes.css";
+/* ── 4. Components ──────────────────────────────────────────── */
+@import '../../components/uveg-topbar/uveg-topbar.css';
+@import '../../components/uveg-sidebar/uveg-sidebar.css';
+@import '../../components/uveg-tabs/uveg-tabs.css';
+@import '../../components/uveg-progress/uveg-progress.css';
+@import '../../components/uveg-card/uveg-card.css';
+@import '../../components/uveg-notes/uveg-notes.css';
+@import '../../components/uveg-mail/uveg-mail.css';
+@import '../../components/uveg-glosario/uveg-glosario.css';
+@import '../../components/uveg-scorm-drawer/uveg-scorm-drawer.css';
+@import '../../components/uveg-scorm-view/uveg-scorm-view.css';
+@import '../../components/uveg-lesson-view/uveg-lesson-view.css';
+@import '../../components/uveg-reto-view/uveg-reto-view.css';
+@import '../../components/uveg-sesiones-view/uveg-sesiones-view.css';
+@import '../../components/uveg-presentacion/uveg-pres-base.css';
+@import '../../components/uveg-presentacion/uveg-pres-alcances.css';
+@import '../../components/uveg-presentacion/uveg-pres-esquema.css';
+@import '../../components/uveg-presentacion/uveg-pres-metodologia.css';
+@import '../../components/uveg-presentacion/uveg-pres-evaluacion.css';
+@import '../../components/uveg-presentacion/uveg-pres-cronograma.css';
 
-@import "../../components//uveg-mail/uveg-mail.css";
-
-/* ── 3. Components ──────────────────────────────────────────── */
-
-/* ── 3. Components ──────────────────────────────────────────── */
-@import '../../../components/uveg-sidebar/uveg-sidebar.css';
-@import '../../../components/uveg-topbar/uveg-topbar.css';
-@import '../../../components/uveg-tabs/uveg-tabs.css';
-@import '../../../components/uveg-card/uveg-card.css';
-@import '../../../components/uveg-progress/uveg-progress.css';
-@import '../../../components/uveg-scorm-drawer/uveg-scorm-drawer.css';
-@import '../../../components/uveg-presentacion/uveg-pres-alcances.css';
-@import '../../../components/uveg-presentacion/uveg-pres-esquema.css';
-@import '../../../components/uveg-presentacion/uveg-pres-metodologia.css';
-@import '../../../components/uveg-presentacion/uveg-pres-evaluacion.css';
-@import '../../../components/uveg-presentacion/uveg-pres-cronograma.css';
-@import '../../../components/uveg-lesson-view/uveg-lesson-view.css';
-@import '../../../components/uveg-reto-view/uveg-reto-view.css';
-@import '../../../components/uveg-scorm-view/uveg-scorm-view.css';
-@import '../../../components/uveg-sesiones-view/uveg-sesiones-view.css';
-@import "../../components/uveg-glosario/uveg-glosario.css";
-
-/* ── 4. Dark mode ───────────────────────────────────────────── */
+/* ── 5. Dark mode ───────────────────────────────────────────── */
 @import './dark-mode.css';
 
-/* ── 5. Responsive ──────────────────────────────────────────── */
+/* ── 6. Responsive ──────────────────────────────────────────── */
 @import './responsive.css';

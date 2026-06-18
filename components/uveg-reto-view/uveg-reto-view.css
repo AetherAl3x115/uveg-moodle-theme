@@ -139,8 +139,8 @@
   display: inline-flex; align-items: center; justify-content: center;
   flex-shrink: 0; position: relative; z-index: 1;
 }
-.lv-inum-pass { background: #dcfce7; color: #166534; }
-.lv-inum-fail { background: #fee2e2; color: #991b1b; }
+.lv-inum-pass { background: var(--color-done-bg);    color: var(--color-done-text); }
+.lv-inum-fail { background: var(--color-danger-bg);  color: var(--color-danger-text); }
 
 .lv-ccal {
   display: inline-flex; align-items: center;
@@ -148,8 +148,8 @@
   padding: 2px 8px; border-radius: var(--radius-full);
 }
 .lv-ccal-zero { background: var(--color-border-light); color: var(--color-text-muted); }
-.lv-ccal-good { background: #dcfce7; color: #166534; }
-.lv-ccal-fail { background: #fee2e2; color: #991b1b; }
+.lv-ccal-good { background: var(--color-done-bg);    color: var(--color-done-text); }
+.lv-ccal-fail { background: var(--color-danger-bg);  color: var(--color-danger-text); }
 
 .lv-attempt-score {
   display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; position: relative; z-index: 1;
@@ -158,8 +158,8 @@
   width: 16px; height: 16px; stroke: currentColor; fill: none;
   stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0;
 }
-.lv-face-pass { color: #16a34a; }
-.lv-face-fail { color: #dc2626; }
+.lv-face-pass { color: var(--color-success); }
+.lv-face-fail { color: var(--color-warning); }
 
 .lv-prev-header {
   display: inline-flex; align-items: center; gap: 7px;
@@ -242,7 +242,7 @@
 /* ── uveg-aviso ───────────────────────────────────────────── */
 .av-root {
   display: flex; border-radius: var(--radius-xl); overflow: hidden;
-  border: .5px solid #f3f4f6; background: #fff;
+  border: .5px solid var(--color-border-light); background: var(--color-surface);
   box-shadow: 0 1px 4px rgba(0,0,0,.06); margin-bottom: 10px;
 }
 .av-stripe {
@@ -263,25 +263,28 @@
 /* ── uveg-instrucciones ───────────────────────────────────── */
 .ins-root {
   border-radius: var(--radius-xl); overflow: hidden;
-  border: .5px solid #dbe8f8; background: #fff;
+  border: .5px solid var(--color-av-ins-border); background: var(--color-surface);
   box-shadow: 0 1px 4px rgba(0,0,0,.06); margin-bottom: 14px;
 }
 .ins-header {
   display: flex; align-items: center; gap: 10px;
   padding: 13px 18px;
-  background: linear-gradient(to right, #1445c4, #0d2a6e);
+  background: linear-gradient(to right, var(--color-accent-dark), var(--color-ins-navy));
 }
 .ins-header-icon {
   width: 34px; height: 34px; border-radius: var(--radius-lg);
   background: rgba(255,255,255,.15);
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  color: #fff;
+  color: var(--color-white);
 }
+
 .ins-header-icon svg { stroke: currentColor; fill: none;
   stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 .ins-header-title {
-  font-size: var(--font-size-sm); font-weight: var(--font-weight-bold); color: #fff;
+  font-size: var(--font-size-sm); font-weight: var(--font-weight-bold); color: var(--color-white);
 }
+
+
 .ins-body  { padding: 18px 20px; }
 .ins-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; }
 
@@ -291,13 +294,14 @@
 }
 .ins-num {
   width: 26px; height: 26px; border-radius: var(--radius-full);
-  background: linear-gradient(135deg, #0d2a6e, #1445c4);
-  color: #fff; font-size: var(--font-size-xs); font-weight: var(--font-weight-bold);
+  background: linear-gradient(135deg, var(--color-ins-navy), var(--color-accent-dark));
+  color: var(--color-white);
+  font-size: var(--font-size-xs); font-weight: var(--font-weight-bold);
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  box-shadow: 0 1px 4px rgba(20,69,196,.3);
+  box-shadow: 0 1px 4px rgba(20,69,196,.3); /* TODO: tokenizar si se repite */
 }
 .ins-line {
-  width: 2px; background: #c5dcf5; flex: 1; margin-top: 4px;
+  width: 2px; background: var(--color-ins-line); flex: 1; margin-top: 4px;
 }
 .ins-step-content { flex: 1; padding-bottom: 16px; padding-top: 3px; }
 .ins-step-text {
@@ -349,7 +353,7 @@
 }
 .ins-aviso {
   display: flex; align-items: center; gap: var(--space-2);
-  background: #fff0f0; border: 0.5px solid rgba(220,38,38,.30);
+  background: var(--color-aviso-bg); border: 0.5px solid var(--color-aviso-border);
   border-radius: var(--radius-md);
   padding: var(--space-2) var(--space-3);
   margin: var(--space-3) var(--space-4) 0;
@@ -422,3 +426,100 @@
 [data-bs-theme="dark"] .lv-hist-compact { background: var(--color-surface); border-color: var(--color-border); }
 [data-bs-theme="dark"] .lv-attempt-card { background: var(--color-tint-bg); border-color: var(--color-tint-border); }
 [data-bs-theme="dark"] .lv-ccal-zero    { background: var(--color-border-light); color: var(--color-text-muted); }
+
+/* ── Reto tabs — selector de reto R1/R2 ─────────────────────── */
+/* Timeline visual de selección entre retos de una unidad.
+   Mueve a este archivo desde content.css — pertenece al componente. */
+.reto-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  padding: 4px 0;
+}
+
+.reto-tab-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+}
+
+.reto-tab-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  border: 2.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-faint);
+  transition:
+    background     var(--transition-spring),
+    border-color   var(--transition-spring),
+    color          var(--transition-spring),
+    transform      var(--transition-spring),
+    box-shadow     var(--transition-spring);
+}
+
+.reto-tab-node:hover .reto-tab-circle {
+  border-color: var(--color-accent-navy);
+  color: var(--color-accent-navy);
+  transform: scale(1.08);
+}
+
+.reto-tab-node.active .reto-tab-circle {
+  background: var(--color-accent);
+  border-color: var(--color-warning-yellow);
+  color: var(--color-white);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-warning-yellow) 20%, transparent);
+  transform: scale(1.12);
+  animation: retoActivate .35s cubic-bezier(.2, 0, .2, 1) forwards;
+}
+
+@keyframes retoActivate {
+  0%   { transform: scale(1);    box-shadow: 0 0 0 0px  color-mix(in srgb, var(--color-warning-yellow) 40%, transparent); }
+  45%  { transform: scale(1.18); box-shadow: 0 0 0 6px  color-mix(in srgb, var(--color-warning-yellow) 15%, transparent); }
+  70%  { transform: scale(1.08); }
+  100% { transform: scale(1.12); box-shadow: 0 0 0 4px  color-mix(in srgb, var(--color-warning-yellow) 20%, transparent); }
+}
+
+.reto-tab-label {
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-faint);
+  transition: color var(--transition-base);
+  white-space: nowrap;
+}
+
+.reto-tab-node.active .reto-tab-label        { color: var(--color-accent); font-weight: var(--font-weight-bold); }
+.reto-tab-node:hover:not(.active) .reto-tab-label { color: var(--color-accent-navy); }
+
+.reto-tab-line {
+  width: 32px;
+  height: 3px;
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+  margin: 0 -1px 20px;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  transition: background var(--transition-base);
+}
+
+.reto-tab-line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 0%;
+  background: var(--color-accent);
+  border-radius: var(--radius-full);
+  transition: width .5s cubic-bezier(.4, 0, .2, 1);
+}
+
+.reto-tabs[data-active="r2"] .reto-tab-line::after { width: 100%; }

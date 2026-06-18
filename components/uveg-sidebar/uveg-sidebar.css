@@ -35,7 +35,9 @@
 /* ── Badge notificación ─────────────────────────────────────── */
 .sb-badge {
   margin-left: auto;
-  background: #ef4444;
+  position: relative;
+  z-index: 1;
+  background: var(--color-sb-badge-bg);
   color: var(--color-white);
   font-size: 9px;
   font-weight: var(--font-weight-bold);

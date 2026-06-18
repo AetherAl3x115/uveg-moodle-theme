@@ -3,343 +3,153 @@
  * ─────────────────────────────────────────────────────────────
  * Overrides para tema oscuro.
  *
- * Funciona con el atributo [data-theme="dark"] en <html>.
- * Los tokens base ya están definidos en variables.css —
- * aquí solo se sobreescriben los que Bootstrap o componentes
- * externos no respetan automáticamente.
+ * Usa [data-bs-theme="dark"] en <html> — mismo atributo que
+ * Bootstrap, controlado por utils/theme.js.
  *
- * Jerarquía de carga (debe ser el último CSS en importarse):
- * bootstrap → variables.css → layout.css → components → dark-mode.css
+ * Estructura:
+ *   1. Tokens  → re-declaración de custom properties para dark
+ *   2. Shell   → body, topbar, content area
+ *   3. Layout  → tabs, view toggle, secciones
+ *   4. Cards   → lecciones, retos, sub-actividades
+ *   5. Panels  → right panel, SCORM drawer, avisos, presentación
+ *   6. UI      → botones, badges, íconos
+ *
+ * Jerarquía de carga:
+ *   bootstrap → variables.css → layout.css → components → dark-mode.css
  * ─────────────────────────────────────────────────────────────
  */
 
-/* ── Sincronizar Bootstrap con nuestro sistema de dark mode ── */
-[data-theme="dark"] {
+/* ── 1. Tokens dark ───────────────────────────────────────────
+ * Solo se sobreescriben los tokens que cambian en dark mode.
+ * El resto hereda los valores de variables.css.
+ * ─────────────────────────────────────────────────────────────*/
+[data-bs-theme="dark"] {
   color-scheme: dark;
+
+  /* Neutral */
+  --color-bg:            #0f1117;
+  --color-surface:       #1a1d27;
+  --color-border:        #2a2d3a;
+  --color-border-light:  #232635;
+
+  /* Text */
+  --color-text-primary:   #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted:     #64748b;
+  --color-text-faint:     #475569;
+
+  /* States */
+  --color-pending-bg:   #232635;
+  --color-pending-text: #64748b;
+  --color-pending-dot:  #334155;
+
+  --color-progress-bg:   #1e3a5f;
+  --color-progress-text: #93c5fd;
+
+  --color-done-bg:   #14532d;
+  --color-done-text: #86efac;
+
+  --color-reto-bg:   #1e2a4a;
+  --color-reto-text: #93c5fd;
+
+  /* Accent overrides */
+  --color-accent-dark: var(--color-accent-navy);
+  --color-tint-bg:     #1e2a4a;
+  --color-tint-border: #2a3a6a;
+  --color-tint-hover:  var(--color-border);
+  --shadow-accent:     0 2px 8px rgba(76, 69, 229, .45), 0 0 0 1.5px rgba(76, 69, 229, .15);
+
+  /* Pbox */
+  --color-pbox-bg:     var(--color-surface);
+  --color-pbox-border: var(--color-border);
+
+  /* Pbox chips hover */
+  --color-card-pbox-bg-hover:  var(--color-accent-navy);
+  --color-card-pbox-brd-hover: #818cf8;
+  --color-card-pbox-div-hover: #3b82f6;
+  --color-card-pbox-txt-hover: #ffffff;
+
+  /* Header */
+  --color-progress-pct: var(--color-text-primary);
+  --color-title-from:   var(--color-text-primary);
+  --color-title-to:     var(--color-text-secondary);
+
+  /* Sidebar tags */
+  --color-act-tag-foro-bg:        #2e1f5e;
+  --color-act-tag-foro-text:      #c4b5fd;
+  --color-act-tag-actividad-bg:   #431407;
+  --color-act-tag-actividad-text: #fb923c;
+
+  /* Advisor */
+  --color-advisor-asesor-bg:  #1e2a4a;
+  --color-advisor-tutor-bg:   #0d2e1f;
+  --color-advisor-tutor-text: #4ade80;
+ --color-advisor-tutor-dot:  #4ade80;
+
+  /* Unit outer card */
+  --color-unit-border:        rgba(165, 180, 252, .2);
+  --color-unit-header-bg:     rgba(76, 69, 229, .08);
+  --color-unit-header-border: rgba(76, 69, 229, .15);
+  --color-unit-divider:       rgba(165, 180, 252, .2);
+  --color-unit-controls-bg:   rgba(76, 69, 229, .05);
 }
 
-/* ── Body / Shell ───────────────────────────────────────────── */
-[data-theme="dark"] body {
+/* ── 2. Shell ─────────────────────────────────────────────────*/
+[data-bs-theme="dark"] body {
   background: var(--color-bg);
   color: var(--color-text-primary);
 }
 
-/* ── Topbar ─────────────────────────────────────────────────── */
-[data-theme="dark"] .topbar {
+/* ── Topbar ── */
+[data-bs-theme="dark"] .topbar {
   background: var(--color-surface);
   border-color: var(--color-border);
 }
 
-[data-theme="dark"] .tb-brand {
-  color: var(--color-text-primary);
-}
+[data-bs-theme="dark"] .tb-brand { color: var(--color-text-primary); }
+[data-bs-theme="dark"] .tb-icon  { color: var(--color-text-faint); }
 
-[data-theme="dark"] .tb-icon {
-  color: var(--color-text-faint);
-}
+[data-bs-theme="dark"] .tb-icon:hover { color: var(--color-text-primary); }
 
-[data-theme="dark"] .tb-icon:hover {
-  color: var(--color-text-primary);
-}
+/* ── Content area ── */
+[data-bs-theme="dark"] .center { background: var(--color-bg); }
 
-/* ── Sidebar ────────────────────────────────────────────────── */
-/* El sidebar usa el gradiente UVEG en ambos temas —
-   no cambia en dark mode, es parte del branding. */
-
-/* ── Content area ───────────────────────────────────────────── */
-[data-theme="dark"] .center {
-  background: var(--color-bg);
-}
-
-[data-theme="dark"] .center::-webkit-scrollbar-thumb {
+[data-bs-theme="dark"] .center::-webkit-scrollbar-thumb {
   background: var(--color-border);
 }
 
-/* ── Module header ──────────────────────────────────────────── */
-[data-theme="dark"] .mod-tag {
-  background: var(--color-reto-bg);
-  color: var(--color-reto-text);
-}
+/* ── Sidebar ──
+   El sidebar usa el gradiente UVEG en ambos temas —
+   no cambia en dark mode, es parte del branding.      */
 
-[data-theme="dark"] .mod-title {
-  color: var(--color-text-primary);
-}
+/* ── 3. Layout ────────────────────────────────────────────────*/
 
-/* ── Progress box ───────────────────────────────────────────── */
-[data-theme="dark"] .pbox {
-  background: var(--color-surface);
-  border-color: var(--color-border);
-}
+/* Module header */
+[data-bs-theme="dark"] .mod-tag { background: var(--color-reto-bg); color: var(--color-reto-text); }
+/* .mod-title — override en content.css via gradient dark */
 
-[data-theme="dark"] .plabel {
-  color: var(--color-text-faint);
-}
+/* Progress box — tokens estáticos, remapeo dark en bloque :root es suficiente */
 
-[data-theme="dark"] .ppct {
-  color: var(--color-text-primary);
-}
+/* Tabs — manejado por tokens en uveg-tabs.css.
+   var(--color-tint-bg) y var(--color-tint-border) ya se
+   sobreescriben en el bloque de tokens dark de arriba. */
 
-[data-theme="dark"] .cden {
-  color: var(--color-text-faint);
-}
+/* View toggle — cubierto por uveg-card.css */
+[data-bs-theme="dark"] .sec-title { color: var(--color-text-muted); } /* !Bootstrap override — Bug C */
 
-[data-theme="dark"] .pbar {
-  background: var(--color-border);
-}
+/* ── 4. Cards — cubierto por uveg-card.css ────────────────────*/
 
-/* ── Tabs ───────────────────────────────────────────────────── */
-[data-theme="dark"] .tabs {
-  background: var(--color-surface);
-  border-color: var(--color-border);
-}
+/* ── 5. Panels — cubierto por tokens re-mapeados en bloque :root ──*/
+/* uveg-sidebar.css y uveg-scorm-view.css usan exclusivamente tokens estáticos. */
+/* Presentación — dark lo maneja content.css (tokens dinámicos por instancia). */
 
-[data-theme="dark"] .tab {
-  color: var(--color-text-faint);
-}
+/* ── 6. UI — cubierto por uveg-card.css ──────────────────────*/
 
-[data-theme="dark"] .tab:hover:not(.active) {
-  background: var(--color-border-light);
-}
-
-/* ── View toggle (tarjetas / lista) ────────────────────────── */
-[data-theme="dark"] .tv-wrap {
-  background: var(--color-border-light);
-}
-
-[data-theme="dark"] .tv-btn {
-  color: var(--color-text-faint);
-}
-
-[data-theme="dark"] .tv-btn.active {
-  background: var(--color-border);
-  color: var(--color-text-secondary);
-}
-
-[data-theme="dark"] .sec-title {
-  color: var(--color-text-muted);
-}
-
-/* ── Cards ──────────────────────────────────────────────────── */
-[data-theme="dark"] .card {
-  background: var(--color-surface);
-  border-color: var(--color-border);
-}
-
-[data-theme="dark"] .card-reto {
-  background: linear-gradient(135deg, var(--color-surface) 60%, var(--color-reto-bg));
-}
-
-[data-theme="dark"] .card:hover {
-  border-color: #4f6bd4;
-}
-
-[data-theme="dark"] .card.open {
-  border-color: var(--uveg-blue);
-}
-
-[data-theme="dark"] .c-title {
-  color: var(--color-text-primary);
-}
-
-[data-theme="dark"] .c-type {
-  color: var(--color-text-faint);
-}
-
-[data-theme="dark"] .c-footer {
-  border-color: var(--color-border-light);
-}
-
-[data-theme="dark"] .cf-date {
-  color: var(--color-text-faint);
-}
-
-[data-theme="dark"] .cf-chip {
-  background: var(--color-border-light);
-  color: var(--color-text-muted);
-}
-
-/* ── Avatar states ──────────────────────────────────────────── */
-[data-theme="dark"] .av-pending {
-  background: var(--color-border-light);
-  color: #4a5568;
-}
-
-/* ── Badges ─────────────────────────────────────────────────── */
-[data-theme="dark"] .b-pending {
-  background: var(--color-border-light);
-  color: var(--color-text-muted);
-}
-
-/* ── Blob / expanded content ────────────────────────────────── */
-[data-theme="dark"] .b-div {
-  background: var(--color-border-light);
-}
-
-[data-theme="dark"] .b-desc {
-  color: var(--color-text-muted);
-}
-
-[data-theme="dark"] .bd-lbl {
-  color: var(--color-text-faint);
-}
-
-[data-theme="dark"] .bd-val {
-  color: var(--color-text-secondary);
-}
-
-/* ── Sub-actividades ────────────────────────────────────────── */
-[data-theme="dark"] .sub-act-card {
-  background: var(--color-border-light);
-  border-color: var(--color-border);
-}
-
-[data-theme="dark"] .sub-act-name {
-  color: var(--color-text-primary);
-}
-
-[data-theme="dark"] .sub-act-desc {
-  color: var(--color-text-muted);
-}
-
-[data-theme="dark"] .sub-section-title {
-  color: var(--color-text-faint);
-}
-
-[data-theme="dark"] .state-bar-val {
-  color: var(--color-text-secondary);
-}
-
-/* ── Simulate button ────────────────────────────────────────── */
-[data-theme="dark"] .sim-btn {
-  color: var(--color-text-faint);
-  border-color: var(--color-border);
-}
-
-[data-theme="dark"] .sim-btn:hover {
-  color: #60a5fa;
-  border-color: #60a5fa;
-}
-
-[data-theme="dark"] .btn-locked {
-  background: var(--color-border-light) !important;
-  color: #334155 !important;
-}
-
-/* ── Avisos tab ─────────────────────────────────────────────── */
-[data-theme="dark"] .aviso-item {
-  background: var(--color-surface);
-  border-color: var(--color-border);
-}
-
-[data-theme="dark"] .aviso-title {
-  color: var(--color-text-primary);
-}
-
-[data-theme="dark"] .aviso-desc {
-  color: var(--color-text-muted);
-}
-
-[data-theme="dark"] .aviso-date {
-  color: var(--color-text-faint);
-}
-
-/* ── Presentación tab ───────────────────────────────────────── */
-[data-theme="dark"] .pres-card {
-  background: var(--color-surface);
-  border-color: var(--color-border);
-}
-
-[data-theme="dark"] .pres-label {
-  color: var(--color-text-muted);
-}
-
-[data-theme="dark"] .pres-content {
-  background: var(--color-surface);
-  border-color: var(--color-border);
-}
-
-[data-theme="dark"] .pres-content h3 {
-  color: var(--color-text-primary);
-}
-
-[data-theme="dark"] .pres-content p {
-  color: var(--color-text-muted);
-}
-
-[data-theme="dark"] .pres-list li {
-  color: var(--color-text-muted);
-}
-
-/* ── SCORM Drawer ───────────────────────────────────────────── */
-[data-theme="dark"] .scorm-drawer {
-  background: var(--color-surface);
-}
-
-/* ── Right Panel ────────────────────────────────────────────── */
-[data-theme="dark"] .rpanel {
-  background: var(--color-surface);
-  border-color: var(--color-border);
-}
-
-[data-theme="dark"] .rp-title {
-  color: var(--color-text-muted);
-}
-
-[data-theme="dark"] .rp-sep {
-  background: var(--color-border);
-}
-
-[data-theme="dark"] .pc-wrap p {
-  color: var(--color-text-muted);
-}
-
-[data-theme="dark"] .pc-wrap strong {
-  color: var(--color-text-primary);
-}
-
-[data-theme="dark"] .rp-link {
-  color: #60a5fa;
-}
-
-[data-theme="dark"] .sec-item:hover {
-  background: var(--color-border-light);
-}
-
-[data-theme="dark"] .sec-item.active {
-  background: var(--color-reto-bg);
-}
-
-[data-theme="dark"] .sec-num {
-  background: var(--color-border);
-  color: var(--color-text-muted);
-}
-
-[data-theme="dark"] .sec-name {
-  color: var(--color-text-secondary);
-}
-
-[data-theme="dark"] .prox-item {
-  border-color: var(--color-border-light);
-}
-
-[data-theme="dark"] .prox-name {
-  color: var(--color-text-secondary);
-}
-
-[data-theme="dark"] .prox-date {
-  color: var(--color-text-faint);
-}
-
-/* ── Dark mode toggle icon swap ─────────────────────────────── */
-/* En light mode: mostrar luna, ocultar sol */
+/* ── Dark mode icon swap ──────────────────────────────────────
+ * Controla qué ícono del topbar se muestra según el tema.
+ * ─────────────────────────────────────────────────────────────*/
 .icon-sun  { display: none; }
 .icon-moon { display: inline; }
 
-/* En dark mode: mostrar sol, ocultar luna */
-[data-theme="dark"] .icon-sun  { display: inline; }
-[data-theme="dark"] .icon-moon { display: none; }
-
-/* ── Note / helper text ─────────────────────────────────────── */
-[data-theme="dark"] .note {
-  color: var(--color-text-faint);
-}
+[data-bs-theme="dark"] .icon-sun  { display: inline; }
+[data-bs-theme="dark"] .icon-moon { display: none; }

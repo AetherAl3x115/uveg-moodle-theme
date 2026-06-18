@@ -456,7 +456,11 @@ class UvegCard extends HTMLElement {
   }
 
   _renderRing(id, cfg, whiteTrack = false) {
-    const trackColor = whiteTrack ? "rgba(255,255,255,.2)" : "#e5e7eb";
+    const trackColor = whiteTrack
+      ? "rgba(255,255,255,.2)"
+      : getComputedStyle(document.documentElement)
+          .getPropertyValue("--color-tint-border")
+          .trim() || "#d4d8f0";
     return `
       <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true" style="position:absolute;top:0;left:0;pointer-events:none">
         <circle cx="22" cy="22" r="17" fill="none" stroke="${trackColor}" stroke-width="3"/>
@@ -525,12 +529,8 @@ class UvegCard extends HTMLElement {
     if (!card) return;
 
     card.addEventListener("click", this._handleCardClick.bind(this));
-    card.addEventListener("mouseenter", () =>
-      card.classList.remove("hover-out"),
-    );
     card.addEventListener("mouseleave", () => {
-      card.classList.add("hover-out");
-      setTimeout(() => card.classList.remove("hover-out"), 300);
+      card.style.transform = "scale(1)";
     });
     card.addEventListener("mousedown", () => springScale(card, 1.015, 0.984));
     card.addEventListener("mouseup", () => springScale(card, 0.984, 1.015));

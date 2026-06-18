@@ -2,161 +2,286 @@
  * variables.css
  * ─────────────────────────────────────────────────────────────
  * Fuente única de verdad para todos los tokens de diseño UVEG.
- * NUNCA hardcodear colores fuera de este archivo.
+ *
+ * REGLAS:
+ *   - NUNCA hardcodear colores fuera de este archivo.
+ *   - NUNCA agregar reglas CSS aquí — solo custom properties.
+ *   - Los overrides de dark mode van en dark-mode.css.
+ * ─────────────────────────────────────────────────────────────
+ */
+
+ /*
+ * ─── Sistema de tokens — 3 niveles ───────────────────────────
+ *
+ * Nivel 1 — Primitivos
+ *   Valores raw. Solo se referencian desde Nivel 2 y 3.
+ *   Nunca se usan directamente en componentes.
+ *
+ * Nivel 2 — Semánticos / estilísticos globales
+ *   Reutilizables en cualquier componente.
+ *   Incluye tokens role-based (--color-surface, --color-accent)
+ *   y tokens estilísticos compartidos (--color-tint-bg, --color-tint-border).
+ *   Estos últimos son visuales, no de rol — usarlos con criterio,
+ *   no como comodín.
+ *
+ * Nivel 3 — Feature (scoped)
+ *   Dueño: un componente o contexto específico.
+ *   NO reutilizar fuera de su dueño.
+ *   Ejemplo: --color-entrega-border, --color-advisor-tutor-bg
+ *
+ * Regla de promoción:
+ *   Si un token Nivel 3 se reutiliza en ≥2 componentes distintos
+ *   o ≥2 features del dominio → migrar a Nivel 2.
+ *
+ * Regla de degradación:
+ *   Si un token Nivel 2 deja de ser reutilizado y pertenece
+ *   a un solo contexto → puede degradarse a Nivel 3.
+ *   Solo con revisión manual. Ningún token vive en duda entre niveles.
+ *
+ * Nivel 2 nunca duplica un Nivel 3 existente.
+ * Nivel 3 puede copiar valor de Nivel 2, nunca al revés.
  * ─────────────────────────────────────────────────────────────
  */
 
 :root {
 
-  /* ── Brand Accent ─────────────────────────────────────────── */
-  --color-accent:        #2662eb;
-  --color-accent-dark:   #1445c4;
-  --color-accent-navy:   #4c45e5;
+  /* ── Brand ────────────────────────────────────────────────── */
+  --color-accent:       #2662eb;
+  --color-accent-dark:  #1445c4;
+  --color-accent-navy:  #4c45e5;
 
-  /* ── Tinted Surface (accent-tinted backgrounds) ───────────── */
-  --color-tint-bg:       #eef2ff;
-  --color-tint-border:   #d4d8f0;
-  --color-tint-hover:    #dde3f0;
+  /* ── Tinted surfaces ──────────────────────────────────────── */
+  --color-tint-bg:      #eef2ff;
+  --color-tint-border:  #d4d8f0;
+  --color-tint-hover:   #dde3f0;
 
-  /* ── Accent Shadow ────────────────────────────────────────── */
-  --shadow-accent:       0 2px 8px rgba(37, 99, 235, .45), 0 0 0 1.5px rgba(37, 99, 235, .15);
+  /* ── Shadows ──────────────────────────────────────────────── */
+  --shadow-accent: 0 2px 8px rgba(37, 99, 235, .45), 0 0 0 1.5px rgba(37, 99, 235, .15);
+  --shadow-sm:     0 1px 3px rgba(0, 0, 0, .06);
+  --shadow-md:     0 4px 12px rgba(0, 0, 0, .08);
+  --shadow-lg:     0 8px 24px rgba(0, 0, 0, .12);
 
-  /* ── Neutral Palette ──────────────────────────────────────── */
-  --color-white:         #ffffff;
-  --color-bg:            #f4f6fb;
-  --color-surface:       #ffffff;
-  --color-border:        #e5e7eb;
-  --color-border-light:  #f3f4f6;
+  /* ── Neutral palette ──────────────────────────────────────── */
+  --color-white:        #ffffff;
+  --color-bg:           #f4f6fb;
+  --color-surface:      #ffffff;
+  --color-border:       #e5e7eb;
+  --color-border-light: #f3f4f6;
 
-  /* ── Card tokens ──────────────────────────────────────────── */
-  --color-card-bg:          #edf1f7;
-  --color-card-border:      #d6dce8;
-  --color-card-border-hover:#a8bcda;
-  --color-card-chip-bg:     #cad9e9;
-  --color-card-chip-border: #7a92a8;
-  --color-av-bg:            #dde5f3;
-  --color-sub-border:       #dee6ff;
-  --bs-card-bg:             #edf1f7;
-
+  /* ── Text ─────────────────────────────────────────────────── */
   --color-text-primary:   #111827;
   --color-text-secondary: #374151;
   --color-text-muted:     #6b7280;
   --color-text-faint:     #9ca3af;
 
-  /* ── State Colors ─────────────────────────────────────────── */
-  --color-pending-bg:    #f3f4f6;
-  --color-pending-text:  #6b7280;
-  --color-pending-dot:   #d1d5db;
+  /* ── Card ─────────────────────────────────────────────────── */
+  --color-card-bg:           #edf1f7;
+  --color-card-border:       #d6dce8;
+  --color-card-border-hover: #a8bcda;
+  --color-card-chip-bg:      #cad9e9;
+  --color-card-chip-border:  #7a92a8;
+  --color-av-bg:             #dde5f3;
+  --color-sub-border:        #dee6ff;
+  --bs-card-bg:              #edf1f7;
+
+  /* ── Pbox (progress box del header) ──────────────────────── */
+  --color-pbox-bg:     rgba(255, 255, 255, 0.85);
+  --color-pbox-border: rgba(255, 255, 255, 0.9);
+  --shadow-pbox:       0 8px 32px rgba(13, 85, 222, 0.08), 0 1px 3px rgba(0, 0, 0, .06);
+  --radius-pbox:       20px;
+
+  /* ── Pbox chips (sub-cards de datos) ─────────────────────── */
+  --color-card-pbox-bg:         var(--color-tint-bg);
+  --color-card-pbox-border:     var(--color-tint-border);
+  --color-card-pbox-divider:    #c7d2fe;
+  --color-card-pbox-label:      #4338ca;
+  --color-card-pbox-data:       var(--color-accent);
+  --color-card-pbox-bg-hover:   var(--color-accent);
+  --color-card-pbox-brd-hover:  var(--color-accent-dark);
+  --color-card-pbox-div-hover:  #60a5fa;
+  --color-card-pbox-txt-hover:  var(--color-white);
+
+  /* ── State: pending / progress / done ────────────────────── */
+  --color-pending-bg:   #f3f4f6;
+  --color-pending-text: #6b7280;
+  --color-pending-dot:  #d1d5db;
 
   --color-progress-bg:   #dbeafe;
   --color-progress-text: #1e40af;
   --color-progress-dot:  #3b82f6;
 
-  --color-done-bg:       #dcfce7;
-  --color-done-text:     #166534;
-  --color-done-dot:      #22c55e;
+  --color-done-bg:   #dcfce7;
+  --color-done-text: #166534;
+  --color-done-dot:  #22c55e;
 
-  --color-reto-bg:       #eef2ff;
-  --color-reto-text:     #4338ca;
-
+  /* ── State: reto / examen / entrega ──────────────────────── */
+  --color-reto-bg:        #eef2ff;
+  --color-reto-text:      #4338ca;
   --color-examen-accent:  #7c3aed;
   --color-entrega-accent: #ea580c;
 
-  --color-semana-orange-bg:    #fff3e6; 
-  --color-semana-orange-text:  #ea580c; 
-  --color-semana-orange-border:#ffe4c4;
+  /* ── State: semana ───────────────────────────────────────── */
+  --color-semana-orange-bg:     #fff3e6;
+  --color-semana-orange-text:   #ea580c;
+  --color-semana-orange-border: #ffe4c4;
 
-  /* ── Sidebar Blocks ───────────────────────────────────────── */
---color-block-menu-icon-bg:     var(--color-tint-bg);
---color-block-menu-icon-border: var(--color-tint-border);
---color-block-menu-icon:        var(--color-accent);
+  /* ── Activity type chips ──────────────────────────────────── */
+  --color-act-video-bg:             #ffe2ee;
+  --color-act-video-text:           #be185d;
+  --color-act-video-border:         #fba4c0;
 
---color-act-dot-foro:           #8b5cf6;
---color-act-dot-lectura:        var(--color-accent);
---color-act-dot-actividad:      #ea580c;
+  --color-act-lectura-bg:           #e3ffec;
+  --color-act-lectura-text:         #15803d;
+  --color-act-lectura-border:       #86efac;
 
---color-act-tag-foro-bg:        #ede9fe;
---color-act-tag-foro-text:      #6d28d9;
---color-act-tag-lectura-bg:     var(--color-tint-bg);
---color-act-tag-lectura-text:   var(--color-accent-dark);
---color-act-tag-actividad-bg:   #ffedd5;
---color-act-tag-actividad-text: #c2410c;
+  --color-act-podcast-bg:           #d2caff;
+  --color-act-podcast-text:         #6d28d9;
+  --color-act-podcast-border:       #afa2e4;
 
-/* ── Pbox Base ────────────────────────────────────────────── */
-  --color-card-pbox-bg:         var(--color-tint-bg);     /* #eef2ff */
-  --color-card-pbox-border:     var(--color-tint-border); /* #d4d8f0 */
-  --color-card-pbox-divider:    #c7d2fe;
-  --color-card-pbox-label:      #4338ca;
-  --color-card-pbox-data:       var(--color-accent);       /* #2662eb */
+  --color-act-presentacion-bg:      #fff9dd;
+  --color-act-presentacion-text:    #b45309;
+  --color-act-presentacion-border:  #fcd34d;
 
-  /* ── Pbox Hover Sólido (¡Cero Grises!) ────────────────────── */
-  --color-card-pbox-bg-hover:   var(--color-accent);       /* Azul sólido de la marca */
-  --color-card-pbox-brd-hover:  var(--color-accent-dark);  /* #1445c4 */
-  --color-card-pbox-div-hover:  #60a5fa;                  /* Azul claro para la línea en hover */
-  --color-card-pbox-txt-hover:  var(--color-white);        /* Texto e iconos pasan a blanco */
+  --color-act-infografia-bg:        #defdff;
+  --color-act-infografia-text:      #0e7490;
+  --color-act-infografia-border:    #a5f3fc;
 
-  /* ── Activity type tokens (uveg-card + cronograma) ────────── */
-  --color-act-video-bg:           #ffe2ee;
-  --color-act-video-text:         #be185d;
-  --color-act-video-border:       #fba4c0;
+  --color-act-ejercicio-bg:         #d4dfff;
+  --color-act-ejercicio-text:       #3730a3;
+  --color-act-ejercicio-border:     #9aa8ed;
 
-  --color-act-lectura-bg:         #e3ffec;
-  --color-act-lectura-text:       #15803d;
-  --color-act-lectura-border:     #86efac;
+  /* ── Sidebar blocks ───────────────────────────────────────── */
+  --color-sb-border:              #1445c4;
+  --color-block-menu-icon-bg:     var(--color-tint-bg);
+  --color-block-menu-icon-border: var(--color-tint-border);
+  --color-block-menu-icon:        var(--color-accent);
+  --color-sb-badge-bg: #ef4444;
 
-  --color-act-podcast-bg:         #d2caff;
-  --color-act-podcast-text:       #6d28d9;
-  --color-act-podcast-border:     #afa2e4;
+  --color-act-dot-foro:      #8b5cf6;
+  --color-act-dot-lectura:   var(--color-accent);
+  --color-act-dot-actividad: #ea580c;
 
-  --color-act-presentacion-bg:    #fff9dd;
-  --color-act-presentacion-text:  #b45309;
-  --color-act-presentacion-border:#fcd34d;
+  --color-act-tag-foro-bg:        #ede9fe;
+  --color-act-tag-foro-text:      #6d28d9;
+  --color-act-tag-lectura-bg:     var(--color-tint-bg);
+  --color-act-tag-lectura-text:   var(--color-accent-dark);
+  --color-act-tag-actividad-bg:   #ffedd5;
+  --color-act-tag-actividad-text: #c2410c;
 
-  --color-act-infografia-bg:      #defdff;
-  --color-act-infografia-text:    #0e7490;
-  --color-act-infografia-border:  #a5f3fc;
-  
---color-advisor-asesor-bg:  #dce6fd;
---color-advisor-asesor-dot: var(--color-accent);
---color-advisor-tutor-bg:   #d6f0e6;
---color-advisor-tutor-text: #0f6e56;
---color-advisor-tutor-dot:  var(--color-done-dot);
+  /* Nivel 3 — uveg-topbar.css */
+--color-tb-mail-badge-bg:     #ef4444;
+--color-tb-mail-badge-text:   var(--color-white);
+--color-tb-mail-badge-border: #dc2626;
+--color-tb-inst-badge-bg:     var(--color-tint-bg);
+--color-tb-inst-badge-text:   var(--color-accent-dark);
+--color-tb-inst-badge-border: var(--color-tint-border);
 
---color-act-ejercicio-bg:     #d4dfff;
---color-act-ejercicio-text:   #3730a3;
---color-act-ejercicio-border: #9aa8ed;
+  /* ── Advisor cards ────────────────────────────────────────── */
+  --color-advisor-asesor-bg:  #dce6fd;
+  --color-advisor-asesor-dot: var(--color-accent);
+  --color-advisor-tutor-bg:   #d6f0e6;
+  --color-advisor-tutor-text: #0f6e56;
+  --color-advisor-tutor-dot:  var(--color-done-dot);
 
-  /* ── Action Buttons ───────────────────────────────────────── */
-  --color-warning:          #dc2626;
---color-btn-glosario-bg:    var(--color-warning);
+  /* ── Action / Warning ─────────────────────────────────────── */
+  --color-warning:            #dc2626;
+  --color-btn-glosario-bg:    #dc2626;
   --color-btn-glosario-hover: #b91c1c;
   --color-tab-glossary:       #c2185b;
 
-  /* ── Header / Progress box ────────────────────────────────── */
+  /* ── Duration chip ───────────────────────────────────────── */
+  --color-duration-bg:          rgba(20, 69, 196, 0.08);
+
+  /* ── Sub-act icon / badge ─────────────────────────────────── */
+  --color-sub-act-icon-bg:      rgba(20, 70, 196, 0.158);
+  --color-sub-act-badge-bg:     rgba(20, 69, 196, 0.08);
+  --color-sub-act-badge-border: rgba(20, 69, 196, 0.20);
+
+  /* ── Entrega (sub-act tipo entrega) ───────────────────────── */
+  --color-entrega-bg:           rgba(225, 29, 72, 0.06);
+  --color-entrega-border:       rgba(225, 29, 72, 0.35);
+  --color-entrega-border-hover: #e11d48;
+  --color-entrega-shadow:       0 0 0 3px rgba(225, 29, 72, 0.08);
+  --color-entrega-icon-bg:      rgba(225, 29, 72, 0.12);
+  --color-entrega-sweep-bg:     rgba(225, 29, 72, 0.12);
+
+  /* ── Unit outer header ────────────────────────────────────── */
+  --color-unit-header-border-inner: rgba(255, 255, 255, 0.15);
+  --color-accent-deeper:            #0f3399;
+  --color-accent-deepest:           #0a2580;
+
+  /* ── Unit outer card ──────────────────────────────────────── */
+  --color-unit-border:          #a5b4fc;
+  --color-unit-header-bg:       #f5f3ff;
+  --color-unit-header-border:   #e0e7ff;
+  --color-unit-divider:         #c7d2fe;
+  --color-unit-controls-bg:     rgba(248, 245, 255, 0.4);
+
+  /* ── Pbox divider ─────────────────────────────────────────── */
+  --color-pbox-divider:         #1e3fad;
+
+  /* ── State: warning-yellow (pfill regular) ────────────────── */
+  --color-warning-yellow:       #eab308;
+--color-warning-bg:           #fef9c3;
+--color-warning-text:         #b45309;
+  --color-success:              #16a34a;
+  --color-danger-bg:            #fee2e2;
+  --color-danger-text:          #991b1b;
+
+  /* ── FAB Chatbot ──────────────────────────────────────────── */
+  --color-fab-from:             #2662eb;
+  --color-fab-to:               #6d3fd4;
+  --shadow-fab:                 0 4px 16px rgba(38, 98, 235, .45), 0 1px 4px rgba(0, 0, 0, .15);
+  --shadow-fab-hover:           0 8px 24px rgba(38, 98, 235, .55), 0 2px 8px rgba(0, 0, 0, .18);
+
+  /* ── Shadows — estado interactivo ────────────────────────── */
+  --shadow-focus:     0 0 0 3px rgba(38, 98, 235, .30);
+  --shadow-active:    0 0 0 2px rgba(38, 98, 235, .50), 0 1px 3px rgba(0, 0, 0, .08);
+  --shadow-highlight: 0 0 0 3px rgba(99, 102, 241, .25), 0 2px 6px rgba(0, 0, 0, .06);
+
+  /* ── Header / Progress fill ───────────────────────────────── */
   --color-progress-fill-from: #10b981;
   --color-progress-fill-to:   #14b8a6;
   --color-progress-pct:       #0d9488;
 
-  --color-mod-tag-from:  var(--color-accent);
-  --color-mod-tag-to:    #4f46e5;
-  --shadow-mod-tag:      0 2px 8px rgba(13, 85, 222, 0.25);
+  --color-mod-tag-from: var(--color-accent);
+  --color-mod-tag-to:   #4f46e5;
+  --shadow-mod-tag:     0 2px 8px rgba(13, 85, 222, 0.25);
 
-  --color-title-from:    #0f172a;
-  --color-title-to:      #475569;
-
-  --color-pbox-bg:       rgba(255, 255, 255, 0.85);
-  --color-pbox-border:   rgba(255, 255, 255, 0.9);
-  --shadow-pbox:         0 8px 32px rgba(13, 85, 222, 0.08), 0 1px 3px rgba(0, 0, 0, .06);
-  --radius-pbox:         20px;
+  --color-title-from: #0f172a;
+  --color-title-to:   #475569;
 
   --color-banner-strong:      #67e8f9;
   --color-aviso-hover-border: #818cf8;
   --color-pres-hover-border:  #818cf8;
 
-  --pfill-transition:    width 1s cubic-bezier(.16, 1, .3, 1);
+  /* Nivel 3 — uveg-notes.css */
+--color-np-warning-bg: #fff7ed;
+--color-np-warning-border: #fed7aa;
+--color-np-warning-text: #92400e;
+--color-np-warning-icon: #ea580c;
+--color-np-warning-bg-dark: #431407;
+--color-np-warning-border-dark: #7c2d12;
+--color-np-warning-text-dark: #fed7aa;
+--color-np-warning-icon-dark: #fb923c;
+--color-np-confirm-bg: #fff1f2;
+--color-np-confirm-border: #fecdd3;
+--color-np-confirm-text: #991b1b;
+--color-np-confirm-bg-dark: #3b0764;
+--color-np-confirm-border-dark: #6b21a8;
+--color-np-confirm-text-dark: #e9d5ff;
+--color-np-section-del-hover-bg: #fee2e2;
+--color-np-toast-info-bg: #0e7490;
+--color-np-cbtn-ok-hover: #b91c1c;
+--color-np-fab-shadow: rgba(38,98,235,.45);
+--color-np-fab-shadow-hover: rgba(38,98,235,.55);
+--color-np-fab-ring: rgba(38,98,235,.4);
+--color-np-fab-ring-active: rgba(38,98,235,.7);
+
+  --pfill-transition: width 1s cubic-bezier(.16, 1, .3, 1);
 
   /* ── Typography ───────────────────────────────────────────── */
- --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family:          'Inter', system-ui, -apple-system, sans-serif;
 
   --font-size-xs:   9px;
   --font-size-sm:   10px;
@@ -182,18 +307,13 @@
   --space-8:  32px;
   --space-10: 40px;
 
-  /* ── Border Radius ────────────────────────────────────────── */
+  /* ── Border radius ────────────────────────────────────────── */
   --radius-sm:   6px;
   --radius-md:   8px;
   --radius-lg:   10px;
   --radius-xl:   12px;
   --radius-2xl:  14px;
   --radius-full: 9999px;
-
-  /* ── Shadows ──────────────────────────────────────────────── */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, .06);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, .08);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, .12);
 
   /* ── Transitions ──────────────────────────────────────────── */
   --transition-fast:   .15s ease;
@@ -213,61 +333,4 @@
   --z-overlay:  199;
   --z-drawer:   200;
   --z-toast:    300;
-}
-
-/* ── Dark Mode ────────────────────────────────────────────────
- * Solo se sobreescriben los tokens que cambian en dark mode.
- * ─────────────────────────────────────────────────────────────*/
-[data-bs-theme="dark"] {
-  --color-bg:            #0f1117;
-  --color-surface:       #1a1d27;
-  --color-border:        #2a2d3a;
-  --color-border-light:  #232635;
-
-  --color-text-primary:   #f1f5f9;
-  --color-text-secondary: #cbd5e1;
-  --color-text-muted:     #64748b;
-  --color-text-faint:     #475569;
-
-  --color-pending-bg:    #232635;
-  --color-pending-text:  #64748b;
-  --color-pending-dot:   #334155;
-
-  --color-progress-bg:   #1e3a5f;
-  --color-progress-text: #93c5fd;
-
-  --color-done-bg:       #14532d;
-  --color-done-text:     #86efac;
-
-  --color-reto-bg:       #1e2a4a;
-  --color-reto-text:     #93c5fd;
-
-  /* Accent dark overrides */
-  --color-accent-dark:   var(--color-accent-navy);
-  --color-tint-bg:       #1e2a4a;
-  --color-tint-border:   #2a3a6a;
-  --color-tint-hover:    var(--color-border);
-  --shadow-accent:       0 2px 8px rgba(76, 69, 229, .45), 0 0 0 1.5px rgba(76, 69, 229, .15);
-
-  /* Header/pbox dark */
-  --color-pbox-bg:       var(--color-surface);
-  --color-pbox-border:   var(--color-border);
-  --color-progress-pct:  var(--color-text-primary);
-  --color-title-from:    var(--color-text-primary);
-  --color-title-to:      var(--color-text-secondary);
-
-  --color-act-tag-foro-bg:        #2e1f5e;
---color-act-tag-foro-text:      #c4b5fd;
---color-act-tag-actividad-bg:   #431407;
---color-act-tag-actividad-text: #fb923c;
-
---color-advisor-asesor-bg:      #1e2a4a;
---color-advisor-tutor-bg:       #0d2e1f;
---color-advisor-tutor-text:     #4ade80;
---color-advisor-tutor-dot:      #4ade80;
-
---color-card-pbox-bg-hover:   var(--color-accent-navy);  /* #4c45e5 */
-  --color-card-pbox-brd-hover:  #818cf8;
-  --color-card-pbox-div-hover:  #3b82f6;
-  --color-card-pbox-txt-hover:  #ffffff;
 }

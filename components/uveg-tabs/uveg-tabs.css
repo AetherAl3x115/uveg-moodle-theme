@@ -141,7 +141,7 @@
 .tab-ripple {
   position: absolute;
   border-radius: var(--radius-full);
-  background: rgba(37, 99, 235, .2);
+  background: color-mix(in srgb, var(--color-accent) 20%, transparent);
   transform: scale(0);
   animation: tabRippleOut .5s ease-out forwards;
   pointer-events: none;

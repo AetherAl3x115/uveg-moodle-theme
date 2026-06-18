@@ -44,10 +44,10 @@
 
 .pres-crono-prog-face .hi { transition: color var(--transition-spring); }
 
-.pres-crono-prog-face.state-atrasado  { background: #fee2e2; }
+.pres-crono-prog-face.state-atrasado  { background: var(--color-danger-bg); }
 .pres-crono-prog-face.state-atrasado  .hi { color: var(--color-warning); }
-.pres-crono-prog-face.state-regular   { background: #fef9c3; }
-.pres-crono-prog-face.state-regular   .hi { color: #b45309; }
+.pres-crono-prog-face.state-regular   { background: var(--color-warning-bg); }
+.pres-crono-prog-face.state-regular   .hi { color: var(--color-warning-text); }
 .pres-crono-prog-face.state-corriente { background: var(--color-progress-bg); }
 .pres-crono-prog-face.state-corriente .hi { color: var(--color-progress-dot); }
 .pres-crono-prog-face.state-completo  { background: var(--color-done-bg); }
@@ -72,7 +72,7 @@
 }
 
 .pres-crono-prog-pct.state-atrasado  { color: var(--color-warning); }
-.pres-crono-prog-pct.state-regular   { color: #b45309; }
+.pres-crono-prog-pct.state-regular   { color: var(--color-warning-text); }
 .pres-crono-prog-pct.state-corriente { color: var(--color-progress-dot); }
 .pres-crono-prog-pct.state-completo  { color: var(--color-done-dot); }
 
@@ -92,7 +92,7 @@
 }
 
 .pres-crono-prog-status-msg.state-atrasado  { background: #fee2e2; color: var(--color-warning); }
-.pres-crono-prog-status-msg.state-regular   { background: #fef9c3; color: #b45309; }
+.pres-crono-prog-status-msg.state-regular   { background: var(--color-warning-bg); color: var(--color-warning-text); }
 .pres-crono-prog-status-msg.state-corriente { background: var(--color-progress-bg); color: var(--color-progress-dot); }
 .pres-crono-prog-status-msg.state-completo  { background: var(--color-done-bg); color: var(--color-done-dot); }
 
@@ -584,7 +584,7 @@
 .crono-view-ripple {
   position: absolute;
   border-radius: var(--radius-full);
-  background: rgba(37, 99, 235, .2);
+  background: color-mix(in srgb, var(--color-accent) 20%, transparent);
   transform: scale(0);
   animation: cronoRipple .5s ease-out forwards;
   pointer-events: none;

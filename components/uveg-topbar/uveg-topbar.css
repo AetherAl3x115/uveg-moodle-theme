@@ -72,7 +72,7 @@
   right: -2px;
   width: 7px;
   height: 7px;
-  background: #ef4444;
+  background: var(--color-sb-badge-bg);
   border-radius: var(--radius-full);
   border: 1.5px solid var(--color-surface);
   pointer-events: none;

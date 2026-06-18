@@ -69,7 +69,7 @@
 
 .rp-link {
   font-size: var(--font-size-sm);
-  color: var(--uveg-blue);
+  color: var(--color-accent);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
   display: flex;
@@ -124,7 +124,7 @@
 }
 
 .sec-num.active {
-  background: var(--uveg-gradient);
+  background: linear-gradient(135deg, var(--color-fab-from), var(--color-fab-to));
   color: var(--color-white);
 }
 
@@ -189,7 +189,7 @@
 [data-bs-theme="dark"] .rp-sep      { background: var(--color-border); }
 [data-bs-theme="dark"] .pc-wrap p   { color: var(--color-text-muted); }
 [data-bs-theme="dark"] .pc-wrap strong { color: var(--color-text-primary); }
-[data-bs-theme="dark"] .rp-link     { color: #60a5fa; }
+[data-bs-theme="dark"] .rp-link     { color: var(--color-progress-dot); }
 [data-bs-theme="dark"] .sec-item:hover  { background: var(--color-border-light); }
 [data-bs-theme="dark"] .sec-item.active { background: var(--color-reto-bg); }
 [data-bs-theme="dark"] .sec-num     { background: var(--color-border); color: var(--color-text-muted); }

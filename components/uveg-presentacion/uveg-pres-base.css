@@ -1,0 +1,190 @@
+/**
+ * uveg-pres-base.css
+ * ─────────────────────────────────────────────────────────────
+ * Estilos base compartidos por todos los sub-componentes de
+ * uveg-presentacion (alcances, esquema, metodologia, evaluacion,
+ * cronograma).
+ *
+ * Usa tokens dinámicos por instancia (--pres-color, --pres-bg)
+ * inyectados desde cada Web Component — este archivo es dueño
+ * de todos sus estados incluido dark mode.
+ *
+ * REGLA: dark-mode.css NO toca ninguna clase .pres-*.
+ * ─────────────────────────────────────────────────────────────
+ */
+
+/* ── Nav grid de secciones ──────────────────────────────────── */
+.pres-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+/* ── Tab / card de sección ──────────────────────────────────── */
+.pres-card {
+  background: var(--pres-color, var(--color-accent));
+  border: 1.5px solid var(--pres-color, var(--color-accent));
+  border-radius: var(--radius-xl);
+  padding: 12px 14px;
+  cursor: pointer;
+  transition:
+    background      var(--transition-fast),
+    border-color    var(--transition-fast),
+    box-shadow      var(--transition-fast),
+    transform       var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.pres-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--pres-color, var(--color-accent)) 30%, transparent);
+}
+
+/* Overlay de hover — usa --pres-bg para no mezclar con el fondo sólido */
+.pres-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--pres-bg, var(--color-border)) 55%, transparent);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 220ms ease;
+  z-index: 0;
+}
+
+.pres-card:hover::before { opacity: 1; }
+
+/* Elevar icono y label sobre el overlay */
+.pres-icon-wrap,
+.pres-label { position: relative; z-index: 1; }
+
+.pres-card.active {
+  background: var(--pres-bg, var(--color-tint-bg));
+  border-color: var(--pres-color, var(--color-accent));
+}
+
+/* ── Icono de sección ───────────────────────────────────────── */
+.pres-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-white);
+  transition: transform 200ms ease;
+  width: 22px;
+  height: 22px;
+}
+
+.pres-card:hover .pres-icon-wrap {
+  transform: scale(1.15);
+  filter: brightness(0.85) saturate(1.4);
+}
+
+.pres-card.active .pres-icon-wrap {
+  color: var(--pres-color, var(--color-accent));
+}
+
+.pres-icon-wrap svg { width: 20px; height: 20px; }
+
+/* ── Label de sección ───────────────────────────────────────── */
+.pres-label {
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-white);
+  line-height: 1.3;
+  transition: color var(--transition-fast);
+}
+
+.pres-card.active .pres-label {
+  color: var(--pres-color, var(--color-accent));
+}
+
+/* ── Área de contenido de la sección activa ─────────────────── */
+.pres-content-header { margin-bottom: 14px; }
+
+.pres-content-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--pres-bg, var(--color-tint-bg));
+  color: var(--pres-color, var(--color-accent));
+  border-radius: var(--radius-full);
+  padding: 5px 14px 5px 8px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.pres-content-pill-icon {
+  display: flex;
+  align-items: center;
+  width: 18px;
+  height: 18px;
+  color: var(--pres-color, var(--color-accent));
+}
+
+.pres-content-pill-icon svg { width: 16px; height: 16px; }
+
+.pres-content {
+  border: .5px solid var(--color-border);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--pres-bg, var(--color-tint-bg)) 40%, transparent) 0%,
+    var(--color-surface) 20%
+  );
+  border-radius: var(--radius-xl);
+  padding: 28px 32px;
+}
+
+.pres-content h3 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: 10px;
+}
+
+.pres-content p {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+
+/* ── Lista de items de contenido ────────────────────────────── */
+.pres-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pres-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+}
+
+.pres-list li svg {
+  color: var(--color-accent);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* ── Dark mode ───────────────────────────────────────────────── */
+/* Este componente usa --pres-color / --pres-bg (tokens dinámicos
+   por instancia). Es dueño de sus estados dark. dark-mode.css
+   no toca ninguna de estas clases. */
+[data-bs-theme="dark"] .pres-card        { background: var(--pres-color, var(--color-accent)); border-color: var(--pres-color, var(--color-accent)); }
+[data-bs-theme="dark"] .pres-card.active { background: color-mix(in srgb, var(--pres-bg, var(--color-tint-bg)) 20%, var(--color-surface)); }
+[data-bs-theme="dark"] .pres-label       { color: var(--color-white); }
+[data-bs-theme="dark"] .pres-content     { background: linear-gradient(to bottom, var(--color-tint-bg) 0%, var(--color-surface) 40%); border-color: var(--color-border); }
+[data-bs-theme="dark"] .pres-content h3  { color: var(--color-text-primary); }
+[data-bs-theme="dark"] .pres-content p   { color: var(--color-text-muted); }
+[data-bs-theme="dark"] .pres-list li     { color: var(--color-text-secondary); }

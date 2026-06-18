@@ -286,7 +286,7 @@
 }
 .sv-badge-live     { background: var(--color-done-bg);     color: var(--color-done-text); }
 .sv-badge-upcoming { background: var(--color-tint-bg);     color: var(--color-accent-dark); }
-.sv-badge-past     { background: #fee2e2;  color: #991b1b; }
+.sv-badge-past     { background: var(--color-np-section-del-hover-bg);  color: var(--color-np-confirm-text); }
 
 /* Botón BBB */
 .sv-btn-bbb {
@@ -441,5 +441,7 @@
 [data-bs-theme="dark"] .sv-back-icon  { background: var(--color-surface); border-color: var(--color-border); }
 [data-bs-theme="dark"] .sv-card       { background: var(--color-surface); border-color: var(--color-border); }
 [data-bs-theme="dark"] .sv-rec-card   { background: var(--color-surface); border-color: var(--color-border); }
-[data-bs-theme="dark"] .sv-rec-header { background: var(--color-card-bg); border-color: var(--color-border); }
-[data-bs-theme="dark"] .sv-row:hover  { background: var(--color-tint-bg); }
+[data-bs-theme="dark"] .sv-rec-header    { background: var(--color-bg);      border-color: var(--color-border); }
+[data-bs-theme="dark"] .sv-rec-body      { background: var(--color-surface); }
+[data-bs-theme="dark"] .sv-rec-body:hover{ background: var(--color-tint-bg); }
+[data-bs-theme="dark"] .sv-row:hover     { background: var(--color-tint-bg); }

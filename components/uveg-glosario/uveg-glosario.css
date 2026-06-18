@@ -82,7 +82,7 @@
 
 .gl-pill.active {
   background: var(--color-tab-glossary);
-  color: white;
+  color: var(--color-white);
 }
 
 /* ── Grupo por letra ────────────────────────────────────────── */
